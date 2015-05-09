@@ -3,7 +3,7 @@ session_start();
 define("CURRENT_PAGE_STYLE","css/recent-styles.css");
 
 require_once("inc/config.php");
-include(ROOT_PATH . 'inc/loggedInHeader.php'); 
+include('inc/loggedInHeader.php'); 
 
 ?>
     

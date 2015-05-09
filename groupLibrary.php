@@ -3,7 +3,7 @@ session_start();
 
 require_once("inc/config.php");
 define("CURRENT_PAGE_STYLE","css/library-styles.css");
-include(ROOT_PATH . 'inc/loggedInHeader.php'); ?>
+include('inc/loggedInHeader.php'); ?>
     
 
     <!--Feature Content-->
