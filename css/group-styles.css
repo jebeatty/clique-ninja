@@ -1,0 +1,45 @@
+body{
+	background: #e4e4e4;
+}
+
+
+#content{
+	padding-top: 0;
+}
+
+.panel{
+	text-align: center;
+	padding: 1px;
+	margin-bottom: 4px;
+	background: white; 
+}
+
+.title.panel{
+	background: #9164ab;
+
+}
+
+.title.panel p{
+	color: white;
+}
+
+.button.radius.right{
+	border-width: 1.5px;
+	height: 2.4em;
+}
+
+#cardArea{
+	background: white;
+}
+
+.large-block-grid-3>li{
+	padding: 0px 1px 15px 1px;
+}
+
+.no-touch.boxshadow.borderradius.rgba.mediaquery.card-bd.ltr.font-wf-sans.border-blockquote.theme-light{
+	background: white;
+}
+
+#modalButtons p{
+	text-align: center;
+}

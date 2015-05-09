@@ -1,0 +1,56 @@
+body{
+	background: #e4e4e4;
+}
+
+#content{
+	padding-top: 0;
+}
+
+.panel{
+	text-align: center;
+	padding: 5px;
+	margin-bottom: 4px;
+	background: white; 
+}
+
+
+#headline{
+	margin-top: 6px;
+	background: #81078e;
+
+}
+
+
+#itemGrid{
+	margin-left: -2px;
+	margin-right: -2px;
+
+}
+
+
+.button.radius.right{
+	border-width: 1.5px;
+	height: 2.4em;
+}
+
+#groupOptionButtons{
+	margin-bottom: 52px;
+}
+
+#groupDescription p{
+	margin-bottom: 10px;
+}
+
+
+
+@media screen and (max-width: 718px) {
+    #groupOptionButtons{
+	margin-bottom: 104px;
+	}
+}
+
+@media screen and (max-width: 417px) {
+    #groupOptionButtons{
+	margin-bottom: 156px;
+	}
+}

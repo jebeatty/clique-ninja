@@ -1,0 +1,68 @@
+body{
+	background: #e4e4e4;
+}
+
+.callout{
+	margin-top: 4px;
+
+}
+
+.panel{
+	text-align: center;
+	padding: 8px;
+	margin-bottom: 4px;
+	background: white;
+}
+
+
+#headline{
+	margin-top: 6px;
+	background: #9164ab;
+
+}
+
+#headerPanel{
+	margin-top: 8px;
+	background: transparent;
+	text-align: center;
+	height: 35px;
+	border: 0px;
+}
+
+#headerPanel>h4{
+	margin-top: -5px;
+	color: white;
+}
+
+#leftFeedColumn{
+	margin-top: -15px;
+	padding-left: 6px;
+	padding-right: 2px;
+
+}
+
+#rightFeedColumn{
+	margin-top: -15px;
+	padding-left: 2px;
+	padding-right: 6px;
+
+}
+
+#mainColumn{
+	background: transparent;
+
+}
+
+
+#content{
+	padding-top: 0;
+	background: #e9e9e9;
+}
+
+
+.button.radius.right{
+	border-width: 1.5px;
+	height: 2.4em;
+}
+
+

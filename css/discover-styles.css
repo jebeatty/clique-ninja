@@ -1,0 +1,54 @@
+body{
+        background: #e4e4e4;
+}
+
+#content{
+        padding-top: 0;
+}
+
+.panel{
+        text-align: center;
+        padding: 5px;
+        margin-bottom: 4px;
+        background: #9164ab; 
+}
+
+.panel>h4{
+        text-align: center;
+        color: white;
+        font-family: 'walkway_ultraboldregular', sans-serif;
+}
+
+.button.radius.right{
+        border-width: 1.5px;
+        height: 2.4em;
+}
+
+#popularContent{
+        margin-top: 30px;
+        margin-bottom: 80px;
+        text-align: center;
+
+}
+
+#popularGroups{
+        margin-top: 30px;
+        margin-bottom: 80px;
+        text-align: center;
+}
+
+#discoveryGroups{
+        margin-bottom: 140px;
+        text-align: center;
+}
+
+
+h1{
+        font-size: 3em;
+        color: #e4e4e4;
+}
+
+[class*="fi-"]{
+        display: inline-block;
+        color: #9164ab;
+}

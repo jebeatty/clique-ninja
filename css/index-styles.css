@@ -1,0 +1,149 @@
+body{
+        background: #774d8f;
+}
+
+/* Navbar
+==========================*/
+nav.top-bar {
+        text-align: right;
+        background: transparent;
+}
+
+
+.top-bar .name h1 a{
+        font-size: 2em;
+        font-family: 'walkway_ultraboldregular', sans-serif;
+}
+
+
+section.top-bar-section{
+        display: inline-block;
+        text-align: center;
+        margin-left: 0px;
+        background: transparent;
+        opacity: 0.0;
+        
+}
+
+.top-bar-section li:not(.has-form) a:not(.button){
+        font-size: 1em;
+        padding: 0 30px 0 30px;
+        background: transparent;
+        font-family: 'walkway_ultraboldregular', sans-serif;
+        border-color: white;
+        border-width: 2px;
+        opacity: 1.0;
+        color: white;
+        
+}
+
+
+.top-bar-section li:not(.has-form) a:not(.button):hover{
+        background: #9164ab;
+        border-color: white;
+        border-width: 2px;
+        opacity: 1.0;
+        color: transparent;
+        color: white;
+}
+
+
+.top-bar.expanded .title-area{
+        background: transparent;
+}
+
+/* CSS for transparent buttons*/
+
+
+
+/*****************************/
+
+
+
+#facebookLoginArea>a{
+        background: #3b5998;
+        padding: 10 6 10 6;
+        color: white;
+}
+
+#facebookLoginArea>a:visited{
+        background: #3b5998;
+        padding: 10 6 10 6;
+        color: white;
+
+}
+
+#facebookSignupArea>a{
+        background: #3b5998;
+        padding: 10 6 10 6;
+        color: white;
+}
+
+#facebookSignupArea>a:visited{
+        background: #3b5998;
+        padding: 10 6 10 6;
+        color: white;
+
+}
+
+.button.radius.right{
+        margin-right:8px;
+        background: transparent;
+        border-color: white;
+        border-width: 3.5px;
+        padding-left: 16px;
+        padding-right: 16px;
+        height: 2.7em;
+        font-weight: bold;
+        font-family: 'walkway_ultraboldregular', sans-serif;
+
+}
+
+/* Media Queries
+
+*/
+
+@media screen and (max-width: 940px) {
+        nav.top-bar {
+                text-align: right;
+                
+        }
+}
+
+@media screen and (max-width: 640px) {
+        nav.top-bar {
+                text-align: right;
+                
+        }
+
+        .top-bar .name h1 a{
+                text-align: left;
+                opacity: 0.8;
+        }
+
+        .top-bar-section li:not(.has-form) a:not(.button){
+                margin-left: 0;
+                background: #774d8f;
+                text-align: right;
+        
+        }
+        section.top-bar-section{
+                opacity: 1.0;
+                text-align: right;
+        }
+
+        .button.radius.right{
+                margin-right:-80px;
+        }
+
+        
+
+        #loginButtonArea{
+                opacity: 0.0;
+        }
+
+        .top-bar-section li:not(.has-form) a:not(.button):hover{
+                margin-left: 0;
+        }
+
+}

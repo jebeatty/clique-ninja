@@ -1,0 +1,332 @@
+@font-face {
+    font-family: 'walkway_semiboldregular';
+    src: url('fonts/walkwaysemibold_regular_macroman/Walkway_SemiBold-webfont.eot');
+    src: url('fonts/walkwaysemibold_regular_macroman/Walkway_SemiBold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/walkwaysemibold_regular_macroman/Walkway_SemiBold-webfont.woff') format('woff'),
+         url('fonts/walkwaysemibold_regular_macroman/Walkway_SemiBold-webfont.ttf') format('truetype'),
+         url('fonts/walkwaysemibold_regular_macroman/Walkway_SemiBold-webfont.svg#walkway_semiboldregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'walkway_boldregular';
+    src: url('fonts/walkwaybold_regular_macroman/Walkway_Bold-webfont.eot');
+    src: url('fonts/walkwaybold_regular_macroman/Walkway_Bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/walkwaybold_regular_macroman/Walkway_Bold-webfont.woff') format('woff'),
+         url('fonts/walkwaybold_regular_macroman/Walkway_Bold-webfont.ttf') format('truetype'),
+         url('fonts/walkwaybold_regular_macroman/Walkway_Bold-webfont.svg#walkway_boldregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'walkway_ultraboldregular';
+    src: url('fonts/walkwayultrabold_regular_macroman/Walkway_UltraBold-webfont.eot');
+    src: url('fonts/walkwayultrabold_regular_macroman/Walkway_UltraBold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/walkwayultrabold_regular_macroman/Walkway_UltraBold-webfont.woff') format('woff'),
+         url('fonts/walkwayultrabold_regular_macroman/Walkway_UltraBold-webfont.ttf') format('truetype'),
+         url('fonts/walkwayultrabold_regular_macroman/Walkway_UltraBold-webfont.svg#walkway_boldregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'walkway_blackregular';
+    src: url('fonts/walkwayblack_regular_macroman/Walkway_Black-webfont.eot');
+    src: url('fonts/walkwayblack_regular_macroman/Walkway_Black-webfont.eot?#iefix') format('embedded-opentype'),
+         url('fonts/walkwayblack_regular_macroman/Walkway_Black-webfont.woff') format('woff'),
+         url('fonts/walkwayblack_regular_macroman/Walkway_Black-webfont.ttf') format('truetype'),
+         url('fonts/walkwayblack_regular_macroman/Walkway_Black-webfont.svg#walkway_boldregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+
+/* Navbar
+==========================*/
+nav.top-bar {
+        text-align: center;
+        background: #9164ab;
+}
+
+.top-bar .name h1 a{
+        font-size: 2em;
+        font-family: 'walkway_ultraboldregular', sans-serif;
+}
+
+section.top-bar-section{
+        display: inline-block;
+        text-align: center;
+        margin-left: 0px;
+}
+
+.top-bar-section li:not(.has-form) a:not(.button){
+        font-size: 1em;
+        padding: 0 30px 0 30px;
+        background: #9164ab;
+        font-family: 'walkway_ultraboldregular', sans-serif;
+        
+}
+
+
+.top-bar-section li:not(.has-form) a:not(.button):hover{
+        background: #774d8f;
+}
+
+
+.top-bar.expanded .title-area{
+        background: #9164ab;
+}
+
+.top-bar.clearBar{
+        background: transparent;
+}
+
+/* Sticky Footer
+===============================*/
+
+html,
+body {
+        margin:0;
+        padding:0;
+        font-family: 'walkway_boldregular', sans-serif;
+        
+}
+#wrapper {
+        min-height:100%;
+        position:relative;
+}
+
+#navigationArea {
+        padding:0px;
+        
+}
+#content {
+
+        padding:10px;
+        padding-bottom:80px;   /* Height of the footer element */
+
+}
+
+.large-4 p{
+        font-family: 'walkway_boldregular', sans-serif;
+        color: white;
+
+}
+
+.jumbotron{
+        margin-top: -45px;
+        float: left;
+        width: 100%
+
+}
+
+.button.radius.right{
+        margin-top:-4px;
+        margin-right:10px;
+        background: transparent;
+        border-color: white;
+        border-width: 2px;
+        padding: 6.6px 8px 5.6px 8px;
+        height: 2.3em;
+        font-family: 'walkway_ultraboldregular', sans-serif;
+
+}
+.button.radius.left{
+        margin-left:1px;
+        font-family: 'walkway_ultraboldregular', sans-serif;
+        margin-bottom: 0;
+
+}
+
+.button{
+        font-family: 'walkway_ultraboldregular', sans-serif;
+}
+
+#footer{
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 80px;
+        text-align: center;
+        background: #554D57;
+        color: white;
+}
+
+#footer>p{
+        margin-top: 30px;
+        vertical-align: middle;
+}
+
+.panel h4, h3, h2, h1 {
+        font-family: 'walkway_ultraboldregular', sans-serif;
+}
+
+textarea {
+        text-indent: 0;
+}
+
+
+/*
+
+Formatting for the custom Embed cards
+*/
+.panel>.itemTitle{
+        text-align: center;
+        margin-bottom: 0;
+        color: #707070;
+        font-style:italic;
+}
+
+.posterComment{
+        margin-bottom: 5px;
+        font-size: 1.04em;
+        line-height:1.4;
+}
+
+.customEmbedCard{
+        border-left-color: red;
+        text-align: left;
+        border-width: 0px;
+        border-color: #dddddd;
+        margin-bottom: 16px;
+        border-radius: 5px;
+        font-family: 'walkway_boldregular', sans-serif;
+}
+
+.itemHeadline{
+        font-family: 'walkway_ultraboldregular', sans-serif;
+        font-size:1.8em;
+}
+
+.objectDesc{
+        font-size: 1em;
+        margin-top: 8px;
+        margin-bottom: 6px;
+        line-height:1.2;
+        text-align: left;
+        font-family: 'walkway_boldregular', sans-serif;
+        
+}
+
+
+.socialButton{
+        padding-top: 14px;
+        padding-bottom: 14px;
+        margin-top: 5px;
+        margin-bottom: 38px;
+}
+
+.discussionStats{
+        font-size: 1.1em;
+        margin-bottom: 0;
+        margin-top: -22px;
+        font-style:italic;
+        
+}
+
+.seeDiscussion{
+        font-size: 1.2em;
+        margin-top: -24px;
+        
+}
+
+/*
+Comment Formatting
+*/
+
+.commenterName{
+        display: inline;
+        font-family: 'walkway_ultraboldregular', sans-serif;
+        letter-spacing: 1px;
+        
+}
+
+.comment{
+        display: inline;
+        font-family: 'walkway_semiboldregular', sans-serif;
+}
+
+.timeStamp{
+        margin-bottom: 10px;
+        font-size: 0.75em;
+        font-style: italic;
+}
+
+/* Settings Modal Format*/
+#settingsModal h2{
+        text-align: center;
+}
+
+.settings.button{
+        font-family: 'walkway_boldregular', sans-serif;
+        padding: 8px 16px 8px 16px;
+        margin-bottom: 4px;
+}
+
+.change.button{
+        text-align: center;
+        font-family: 'walkway_boldregular', sans-serif;
+}
+
+/*Feature Content
+==========================*/
+
+[class*="large-4"] > h3{
+        text-align: center;
+        font-family: 'walkway_ultraboldregular', sans-serif;
+        color: white;
+}
+
+
+/* Icons */
+[class*="fi-"]{
+        font-size: 3em;
+        text-align: center;
+        color: white;
+        display: block;
+        margin-top: 25px;
+}
+
+[class*="fi-comments"]{
+        display: inline-block;
+        color: #774d8f;
+        font-size: 1.5em;
+}
+
+a{
+        color: #774d8f;
+}
+
+
+
+/* Media Query
+===========================*/
+
+@media screen and (max-width: 940px) {
+        nav.top-bar {
+                text-align: center;
+        }
+}
+
+@media screen and (max-width: 640px) {
+        nav.top-bar {
+                text-align: left;
+        }
+
+        .top-bar-section li:not(.has-form) a:not(.button){
+                margin-left: 0px;
+        
+        }
+
+
+        .top-bar-section li:not(.has-form) a:not(.button):hover{
+                margin-left: 0px;
+        }
+
+}
