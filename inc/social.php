@@ -12,9 +12,9 @@ if (isset($_SESSION['username'])) {
 
   socialActionSelector($action);
 
-  } else {
-    echo "Invalid session data";
-  } 
+} else {
+  echo "Invalid session data";
+} 
 
  
 function socialActionSelector($action){

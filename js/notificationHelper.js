@@ -1,16 +1,32 @@
 function setNotificationStatus(registered){
+	setNotificationUIStatus(registered)
+
 	if (registered) {
-		console.log("user is registered");
+		document.getElementById("notificationsSwitch").checked=true;
+		//set frequency 
+	} else{
+		document.getElementById("notificationsSwitch").checked=false;
 	}
 }
 
+function setNotificationUIStatus(enabled){
+	if(enabled){
+		$('#notificationSetting').html('Notifications are currently enabled');
+    	$('#notificationFrequencyControl').html(writeFrequencyControlHTML());
+	}else{
+		$('#notificationSetting').html('Notifications are currently disabled');
+    	$('#notificationFrequencyControl').html('');
+	}
+}
+
+
+
+//change functions
 function notificationsChanged(){
   if(document.getElementById("notificationsSwitch").checked){
-    $('#notificationSetting').html('Notifications are currently enabled');
-    $('#notificationFrequencyControl').html(writeFrequencyControlHTML());
+    setNotificationUIStatus(true);
   }else{
-    $('#notificationSetting').html('Notifications are currently disabled');
-    $('#notificationFrequencyControl').html('');
+    setNotificationUIStatus(false);
   }
 }
 
@@ -19,13 +35,40 @@ function frequencyChanged(){
   document.getElementById("saveNotificationsSettingsButton").className="button";
 }
 
+function changeNotificationStatus(){
+	var formData = "action=toggleNotifications&enabled="+document.getElementById("notificationsSwitch").checked;
+	$.post('inc/notifications.php',formData,function(response){
+    	console.log(response);
+    	if (response=='"success"') {}
+    	else{
+    		$("#notificationNotice").html("Something has gone wrong in changing your notification settings...");
+    	}
+    }); 
+
+}
+
 function changeNotificationSettings(){
   if (!document.getElementById("saveNotificationsSettingsButton").disabled) {
-    console.log("settings changed!");
-    document.getElementById("saveNotificationsSettingsButton").disabled=true;
-    document.getElementById("saveNotificationsSettingsButton").className="button secondary";
+    document.getElementById("saveNotificationsSettingsButton").value="Saving Changes...";
+    var formData = "action=changeSettings&postFreq="+$('input:radio[name=row-1]:checked').val()+"&commentFreq="+$('input:radio[name=row-2]:checked').val();
+    console.log(formData);
+    $.post('inc/notifications.php',formData,function(response){
+    	console.log(response);
+    	if (response=='"success"') {
+    		document.getElementById("saveNotificationsSettingsButton").disabled=true;
+    		document.getElementById("saveNotificationsSettingsButton").className="button secondary";
+    		document.getElementById("saveNotificationsSettingsButton").value="Save Changes";
+    	}
+    	else{
+    		$("#notificationNotice").html("Something has gone wrong. Sorry - we'll be right on it.")
+    		document.getElementById("saveNotificationsSettingsButton").value="Save Changes";
+    	}
+    }); 
   };
 }
+
+
+
 
 function writeFrequencyControlHTML(){
 	var freqHTML='';
@@ -46,17 +89,17 @@ function writeFrequencyControlHTML(){
 	freqHTML+='<tbody>';
 	freqHTML+='<tr>';
 	freqHTML+='<td>Posts</td>';
-	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-1" data-col="1" onchange="frequencyChanged();"></td>';
-	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-1" data-col="2" onchange="frequencyChanged();" checked></td>';
-	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-1" data-col="3" onchange="frequencyChanged();"></td>';
-	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-1" data-col="4" onchange="frequencyChanged();"></td>';
+	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-1" data-col="1" value="0" onchange="frequencyChanged();"></td>';
+	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-1" data-col="2" value="1" onchange="frequencyChanged();" checked></td>';
+	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-1" data-col="3" value="2" onchange="frequencyChanged();"></td>';
+	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-1" data-col="4" value="3" onchange="frequencyChanged();"></td>';
 	freqHTML+='</tr>';
 	freqHTML+='<tr>';
 	freqHTML+='<td>Comments</td>';
-	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-2" data-col="1"></td>';
-	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-2" data-col="2" checked></td>';
-	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-2" data-col="3"></td>';
-	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-2" data-col="4"></td>';
+	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-2" data-col="1" value="0" onchange="frequencyChanged();"></td>';
+	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-2" data-col="2" value="1" onchange="frequencyChanged();" checked></td>';
+	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-2" data-col="3" value="2" onchange="frequencyChanged();"></td>';
+	freqHTML+='<td style="text-align:center;"><input type="radio" name="row-2" data-col="4" value="3" onchange="frequencyChanged();"></td>';
 	freqHTML+='</tr>';
 	freqHTML+='</tbody>';
 	freqHTML+='</table>';

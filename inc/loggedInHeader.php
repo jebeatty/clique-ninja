@@ -23,12 +23,7 @@
     <script src='js/headerHelper.js'></script>
     <script src='js/notificationHelper.js'></script>
     <script>
-    /*
-        var _roost = _roost || [];
-        _roost.push(['autoprompt', true]);*/
-    var registered=true;
-    setNotificationStatus(registered);
-
+      var _roost = _roost || [];
     </script>
     <script>
       $(document).ready(function(){
@@ -60,6 +55,16 @@
           minLength: 1//search after two characters
          
         });
+
+        var timer;
+        var delay = 1200; // 0.6 seconds delay after last input
+ 
+        $('#notificationsSwitch').on('change', function() {
+            window.clearTimeout(timer);
+            timer = window.setTimeout(function(){
+                  changeNotificationStatus();
+            }, delay);
+        })
 
         
         $('#addGroup').submit(function(evt){
@@ -98,6 +103,15 @@
             $('#groupInviteAlert').html('');
           }
           
+        $('#autocomplete').keydown(function(event) {
+        if (event.keyCode == 188) {
+            addFriendToTable();
+            if($('#warningArea').html()==''){
+              $('#autocomplete').val('');
+            }
+            return false;
+         }
+        });
 
         });
       }); //end ready
@@ -206,8 +220,9 @@
       </script> 
 
       <h4> Notifications </h4>
-      <p> Because every recommendation on Clique comes to you directly from your friends, new posts can be a little irregular. We <i>highly</i> recommend signing up fo
+      <p> Because every recommendation on Clique comes to you directly from your friends, new posts can be a little irregular. We <i>highly</i> recommend signing up for browser notifications so you don't miss a thing!
       <div id="notificationSection">
+        <p id="notificationNotice"></p>
         <div class="row" id="notificationHeadline">
           <div class = "small-10 columns">
              <p id="notificationSetting"> Notifications are currently disabled </p>
@@ -222,6 +237,15 @@
         <div id="notificationFrequencyControl">  
         </div>
       </div>
+      <script>
+              _roost.push(['onresult', function(data){
+                console.log("registered="+data['registered']);
+
+                //if the user isn't registered, then we can prompt, or we have to advise.
+                setNotificationStatus(data['enabled']);
+              }]);
+              
+            </script>
       <div id="digestSection">
       </div>
       
@@ -363,10 +387,10 @@
 
       <fieldset>
         <legend> Select Friends to Invite:</legend>
-        <p> Enter each friend&#39;s email individually to add them to the invite list. If they are not yet a Clique user, ask them to join and they will see the group 
+        <p> Enter your friend&#39;s emails to add them to the invite list. If they are not yet a Clique user, ask them to join and they will see the group 
 
         <div class="ui-widget">
-          <input placeholder="Enter friend's email" id="autocomplete" size="30"><p id="warningArea"></p> <button onclick="addFriendToTable(); return false;"> Add Frien
+          <input placeholder="Enter friend's email" id="autocomplete" size="30"><p id="warningArea"></p> <button onclick="addFriendToTable(); return false;"> Add Friend to Invite List </button>
         </div>
         <div>
           Friends to Invite: <br>

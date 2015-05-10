@@ -60,6 +60,24 @@ include('inc/loggedInHeader.php'); ?>
          }
         });
 
+        $("#inviteAutocomplete").autocomplete({
+          source: "inc/search.php",
+          appendTo: "#inviteFriendsModal",
+          delay: 400,
+          minLength: 1//search after two characters   
+        });
+
+      $('#inviteAutocomplete').keydown(function(event) {
+        if (event.keyCode == 188) {
+          addFriendToInviteTable();
+          if ($("#inviteWarningArea").html()=='') {
+            $('#inviteAutocomplete').val('');
+          }
+          
+          return false;
+         }
+        });
+
         $('#inviteFriends').submit(function(evt){
           console.log("inviteFriends event detected!");
           evt.preventDefault();
@@ -79,6 +97,7 @@ include('inc/loggedInHeader.php'); ?>
               }
           }); //end post
           }); //end InviteFriends Submit
+
       });//end ready
 
         
@@ -223,12 +242,6 @@ include('inc/loggedInHeader.php'); ?>
         $('#leaveGroupModal').foundation('reveal', 'close');
       }
       
-      $("#inviteAutocomplete").autocomplete({
-        source: "inc/search.php",
-        appendTo: "#inviteFriendsModal",
-        delay: 400,
-        minLength: 1//search after two characters   
-      });
 
       function addFriendToInviteTable(){
         var friendEmail = $('#inviteAutocomplete').val();
