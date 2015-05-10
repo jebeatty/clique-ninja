@@ -33,6 +33,12 @@ function socialActionSelector($action){
     $postId = $_POST['postId'];
     addCommentToPost($postId,$userId,$comment);
 
+  }else if ($action=="postGroupComment") {
+    $comment = $_POST['comment'];
+    $userId=$_SESSION['userId'];
+    $groupId = $_POST['groupId'];
+    addGroupCommentToChat($groupId,$userId,$comment);
+
   }
   else if ($action=="getComments"){
     $postId = $_GET['postId'];
@@ -46,6 +52,10 @@ function socialActionSelector($action){
     $json = json_encode($json);
     echo $json;
 
+  }
+  else if ($action=="getGroupChat"){
+    $groupId = $_GET['groupId'];
+    getGroupChat($groupId);
   }
   else{
     echo 'invalid action code!';
@@ -177,6 +187,44 @@ function addCommentToPost($postId, $userId, $comment){
     }
 
     echo "comment added";
+}
+
+function addGroupCommentToChat($groupId, $userId, $comment){
+
+    require_once("../inc/config.php");
+    require(ROOT_PATH."inc/database.php");
+
+    $username=getUserNameForId($userId);
+    
+    try{
+      $results = $db->prepare("INSERT INTO `groupChatMessages` (`groupId`, `commenterId`, `commenterName`, `comment`) VALUES (?,?,?,?)");
+      $results->execute(array($groupId, $userId, $username, $comment));
+
+    } catch(Exception $e){
+       echo "Comment data insertion error!".$e;
+        exit;
+    }
+
+    echo json_encode("success");
+}
+
+
+function getGroupChat($groupId){
+ 
+    require_once("../inc/config.php");
+    require(ROOT_PATH."inc/database.php");
+
+    try{
+      $results = $db->prepare("SELECT commenterName, comment, timePosted FROM `groupChatMessages` WHERE groupId=? LIMIT 30");
+      $results->execute(array($groupId));
+
+    } catch(Exception $e){
+       echo "Chat data selection error:".$e;
+      exit;
+    }
+
+    $chatData = $results->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode($chatData);
 
 }
 

@@ -20,9 +20,9 @@ include('inc/loggedInHeader.php'); ?>
           <a href="#panel1a" style="background:#9164ab;color:white;">Group Chat</a>
           <div id="panel1a" class="content" style="text-align:left; padding-bottom:0;">
             <div id="chatMessages" style="overflow:auto;height:300px;">
-            No discussion yet!
+            
             </div>
-
+            <p id="chatEmptyState"> No discussion yet! <p>
             <div id="commentArea">
               <input type="text" id="commentBox" placeholder="Your comment..." style="margin-top:5px;">
             </div>
@@ -32,7 +32,7 @@ include('inc/loggedInHeader.php'); ?>
       </ul>
     </div>
     <div id="content">
-      
+      <script src="js/libraryHelper.js"></script>
         <script>
                 
       $(document).ready(function(){
@@ -46,6 +46,7 @@ include('inc/loggedInHeader.php'); ?>
         $('#groupOptionButtons').html(optionButtonHTML);
 
         getGroupMemberInfo(groupId);
+        getGroupChat(groupId);
         refreshGroupLibrary(groupId);
 
         window.addEventListener('itemUpdated', function (e) {
@@ -54,7 +55,7 @@ include('inc/loggedInHeader.php'); ?>
                                      
         $('#commentArea').keyup(function(event) {
         if (event.keyCode == 13) {
-            console.log("comment submitted");
+            postGroupChatComment($('#commentBox').val(), groupId);
             return false;
          }
         });
@@ -65,7 +66,7 @@ include('inc/loggedInHeader.php'); ?>
           var url = $(this).attr("action");
           var formData = $(this).serialize();
           formData+='&action=inviteFriends&groupId='+groupId;
-                $('#inviteButton').attr('value', 'Inviting...Please Wait');
+          $('#inviteButton').attr('value', 'Inviting...Please Wait');
           $.post(url, formData, function(response){
              console.log(response);
               if (response="success") {
@@ -80,100 +81,7 @@ include('inc/loggedInHeader.php'); ?>
           }); //end InviteFriends Submit
       });//end ready
 
-        function getParameterByName(name) {
-                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
-                results = regex.exec(location.search);
-                return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-        }
-
-      function refreshGroupLibrary(groupId){
-        $.getJSON('inc/posts.php',{action:"getGroupData",groupId:groupId},function(response){
-
-        var blockgridHTML = '';
-
-        $.each(response, function(index, post){
-          blockgridHTML += '<li>';
-          blockgridHTML += writeItemHTML(post);
-          blockgridHTML += '</li>';
-          
-        });//end each
-
-        $('#itemGrid').html(blockgridHTML);
-
-        }); //end getJSON
-      }
-
-      function getGroupMemberInfo(groupId){
-        $.getJSON('inc/invites.php',{action:"getGroupInfo",groupId:groupId},function(response){
-        console.log(response);
-        var groupInfoHTML = '';
-
-        groupInfoHTML+= '<h3 id="groupInfoName"> '+response[0]['groupName']+' </h3>';
-        groupInfoHTML+= '<p id="groupInfoDesc"> '+response[0]['groupDesc']+' </p>';
-        groupInfoHTML+= '<p id="memberList"> Members: ';
-        $.each(response[1], function(index,member){
-          groupInfoHTML+=member.userName;
-          if ((index+1)<response[1].length) {
-            groupInfoHTML+=', ';
-          };
-        });
-        groupInfoHTML+= '</p>';
-        if (response[2][0]['status']==1) {
-          groupInfoHTML+='<a data-reveal-id="editGroupModal"> Edit Group Info <a>';
-          document.getElementsByName("editGroupName")[0].value=response[0]['groupName'];
-          document.getElementsByName("editGroupDesc")[0].value=response[0]['groupDesc'];
-
-          //and where we actually save & change values
-          $("#saveGroupChanges").click(function() {
-            $("#saveGroupChanges").val("Saving Changes...");
-            var url = 'inc/invites.php';
-            var newName = document.getElementsByName("editGroupName")[0].value;
-            var newDesc = document.getElementsByName("editGroupDesc")[0].value;
-            var formData = 'action=changeGroupInfo&groupId='+groupId+'&groupName='+newName+'&groupDesc='+newDesc;
-
-            $.post(url, formData, function(response){
-             console.log(response);
-              if (response=='"success"') {
-                $('#editGroupErrorLabel').html('');
-                $('#groupInfoName').html(document.getElementsByName("editGroupName")[0].value);
-                $('#groupInfoDesc').html(document.getElementsByName("editGroupDesc")[0].value);
-                $('#editGroupModal').foundation('reveal', 'close');
-                $("#saveGroupChanges").val("Save Changes");
-                
-              }
-              else{
-                $('#editGroupErrorLabel').html("Something seems to have gone wrong! Please try again later!");
-              }
-          }); //end post
-          });
-        };
-        $('#groupDescription').html(groupInfoHTML);
-
-        }); //end getJSON
-      }
-      
-      function resetInviteFriendsModal(){
-        var inviteFriendHTML='';
         
-        inviteFriendHTML+='<form method="post" action="inc/invites.php" id="inviteFriends">';
-        inviteFriendHTML+='<fieldset>';
-        inviteFriendHTML+='<legend> Select Friends to Invite:</legend>';
-        inviteFriendHTML+='<div class="ui-widget">';
-        inviteFriendHTML+='<input placeholder="Enter friend&#39;s email" id="inviteAutocomplete" size="30"><p id="inviteWarningArea"></p> <button onclick="addFriendToInviteTable(); return false;">  Add Friend to Invite List</button>';
-        inviteFriendHTML+='</div>';
-        inviteFriendHTML+='<div>';
-        inviteFriendHTML+='Invite List: <br>';
-        inviteFriendHTML+='<ul id="inviteFriendZone">';
-        inviteFriendHTML+='</ul>';
-        inviteFriendHTML+='</div>';
-        inviteFriendHTML+='</fieldset>'; 
-        inviteFriendHTML+='<input class="button radius" type="submit" value="Invite Friends!">';
-        inviteFriendHTML+='</form>';
-        inviteFriendHTML+='<a class="close-reveal-modal" aria-label="Close">&#215;</a>';
-
-        $('#inviteFriendsModal').html(inviteFriendHTML);        
-      }
 
       </script>
        <ul class="large-block-grid-3" id="itemGrid" data-equalizer> 
