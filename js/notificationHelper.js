@@ -1,4 +1,5 @@
 function setNotificationStatus(registered){
+	writeNotificationSection();
 	setNotificationUIStatus(registered)
 
 	if (registered) {
@@ -68,7 +69,23 @@ function changeNotificationSettings(){
 }
 
 
-
+function writeNotificationSection(){
+	sectionHTML = '<p id="notificationNotice"></p>';
+	sectionHTML += '<div class="row" id="notificationHeadline">';
+	sectionHTML += '<div class = "small-10 columns">';
+	sectionHTML += '<p id="notificationSetting"> Notifications are currently disabled </p>';
+	sectionHTML += '</div>';
+	sectionHTML += '<div class ="small-2 columns">';
+	sectionHTML += '<div class="switch round large">';
+	sectionHTML += '<input id="notificationsSwitch" type="checkbox" onchange="notificationsChanged();">';
+	sectionHTML += '<label for="notificationsSwitch"></label>';
+	sectionHTML += '</div>'; 
+	sectionHTML += '</div>';
+	sectionHTML += '</div>';
+	sectionHTML += '<div id="notificationFrequencyControl">';  
+	sectionHTML += '</div>';
+	$('#notificationSection').html(sectionHTML);
+}
 
 function writeFrequencyControlHTML(){
 	var freqHTML='';

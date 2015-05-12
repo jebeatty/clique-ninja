@@ -32,10 +32,8 @@ function postNewPost(url, formData){
       $('#postButton').attr('value',"Posting...");          
       $.post(url, formData, function(response){
         
-        console.log(response.length);
+
         response=response.substr(1,7);
-        console.log(response.length);
-        console.log(response);
         if (response=='success') {
           $("#newPostErrorLabel").html("");
           console.log("Response Successful");

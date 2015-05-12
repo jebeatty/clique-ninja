@@ -25,8 +25,7 @@ include('inc/loggedInHeader.php');
 
                 $.each(response, function(index, post){
                   var mod = index%2;
-                  console.log(post);
-
+                 
                   if (mod===1) {
                     column1HTML += writeItemHTML(post);
                   }

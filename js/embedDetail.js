@@ -14,7 +14,11 @@
     callEmbedlyAPIForDiv(itemIdTag,post.url);
 
 
+
     //Comments & Social
+    itemHTML += '<p style="font-size:.60em; margin-bottom:2px; margin-top:-32px;"><a onclick="sharePost(&#39;'+post.url+'&#39;);"><i class="fi-share" style="display:inline-block; color:#9164ab; margin-left-5px;"></i></a>';
+    itemHTML += '<a onclick="emailPost(&#39;'+post.url+'&#39;);"><i class="fi-mail" style="display:inline-block; color:#9164ab; margin-left:10px;"></i></a></p>';
+
     itemHTML += '<ul class="button-group radius even-2">';
 
     if (post.postLiked) {
@@ -27,6 +31,10 @@
     }
 
     itemHTML += '</ul>';
+
+    
+
+
     itemHTML += '<p class="discussionStats">'+post.commentData.length+' Comments </p>';
     itemHTML += '<p class="seeDiscussion"><a data-reveal-id="detailModal" onclick="fillModal(&#39;'+post.postId+'&#39;,&#39;'+cleanURL+'&#39;,&#39;'+post.posterName+'&#39;);"> <i class="fi-comments"></i> See Discussion</a></p> </div>';
 
@@ -61,6 +69,9 @@
 
 
     //Comments & Social
+    itemHTML += '<p style="font-size:.60em; margin-bottom:2px; margin-top:-32px;"><a onclick="sharePost(&#39;'+post.url+'&#39;);"><i class="fi-share" style="display:inline-block; color:#9164ab; margin-left-5px;"></i></a>';
+    itemHTML += '<a onclick="emailPost(&#39;'+post.url+'&#39;);"><i class="fi-mail" style="display:inline-block; color:#9164ab; margin-left:10px;"></i></a></p>';
+
     itemHTML += '<ul class="button-group radius even-2">';
 
     itemHTML += '<li><a id="like'+post.postId+'" class="button socialButton" onclick="submitLike(&#39;likes&#39;,&#39;'+post.postId+'&#39;);">'+post.likes+' Likes</a></li>';
@@ -71,6 +82,19 @@
     itemHTML += '<p class="seeDiscussion"><a data-reveal-id="detailModal" onclick="fillModal(&#39;'+post.postId+'&#39;,&#39;'+cleanURL+'&#39;,&#39;'+post.posterName+'&#39;);"> <i class="fi-comments"></i> See Discussion</a></p> </div>';
 
     return itemHTML;
+  }
+
+  function sharePost(postURL){
+    $('#newPostUrl').val(postURL);
+    $('#newPostModal').foundation('reveal', 'open');
+
+  }
+
+  function emailPost(postURL){
+    console.log(postURL);
+    $('#emailModal').foundation('reveal', 'open');
+    //launch the email modal
+
   }
 
   function submitLike(likeType, postId){
@@ -141,11 +165,11 @@ function postComment(postId){
   var url= 'inc/social.php';
   var formData = 'postId='+postId+'&comment='+$('#commentBox').val();
   formData+='&action=postComment';
-  console.log(formData);
+ 
 
   
   $.post(url,formData,function(response){
-    console.log('Response:' + response);
+
     getCommentsForPost(postId);
   });
 
@@ -154,14 +178,14 @@ function postComment(postId){
 function getCommentsForPost(postId){
   var commentsHTML = '';
   $.getJSON('inc/social.php', {action:"getComments", postId:postId}, function(response){
-      console.log(response);
+      
 
       
       $.each(response, function(index, comment){
         commentsHTML +='<p class="commenterName"> '+comment.userName+': </p><p class="comment">'+comment.comment+'</p><p class="timeStamp"></p>';
       });
 
-      console.log(commentsHTML);
+
       $('#commentSection').html(commentsHTML);
       $('#commentBox').val('');
       

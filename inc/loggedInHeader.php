@@ -24,6 +24,8 @@
     <script src='js/notificationHelper.js'></script>
     <script>
       var _roost = _roost || [];
+      
+      _roost.push(['alias', <?php echo $_SESSION['userId']?>]);
     </script>
     <script>
       $(document).ready(function(){
@@ -76,8 +78,6 @@
           console.log(formData)
           $('#groupButton').attr('value',"Creating Group...");     
           $.post(url, formData, function(response){
-             console.log("Invite response:");
-             console.log(response);
               if (response="success") {
                 $('#addGroup').html("<p> Group Created! </p>");
                 //wait
@@ -162,7 +162,14 @@
 
     <a class="button radius left" data-reveal-id="newPostModal"> New Post </a>
     <a class="button radius left" data-reveal-id="newGroupModal"> New Group </a>
+    <a class="button radius left" onclick="promptBox();return false;"> Prompt </a>
+    <script>
+    function promptBox(){
 
+      _roost.prompt();
+    }
+
+    </script>
     <!-- End Navigation -->
     <!-- Modal Windows -->
 
@@ -221,31 +228,34 @@
 
       <h4> Notifications </h4>
       <p> Because every recommendation on Clique comes to you directly from your friends, new posts can be a little irregular. We <i>highly</i> recommend signing up for browser notifications so you don't miss a thing!
+      
       <div id="notificationSection">
-        <p id="notificationNotice"></p>
-        <div class="row" id="notificationHeadline">
-          <div class = "small-10 columns">
-             <p id="notificationSetting"> Notifications are currently disabled </p>
-          </div>
-          <div class ="small-2 columns">
-            <div class="switch round large">
-             <input id="notificationsSwitch" type="checkbox" onchange="notificationsChanged();"> 
-             <label for="notificationsSwitch"></label>
-            </div> 
-          </div>
-        </div>
-        <div id="notificationFrequencyControl">  
-        </div>
+        <p> It seems like you haven't yet registered for notifications. If you dismissed the earlier pop-up, please click below (and then the "allow" button) to register. If you've already blocked notifications, the button below will not work, and you'll need to go to your browser's settings and unblock notifications from this site.  
+        <br>
+        <br>
+        <a class="button radius" onclick="_roost.prompt();_roost.push(['alias', <?php echo $_SESSION['userId']?>]);"> Register for Notifications</a>
       </div>
       <script>
-              _roost.push(['onresult', function(data){
-                console.log("registered="+data['registered']);
-
-                //if the user isn't registered, then we can prompt, or we have to advise.
-                setNotificationStatus(data['enabled']);
-              }]);
               
-            </script>
+        _roost.push(['onresult', function(data){
+
+          //if the user isn't registered, then we can prompt, or we have to advise.
+          if (data['registered']) {
+            setNotificationStatus(data['enabled']);
+
+            if (data['firstTime']) {
+              //if it is the first time, we should insert the user into the notification database
+              changeNotificationSettings();
+            }
+
+            
+          } else{
+            console.log("not registered");
+          }
+          
+        }]);
+        
+      </script>
       <div id="digestSection">
       </div>
       
@@ -350,13 +360,42 @@
       <a class="close-reveal-modal" aria-label="Close">&#215;</a>
     </div>
 
+    <!-- Email Share -->
+    <div id="emailModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+      <h2 id="emailTitle">Email Friends</h2>
+      <form method="post" action='inc/social.php' id="emailFriends">
+      Subject: <input name="groupName"> <br>
+      <br>
+      <br>
+      Message:
+      <textarea name="emailBody" rows="4" cols="3"></textarea><br>
+
+      <fieldset>
+        <legend> Select Recipients:</legend>
+        <p> Enter your friend&#39;s emails to add them to the email list </p>
+
+        <div class="ui-widget">
+          <input placeholder="Enter friend's email" id="autocomplete" size="30"><p id="warningArea"></p> <button onclick="addFriendToTable(); return false;"> Add Email </button>
+        </div>
+        <div>
+          Selected Recipients: <br>
+          <ul id="friendZone">
+
+          </ul>
+        </div>
+      </fieldset>
+     
+      <input class="button" type="submit" value="Send Email!" id="emailButton">
+      </form>
+      <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+    </div>
 
     <!-- New Post -->
     <div id="newPostModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
       <h2 id="newPostTitle">New Post</h2>
       <p id="newPostErrorLabel"></p>
       <form method="post" action='inc/posts.php' id="addPosts">
-      URL: <input name="url"> <br>
+      URL: <input name="url" id="newPostUrl" style="width:85%;"> <br>
       <br>
       <br>
       Comment:

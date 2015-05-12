@@ -84,8 +84,16 @@ function addNewPost($groups, $userId, $url, $comment){
       addUserPostRelation($insertId,$userId, 'likes');
     } //end each*/
 
+    //wrap in ob_flush
+   
+    //ob_start();
+    echo json_encode("success"); 
+    //header("Content-Length: ".ob_get_length());
+    //header("Connection: close");
+    //ob_end_flush();
 
-    echo json_encode("success");   
+    //sendNotifications($groups,"post") - function has arguments of the list of groups that have been update & a code for either post or comment
+      
   }
 }
 
