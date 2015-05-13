@@ -1,8 +1,8 @@
-function setNotificationStatus(registered){
+function setNotificationStatus(enabled){
 	writeNotificationSection();
-	setNotificationUIStatus(registered)
+	setNotificationUIStatus(enabled)
 
-	if (registered) {
+	if (enabled) {
 		document.getElementById("notificationsSwitch").checked=true;
 		//set frequency 
 	} else{

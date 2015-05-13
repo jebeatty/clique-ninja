@@ -41,14 +41,7 @@
           }); //end post - logout
         }); //end submit - logout
 
-        $('#addPosts').submit(function(evt){
-          evt.preventDefault();
-          var url = $(this).attr("action");
-          var formData = $(this).serialize();
-          postNewPost(url,formData);
-          //make sure they actually input stuff...
-            
-        });
+        
 
         $("#autocomplete").autocomplete({
           source: "inc/search.php",
@@ -408,7 +401,7 @@
           </div>
       </fieldset>
      
-      <input class="button" type="submit" value="Post!" id="postButton">
+      <a class="button" id="postButton" onclick="postNewPost();">Post!</a>
       </form>
       <a class="close-reveal-modal" aria-label="Close">&#215;</a>
     </div>

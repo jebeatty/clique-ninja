@@ -3,6 +3,12 @@
 //SOP Action Selector 
 
 session_start();
+
+require_once("config.php");
+require_once("database.php");
+require_once("helperFunctions.php");
+require_once("notificationFunctions.php");
+
 if (isset($_SESSION['username'])) {
 	if (isset($_POST["action"])) {
 		$action = $_POST["action"];
@@ -18,7 +24,7 @@ if (isset($_SESSION['username'])) {
 
  
 function socialActionSelector($action){
-  include('groupHelper.php');
+  //include('groupHelper.php');
 
   if ($action=="submitLike") {
   	$likeType = $_GET['likeType'];
@@ -95,28 +101,6 @@ function addLikeToPost($postId, $userId, $likeType){
 
 }
 
-function checkIfUserLikedPost($postId, $userId){
-	require_once("../inc/config.php");
-  	require(ROOT_PATH."inc/database.php");
-
-  	try{
-  		$results = $db->prepare("SELECT postId FROM userPostRelations WHERE postId=? AND userId=?");
-  		$results->execute(array($postId, $userId));
-
-  	} catch(Exception $e){
-  		 echo "Like tabulation data error!";
-        exit;
-  	}
-
-  	$results = $results->fetchAll(PDO::FETCH_ASSOC);
-  	if (count($results)>0) {
-  		return true;
-  	} else{
-		return false;
-  	}
-
-
-}
 
 function addUserPostRelation($postId, $userId, $likeType){
 	  require_once("../inc/config.php");
@@ -133,43 +117,8 @@ function addUserPostRelation($postId, $userId, $likeType){
 
 }
 
-function getLikesForPost($postId){
-	require_once("../inc/config.php");
-  	require(ROOT_PATH."inc/database.php");
-
-  	try{
-  		$results = $db->prepare("SELECT ehs, likes, loves FROM posts WHERE postId=? LIMIT 1");
-  		$results->execute(array($postId));
-
-  	} catch(Exception $e){
-  		 echo "Like tabulation data error!";
-        exit;
-  	}
-
-  	$likeData = $results->fetchAll(PDO::FETCH_ASSOC);
-  	return $likeData;
-}
-
-
 
 //comments
-function getCommentsForPost($postId){
-    require_once("../inc/config.php");
-    require(ROOT_PATH."inc/database.php");
-
-    try{
-      $results = $db->prepare("SELECT comment, userId FROM comments WHERE postId=?");
-      $results->execute(array($postId));
-
-    } catch(Exception $e){
-       echo "Comment tabulation data error!";
-       exit;
-    }
-
-    $commentData = $results->fetchAll(PDO::FETCH_ASSOC);
-    return $commentData;
-
-}
 
 function addCommentToPost($postId, $userId, $comment){
 
@@ -186,7 +135,15 @@ function addCommentToPost($postId, $userId, $comment){
         exit;
     }
 
-    echo "comment added";
+    ob_start();
+    echo json_encode("success");
+    header("Content-Length: ".ob_get_length());
+    header("Connection: close");
+    ob_end_flush();
+
+    $group = array(getGroupIdForPostId($postId));
+    updateNotifications($group,"comment");
+    
 }
 
 function addGroupCommentToChat($groupId, $userId, $comment){

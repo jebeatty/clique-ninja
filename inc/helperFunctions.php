@@ -48,6 +48,7 @@ function getUserIdForEmail($email){
     }   
 }
 
+
 function getLikesForPost($postId){
         global $db;
 
@@ -147,7 +148,45 @@ function getAllMembersForGroup($groupId){
     return $results;
 }
 
+function getMemberIdsForGroup($groupId){
+  global $db;
 
+  try {
+    $results = $db->prepare("SELECT userId FROM userGroupRelations WHERE groupId = ?");
+    $results->execute(array($groupId));
+
+    } catch(Exception $e){
+        echo "Data selection error!";
+        exit;
+    }
+
+    $results = $results->fetchAll(PDO::FETCH_ASSOC);
+
+    return $results;
+}
+
+function getGroupIdForPostId($postId){
+  require_once("../inc/config.php");
+  require(ROOT_PATH."inc/database.php");
+
+  try{
+    $results = $db->prepare("SELECT groupId FROM posts WHERE postId=?");
+    $results->execute(array($postId));
+
+  } catch(Exception $e){
+     echo "GroupId/PostId data error!";
+      exit;
+  }
+
+  $results = $results->fetchAll(PDO::FETCH_ASSOC);
+  if (count($results)>0) {
+    return $results[0]['groupId'];
+  }
+  else{
+    return '0';
+  }
+
+}
 //check functions, checking if certain data states are true or false
 function checkIfUserLikedPost($postId, $userId){
         global $db;

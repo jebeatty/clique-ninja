@@ -5,6 +5,7 @@ session_start();
 require_once("config.php");
 require_once("database.php");
 require_once("helperFunctions.php");
+require_once("notificationFunctions.php");
 
 if (isset($_SESSION['username'])) {
   if (isset($_POST["action"])) {
@@ -86,13 +87,13 @@ function addNewPost($groups, $userId, $url, $comment){
 
     //wrap in ob_flush
    
-    //ob_start();
+    ob_start();
     echo json_encode("success"); 
-    //header("Content-Length: ".ob_get_length());
-    //header("Connection: close");
-    //ob_end_flush();
+    header("Content-Length: ".ob_get_length());
+    header("Connection: close");
+    ob_end_flush();
 
-    //sendNotifications($groups,"post") - function has arguments of the list of groups that have been update & a code for either post or comment
+    updateNotifications($groups,"post");
       
   }
 }

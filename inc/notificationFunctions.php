@@ -1,18 +1,85 @@
 <?php
+require_once("config.php");
+require_once("database.php");
+require_once("helperFunctions.php");
 
+function updateNotifications($groups, $type){
+	global $db;
 
-function UpdateNotifications($groupList, $type){
+	$category='';
+	$freq='';
+	if ($type=='post') {
+		$category='pendingPosts';
+		$freq='postCode';
+	} else if($type=='comment'){
+		$category='pendingComments';
+		$freq='commentCode';
+	} else{
+		exit();
+	}
 
-//for each group, get the list of members
-	//create a immediate send array
-	//for that set of members, get relevant notification info (SELECT userId, ? (either postFreq or commentFreq depending on ) FROM notifications WHERE userId=? OR userId=? ...)
-		//if freq > 0, pending++;
-		//else, add them to the immediate send array
-	//}
-	//sendNotificationToAliases("SENDER NAME made a post/comment in GROUP NAME", $urlforgroupLibrary[need name and id], $immediateSendList);
-//}
-//we've now gone through all the groups it has been posted to and updated all the notification counters for members registered for notification or sent out notifications
+	echo $freq;
+	echo $category;
+	//group array is just the id
+	foreach ($groups as $group) {
+		$groupId = $group;
+		if ($groupId!='library') {
+			$groupName=getGroupNameForId($groupId); 
+			$groupMembers = array_column(getMemberIdsForGroup($groupId),'userId');
 
+			$immediateSendList = array();
+
+			//generate the appropriate SQL query
+			$SQLQuery = "SELECT userId, enabled, ".$freq.", ".$category." FROM notifications WHERE ";
+
+			for ($i=0; $i < count($groupMembers); $i++) { 
+			    $SQLQuery .= "userId=? ";
+			    $remainingLoops = (count($groupMembers)-$i)-1;
+			    if ($remainingLoops!==0) {
+			      $SQLQuery .= "OR ";
+			    }
+		  	}
+
+		  	try {
+		    $results = $db->prepare($SQLQuery);
+		    $results->execute($groupMembers);
+
+		    } catch(Exception $e){
+		        echo "Data loading error!";
+		        exit;
+
+		    }
+
+		    $membersToUpdate = $results->fetchAll(PDO::FETCH_ASSOC);
+
+		    //now take each of the members of the group and update or notify as need be
+		    foreach ($membersToUpdate as $member) {
+		    	if ($member['enabled']=='1') {
+		    		echo "member note code: ".$member[$freq];
+		    		if ($member[$freq]=='0') {
+		    			array_push($immediateSendList, $member['userId']); //member to be notified
+		    			echo "User ".$member['userId']." to be notified ";
+		    		} else {
+		    			echo "User ".$member['userId']." to be updated ";
+		    			try{
+		    				$updateQuery = "UPDATE notifications SET ".$category."=".$category."+1 WHERE userId=".$member['userId'];
+						 	$updates = $db->prepare($updateQuery);
+						 	$updates->execute();
+						} catch (Exception $e){
+							echo "notification update error";
+							exit();
+						}
+		    		}
+		    	}
+		    }
+
+		    $urlforgroupLibrary="https://www.discoverclique.com/doublesecretbeta/groupLibrary.php?groupName=".$groupName."&groupId=".$groupId;
+		    echo var_dump($immediateSendList);
+		    if (count($immediateSendList)>0) {
+		    	sendNotificationsToAliases("There's been a ".$type." to ".$groupName, $urlforgroupLibrary, $immediateSendList);
+		    }
+		}
+	}
 }
 
 

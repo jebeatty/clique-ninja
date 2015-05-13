@@ -16,9 +16,11 @@ function getGroupList(){
 }
 
 
-
 //Post Modal Functions
-function postNewPost(url, formData){
+function postNewPost(){
+  var url = $('#addPosts').attr("action");
+  var formData = $('#addPosts').serialize();
+
   if (formData.search("url=&")>-1) {
     $("#newPostErrorLabel").html("Please input a URL");
 
@@ -64,13 +66,14 @@ function postNewPost(url, formData){
   } 
 }
 
+
 function resetPostModalHTML(){
       
   postModalHTML= '<h2 id="newPostTitle">New Post</h2><p id="newPostErrorLabel"></p><form method="post" action="inc/posts.php" id="addPosts">URL: <input name="url"> <br><br><br>';
   postModalHTML+= 'Comment: <textarea name="message" rows="5" cols="3"></textarea><br><fieldset><legend> Select Groups to Share With:</legend>';
   postModalHTML+= '<input type="checkbox" name="group[]" value="library"> Post to My Library<br>';
   postModalHTML+= '<div id="modalGroups"></div></fieldset>';
-  postModalHTML+='<input class="button" type="submit" value="Post!" id="postButton"></form><a class="close-reveal-modal" aria-label="Close">&#215;</a>';
+  postModalHTML+='<a class="button" id="postButton" onclick="postNewPost();">Post!</a></form><a class="close-reveal-modal" aria-label="Close">&#215;</a>';
 
   $('#newPostModal').html(postModalHTML);
 }
