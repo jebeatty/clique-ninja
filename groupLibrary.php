@@ -35,7 +35,7 @@ include('inc/loggedInHeader.php'); ?>
       <script src="js/libraryHelper.js"></script>
         <script>
                 
-      $(document).ready(function(){
+    $(document).ready(function(){
         var groupId = getParameterByName('groupId');
         var groupName = getParameterByName('groupName');
 
@@ -78,27 +78,27 @@ include('inc/loggedInHeader.php'); ?>
          }
         });
 
-        $('#inviteFriends').submit(function(evt){
-          console.log("inviteFriends event detected!");
-          evt.preventDefault();
-          var url = $(this).attr("action");
-          var formData = $(this).serialize();
-          formData+='&action=inviteFriends&groupId='+groupId;
-          $('#inviteButton').attr('value', 'Inviting...Please Wait');
-          $.post(url, formData, function(response){
-             console.log(response);
-              if (response="success") {
-                $('#inviteFriendsModal').html("<p> Invites sent! </p>");
-                $('#inviteFriendsModal').foundation('reveal', 'close');
-                resetInviteFriendsModal();
-              }
-              else{
-                $('#inviteFriendsModal').html("<p> Something seems to have gone wrong! Please try again later </p>");
-              }
-          }); //end post
-          }); //end InviteFriends Submit
+      $('#inviteFriends').submit(function(evt){
+        console.log("inviteFriends event detected!");
+        evt.preventDefault();
+        var url = $(this).attr("action");
+        var formData = $(this).serialize();
+        formData+='&action=inviteFriends&groupId='+groupId;
+        $('#inviteButton').attr('value', 'Inviting...Please Wait');
+        $.post(url, formData, function(response){
+           console.log(response);
+            if (response="success") {
+              $('#inviteFriendsModal').html("<p> Invites sent! </p>");
+              $('#inviteFriendsModal').foundation('reveal', 'close');
+              resetInviteFriendsModal();
+            }
+            else{
+              $('#inviteFriendsModal').html("<p> Something seems to have gone wrong! Please try again later </p>");
+            }
+        }); //end post
+        }); //end InviteFriends Submit
 
-      });//end ready
+    });//end ready
 
         
 

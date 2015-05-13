@@ -95,38 +95,24 @@ function resetGroupModalHTML(){
   $('#newGroupModal').html(groupModalHTML);
 }
 
-function addFriendToTable(){
 
-  //check if it is a multiple friend sitch or if it is just one
-  
-  /*
-  if (friendEmail.indexOf(',')>0) {
-    //so multiple friends - we should parse the first friend email, remove it, take off the comma, then run the check again (recursion!)
-    
-    //create an empty array, then pass it and the string to the function
-    var emailArray
-    parseEmailIntoArray();
-    generateHTMLFromEmailArray();
-    
-  }
-  else{}
-  */
-  
-  var friendEmail = $('#autocomplete').val();
- 
+function addFriendToTable(){
+  var friendEmail = $('[name=friendEmailInput]').val();
+
     if (friendEmail.indexOf('@')>0) {
-      var existingFriends = $('#friendZone').html();
+      var existingFriends = $('#groupFriendZone').html();
       var newFriend = '<input type="checkbox" name="members[]" value="'+friendEmail;
       if (existingFriends.indexOf(newFriend)==-1) {
-        $('#warningArea').html('');
-        $('#friendZone').append(newFriend+'" checked> '+friendEmail+'<br>');
-        $('#autocomplete').val('');
+        $('#groupWarningArea').html('');
+        $('#groupFriendZone').append(newFriend+'" checked> '+friendEmail+'<br>');
+        $('[name=friendEmailInput]').val('');
       }
       else{
-        $('#warningArea').html('Friend already selected');
+        $('#groupWarningArea').html('Friend already selected');
       }
     } 
     else{
-      $('#warningArea').html('Invalid Email');
+      $('#groupWarningArea').html('Invalid Email');
+    
     }  
 }

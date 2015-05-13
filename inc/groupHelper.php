@@ -148,26 +148,5 @@ function getUserNameForId($userId){
     
 }
 
-function getGroupIdForPostId($postId){
-  require_once("../inc/config.php");
-  require(ROOT_PATH."inc/database.php");
 
-  try{
-    $results = $db->prepare("SELECT groupId FROM posts WHERE postId=?");
-    $results->execute(array($postId));
-
-  } catch(Exception $e){
-     echo "GroupId/PostId data error!";
-      exit;
-  }
-
-  $results = $results->fetchAll(PDO::FETCH_ASSOC);
-  if (count($results)>0) {
-    return $results[0]['groupId'];
-  }
-  else{
-    return '0';
-  }
-
-}
 ?>

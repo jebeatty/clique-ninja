@@ -20,7 +20,7 @@
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="https://cdn.embed.ly/jquery.embedly-3.1.1.min.js" type="text/javascript"></script>
     <script src='//cdn.goroost.com/roostjs/pvneqf9i8wdjrh7yj0pxw000xy3ex3me' async></script>
-    <script src='js/headerHelper.js'></script>
+    
     <script src='js/notificationHelper.js'></script>
     <script>
       var _roost = _roost || [];
@@ -29,7 +29,6 @@
     </script>
     <script>
       $(document).ready(function(){
-
 
         $('#logoutForm').submit(function(evt){
           evt.preventDefault();
@@ -41,16 +40,13 @@
           }); //end post - logout
         }); //end submit - logout
 
-        
-
-        $("#autocomplete").autocomplete({
+       
+        $("[name=friendEmailInput]").autocomplete({
           source: "inc/search.php",
           appendTo: "#newGroupModal",
           delay: 400,
-          minLength: 1//search after two characters
-         
+          minLength: 1//search after two characters  
         });
-
         var timer;
         var delay = 1200; // 0.6 seconds delay after last input
  
@@ -95,19 +91,26 @@
           } else{
             $('#groupInviteAlert').html('');
           }
-          
-        $('#autocomplete').keydown(function(event) {
-        if (event.keyCode == 188) {
-            addFriendToTable();
-            if($('#warningArea').html()==''){
-              $('#autocomplete').val('');
-            }
-            return false;
-         }
         });
 
+
+        $('[name=friendEmailInput]').keydown(function(event) { 
+          if (event.keyCode == 188) {
+              addFriendToTable();
+              if($('#groupWarningArea').html()==''){
+                $('[name=friendEmailInput]').val('');
+              }
+              return false;
+           }
         });
+
+
+
+
       }); //end ready
+
+
+    
     </script>
   </head>
 
@@ -140,7 +143,7 @@
                  <li><a href="library.php">Library</a></li>
                  <li class="has-dropdown">
                     <a href="groups.php">Groups <span id="groupInviteAlert"> </span></a>
-                    <script> getGroupList(); </script>
+                    
                     <ul class="dropdown" id='groupMenu'>
                     </ul>
                  </li>
@@ -155,12 +158,7 @@
 
     <a class="button radius left" data-reveal-id="newPostModal"> New Post </a>
     <a class="button radius left" data-reveal-id="newGroupModal"> New Group </a>
-    <a class="button radius left" onclick="promptBox();return false;"> Prompt </a>
-    <script>
-    function promptBox(){
-
-      _roost.prompt();
-    }
+   
 
     </script>
     <!-- End Navigation -->
@@ -368,7 +366,7 @@
         <p> Enter your friend&#39;s emails to add them to the email list </p>
 
         <div class="ui-widget">
-          <input placeholder="Enter friend's email" id="autocomplete" size="30"><p id="warningArea"></p> <button onclick="addFriendToTable(); return false;"> Add Email </button>
+          <input placeholder="Enter friend's email" id="friendEmailInput" size="30"><p id="warningArea"></p> <button onclick="addFriendToTable(); return false;"> Add Email </button>
         </div>
         <div>
           Selected Recipients: <br>
@@ -422,11 +420,12 @@
         <p> Enter your friend&#39;s emails to add them to the invite list. If they are not yet a Clique user, ask them to join and they will see the group 
 
         <div class="ui-widget">
-          <input placeholder="Enter friend's email" id="autocomplete" size="30"><p id="warningArea"></p> <button onclick="addFriendToTable(); return false;"> Add Friend to Invite List </button>
+          <input placeholder="Enter friend's email" name="friendEmailInput" size="30"><p id="groupWarningArea"></p><button onclick="addFriendToTable(); return false;"> Add Friend to Invite List </button>
         </div>
+    
         <div>
           Friends to Invite: <br>
-          <ul id="friendZone">
+          <ul id="groupFriendZone">
 
           </ul>
         </div>
@@ -436,6 +435,8 @@
       </form>
       <a class="close-reveal-modal" aria-label="Close">&#215;</a>
     </div>
+    <script src='js/headerHelper.js'></script>
+    <script> getGroupList(); </script>
 
 
 
