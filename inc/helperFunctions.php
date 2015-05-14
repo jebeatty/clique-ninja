@@ -24,6 +24,26 @@ function getUserNameForId($userId){
     }    
 }
 
+function getUserIdForName($username){
+    global $db;
+
+    try{
+      $results = $db->prepare("SELECT userId FROM users WHERE userName=? LIMIT 1");
+      $results->execute(array($username));
+
+    } catch(Exception $e){
+       echo "UserId selection data error!";
+        exit;
+    }
+
+    $results = $results->fetchAll(PDO::FETCH_ASSOC);
+    if (count($results)>0) {
+      return $results[0]['userId'];
+    }
+    else{
+      return '';
+    }    
+}
 
 
 function getUserIdForEmail($email){
@@ -230,11 +250,11 @@ function checkUserGroupMembership($userId, $groupId){
 }
 
 function checkUserGroupInviteStatus($userId, $groupId){
-        global $db;
+    global $db;
 
-        try {
-        $results = $db->prepare("SELECT groupId FROM groupInvites WHERE userId=? AND groupId=? ");
-        $results->execute(array($userId, $groupId));
+    try {
+    $results = $db->prepare("SELECT groupId FROM groupInvites WHERE userId=? AND groupId=? ");
+    $results->execute(array($userId, $groupId));
 
     } catch(Exception $e){
         echo "User membership data  error!";
@@ -248,6 +268,49 @@ function checkUserGroupInviteStatus($userId, $groupId){
     else{
         return false;
     }
+}
+
+
+function checkForExistingUsername($username){
+  global $db;
+
+  try {
+  $results = $db->prepare("SELECT userId FROM users WHERE userName=?");
+  $results->execute(array($username));
+
+  } catch(Exception $e){
+      echo "Username membership data error!";
+      exit;
+  }
+
+  $resultCount = $results->rowCount();
+  if ($resultCount>0) {
+      return true;
+  }
+  else{
+      return false;
+  }
+}
+
+function checkForExistingEmail($email){
+  global $db;
+
+  try {
+  $results = $db->prepare("SELECT userId FROM users WHERE email=?");
+  $results->execute(array($email));
+
+  } catch(Exception $e){
+      echo "Username membership data error!";
+      exit;
+  }
+
+  $resultCount = $results->rowCount();
+  if ($resultCount>0) {
+      return true;
+  }
+  else{
+      return false;
+  }
 }
 
 //General utility functions
@@ -274,47 +337,160 @@ function cleanURL($inputURL){
 }
 
 function getNumDays($time_posted){
-        $now = time();
-        $your_date = strtotime($time_posted);
-        $post_date=date("M j, Y", $your_date);
-        $datediff = $now - $your_date;
-        $num_sec=$datediff;
-        $num_min=floor($datediff/(60));
-        $num_hour=floor($datediff/(60*60));
-        $num_day=floor($datediff/(60*60*24));   
-        $num_week=floor($datediff/(60*60*24*7));
-        $num_month=floor($datediff/(60*60*24*7*4.38));
+  $now = time();
+  $your_date = strtotime($time_posted);
+  $post_date=date("M j, Y", $your_date);
+  $datediff = $now - $your_date;
+  $num_sec=$datediff;
+  $num_min=floor($datediff/(60));
+  $num_hour=floor($datediff/(60*60));
+  $num_day=floor($datediff/(60*60*24));   
+  $num_week=floor($datediff/(60*60*24*7));
+  $num_month=floor($datediff/(60*60*24*7*4.38));
 
-        if($num_sec<0)
-                $num_sec=0;
-                
-        if($num_sec<60)
-                return $num_sec." sec ago";
-                
-        if($num_min>0 && $num_min<60)
-                return $num_min." min ago";
+  if($num_sec<0)
+    $num_sec=0;
+    
+  if($num_sec<60)
+    return $num_sec." sec ago";
+    
+  if($num_min>0 && $num_min<60)
+    return $num_min." min ago";
 
-        if($num_hour>1 && $num_hour<24)
-                return $num_hour." hours ago";
-        else if($num_hour==1)
-                return "1 hour ago";
+  if($num_hour>1 && $num_hour<24)
+    return $num_hour." hours ago";
+  else if($num_hour==1)
+    return "1 hour ago";
 
-        if($num_day>1 && $num_day<14)
-                return $num_day." days ago";
-        if($num_day==1)
-                return "1 day ago";
+  if($num_day>1 && $num_day<14)
+    return $num_day." days ago";
+  if($num_day==1)
+    return "1 day ago";
 
-        if($num_week>1 && $num_week<5)
-                return $num_week." weeks ago";
-        else if($num_week==1)
-                return '1 week ago';
+  if($num_week>1 && $num_week<5)
+    return $num_week." weeks ago";
+  else if($num_week==1)
+    return '1 week ago';
 
-        if($num_month>1 && $num_month<3)
-                return $num_month." months ago";
-        else if($num_month==1)
-                return "1 month ago";
-        else
-                return $post_date;
-        }
+  if($num_month>1 && $num_month<3)
+    return $num_month." months ago";
+  else if($num_month==1)
+    return "1 month ago";
+  else
+    return $post_date;
+}
+
+function randString($length, $charset='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789')
+{
+    $str = '';
+    $count = strlen($charset);
+    while ($length--) {
+        $str .= $charset[mt_rand(0, $count-1)];
+    }
+    return $str;
+}
+
+//authentification functions
+function authenticateUser($userId,$password){
+  global $db;
+  
+  if ($userId!='') {
+    //see if the id has a hashed password
+    if(saltExists($userId)){
+      //see if the passwords match
+      if (checkPassword($password, $userId)) {
+        return true;
+      } else{
+        return false;
+      }
+      //else do an unhashed password check
+    } else{
+      try {
+      $results = $db->prepare("SELECT userId FROM users WHERE userId=? AND password=? ");
+      $results->execute(array($userId,$password));
+      } catch(Exception $e){
+          echo "Data loading error!";
+          exit;
+      }
+      $user = $results->fetchAll(PDO::FETCH_ASSOC);
+
+      //if we find a match, start the session
+      if (count($user)>0) {
+        return true;
+      } else{
+        return false;
+      }
+    }
+  } else{
+    return false;
+  }
+}
+
+function setPassword($password,$userId){
+global $db;
+
+$salt = randString(12);
+$saltedPassword=$salt.$password;
+$hash = hash('sha256',$saltedPassword);
+
+try {
+    $results = $db->prepare("UPDATE users SET password=?, salt=? WHERE userId=?");
+    $results->execute(array($hash,$salt,$userId));
+
+  } catch(Exception $e){
+    echo "Data selection error!";
+    exit;
+  }
+}
+
+function checkPassword($password,$userId){
+  global $db;
+
+  try {
+    $results = $db->prepare("SELECT password, salt FROM users WHERE userId=? LIMIT 1");
+    $results->execute(array($userId));
+
+  } catch(Exception $e){
+    echo "Data selection error!";
+    exit;
+  }
+  $userInfo = $results->fetchAll(PDO::FETCH_ASSOC);
+  if (count($userInfo)>0) {
+    $salt = $userInfo[0]['salt'];
+    $saltedPassword=$salt.$password;
+    $newHash = hash('sha256',$saltedPassword); 
+    if ($newHash===$userInfo[0]['password']) {
+      return true;
+    } else{
+      return false;
+    }
+  } else{
+    return false;
+  }
+}
+
+function saltExists($userId){
+  global $db;
+
+  try {
+    $results = $db->prepare("SELECT salt FROM users WHERE userId=? LIMIT 1");
+    $results->execute(array($userId));
+
+  } catch(Exception $e){
+    echo "Data selection error!";
+    exit;
+  }
+  $userInfo = $results->fetchAll(PDO::FETCH_ASSOC);
+  if (count($userInfo)>0) {
+    if ($userInfo[0]['salt']!='') {
+      return true;
+    } else{
+      return false;
+    }
+  } else{
+    return false;
+  }
+
+}
 
 ?>

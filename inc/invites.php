@@ -26,24 +26,22 @@ if (isset($_SESSION['username'])) {
 
 function actionSelector($action){
   
-        if ($action=="createGroup") {
-                $groupName = $_POST['groupName'];
-                $groupDesc = $_POST['groupDesc'];
-                $public = $_POST['public'];
-                $invitedMembers = $_POST['members'];
-                
-                createGroup($groupName,$groupDesc,$public,$invitedMembers);
-        }
-        else if ($action=="inviteFriends") {
-                $invitedMembers = $_POST['members'];
-                $groupId = $_POST['groupId'];
-                $inviterName=$_SESSION['username'];
-
-                echo $groupId;
-                echo var_dump($invitedMembers);
-                sendInvites($groupId, $inviterName, $invitedMembers);   
-                
-        }
+  if ($action=="createGroup") {
+    $groupName = $_POST['groupName'];
+    $groupDesc = $_POST['groupDesc'];
+    $public = $_POST['public'];
+    $invitedMembers = $_POST['members'];
+    $inviteMsg=$_POST['groupInviteMsg'];
+    createGroup($groupName,$groupDesc,$public,$invitedMembers,$inviteMsg);
+  }
+  else if ($action=="inviteFriends") {
+    $invitedMembers = $_POST['members'];
+    $groupId = $_POST['groupId'];
+    $inviterName=$_SESSION['username'];
+    $inviteMsg=$_POST['friendsInviteMsg'];
+    sendInvites($groupId, $inviterName, $invitedMembers, $inviteMsg);   
+          
+  }
   else if($action=="getGroupInfo"){
     //gets information on members & invites
     $groupId = $_GET['groupId'];
@@ -61,107 +59,102 @@ function actionSelector($action){
 
     $json = json_encode($groupInfo);
     echo $json;
-
   }
   else if($action=="changeGroupInfo"){
     $groupId=$_POST['groupId'];
     $groupName=$_POST['groupName'];
     $groupDesc=$_POST['groupDesc'];
     changeGroupInfo($groupId, $groupName, $groupDesc);
+  }
+  else if ($action=="getGroupInvites"){
+    queryInvites($_SESSION['userId']);
 
+
+  } else if ($action=="acceptInvite") {
+    $groupId=$_GET['acceptedGroupId'];
+    $userId = $_SESSION['userId'];
+    acceptInvite($groupId,$userId);
+    echo json_encode('success');
+  }
+  else if ($action=="rejectInvite"){
+    $groupId=$_GET['rejectedGroupId'];
+    $userId = $_SESSION['userId'];
+    deleteInvite($groupId,$userId);
+    echo json_encode('success');
+
+  } else if ($action=="leaveGroup"){
+    $groupId=$_GET['rejectedGroupId'];
+    $userId = $_SESSION['userId'];
+    removeUserFromGroup($groupId,$userId);
+    echo json_encode('success');
 
   }
-        else if ($action=="getGroupInvites"){
-                queryInvites($_SESSION['userId']);
+  else{
+    echo "invalid action selector:";
+    echo $action;
 
-
-        } else if ($action=="acceptInvite") {
-                $groupId=$_GET['acceptedGroupId'];
-                $userId = $_SESSION['userId'];
-                acceptInvite($groupId,$userId);
-                echo json_encode('success');
-        }
-        else if ($action=="rejectInvite"){
-                $groupId=$_GET['rejectedGroupId'];
-                $userId = $_SESSION['userId'];
-                deleteInvite($groupId,$userId);
-                echo json_encode('success');
-
-        } else if ($action=="leaveGroup"){
-                $groupId=$_GET['rejectedGroupId'];
-                $userId = $_SESSION['userId'];
-                removeUserFromGroup($groupId,$userId);
-                echo json_encode('success');
-
-        }
-
-        else{
-                echo "invalid action selector:";
-                echo $action;
-
-        }
-
+  }
 }
 
-
-
 //create groups
-function createGroup($name,$desc,$public,$invites){
-        global $db;
-        
-        if (!$public) {
-                $public=false;
-        }
-
-        try {
-    $results = $db->prepare("INSERT INTO `groups` (`groupName`, `groupDesc`,`public`) VALUES (?,?,?)");
-    $results->execute(array($name,$desc,$public));
-    $insertId = $db->lastInsertId();
-    } catch(Exception $e){
-        echo "Group creation data insertion error!";
-        exit;
+function createGroup($name,$desc,$public,$invites,$inviteMsg){
+    global $db;
+    
+    if (!$public) {
+      $public=false;
     }
-        addUserToGroup($_SESSION['userId'],$insertId, $name);
-  setUserGroupStatus($_SESSION['userId'],$insertId,1);
-        $inviterName=$_SESSION['username'];
-        sendInvites($insertId, $inviterName, $invites); 
-        
- }
+
+    try {
+      $results = $db->prepare("INSERT INTO `groups` (`groupName`, `groupDesc`,`public`) VALUES (?,?,?)");
+      $results->execute(array($name,$desc,$public));
+      $insertId = $db->lastInsertId();
+    } catch(Exception $e){
+      echo "Group creation data insertion error!";
+      exit;
+    }
+
+    addUserToGroup($_SESSION['userId'],$insertId, $name);
+    setUserGroupStatus($_SESSION['userId'],$insertId,1);
+
+    if (count($invites)>0) {
+      $inviterName=$_SESSION['username'];
+      sendInvites($insertId, $inviterName, $invites,$inviteMsg); 
+    }      
+}
 
 
 
 //send invites
-function sendInvites($groupId, $inviterName, $invites){
+function sendInvites($groupId, $inviterName, $invites, $inviteMsg){
   require_once("emailHelper.php");
   if (count($invites)>0) {
     foreach ($invites as $userInvite) {
-    $userId=getUserIdForEmail($userInvite);
-    if ($userId) {
-      inviteUserToGroup($userId,$groupId, $inviterName);
-    }
-    else{
-      createInviteForNonuser($userInvite,$groupId, $inviterName);
-    }
+      $userId=getUserIdForEmail($userInvite);
+      if ($userId) {
+        inviteUserToGroup($userId,$groupId, $inviterName,$inviteMsg);
+      }
+      else{
+        createInviteForNonuser($userInvite,$groupId, $inviterName,$inviteMsg);
+      }
     }
   }
 
-        echo "success";
+    echo "success";
 
 }
 
-function createInviteForNonuser($userInvite,$groupId, $inviterName){
+function createInviteForNonuser($userInvite,$groupId, $inviterName,$inviteMsg){
       global $db;
-
       try {
-      $results = $db->prepare("INSERT INTO `pendingInvites` (`groupId`, `userEmail`, `inviterName`) VALUES (?,?,?)");
-      $results->execute(array($groupId, $userInvite, $inviterName));
+      $results = $db->prepare("INSERT INTO `pendingInvites` (`groupId`, `userEmail`, `inviterName`,`inviteMsg`) VALUES (?,?,?,?)");
+      $results->execute(array($groupId, $userInvite, $inviterName, $inviteMsg));
 
       } catch(Exception $e){
           echo "User invite data insertion error!";
           exit;
       }
 
-      sendInviteEmail($userInvite,$inviterName, getGroupNameForId($groupId));
+      //sendInviteEmail($userInvite,$inviterName, getGroupNameForId($groupId));
 }
 
 
@@ -171,8 +164,6 @@ function acceptInvite($groupId,$userId){
         $groupName=getGroupNameForId($groupId);
         addUserToGroup($userId,$groupId, $groupName);
         deleteInvite($groupId, $userId);
-        
-
 }
 
 //reject invites
@@ -194,10 +185,9 @@ function deleteInvite($groupId,$userId){
 function queryInvites($userId){
   global $db;
 
-        try {
-    $results = $db->prepare("SELECT groupId, inviterName FROM groupInvites WHERE userId=?");
-    $results->execute(array($userId));
-
+    try {
+      $results = $db->prepare("SELECT groupId, inviterName, inviteMsg FROM groupInvites WHERE userId=?");
+      $results->execute(array($userId));
     } catch(Exception $e){
         echo "Data selection error!";
         exit;
@@ -211,33 +201,27 @@ function queryInvites($userId){
                 $groupName="Unnamed Group";
         }
         $groupInvite["groupName"]=$groupName;
-
     }
-
   
     echo json_encode($groupData);
 
 }
 
-function inviteUserToGroup($userId,$groupId, $inviterName){
-        $alreadyMember = checkUserGroupMembership($userId,$groupId);
-        $alreadyInvited = checkUserGroupInviteStatus($userId,$groupId);
+function inviteUserToGroup($userId,$groupId,$inviterName,$inviteMsg){
+  $alreadyMember = checkUserGroupMembership($userId,$groupId);
+  $alreadyInvited = checkUserGroupInviteStatus($userId,$groupId);
 
-        if (!$alreadyMember && !$alreadyInvited) {
+  if (!$alreadyMember && !$alreadyInvited) {
+    global $db;
 
-        global $db;
-
-                try {
-        $results = $db->prepare("INSERT INTO `groupInvites` (`groupId`, `userId`, `inviterName`,`accepted`) VALUES (?,?,?,0)");
-        $results->execute(array($groupId, $userId, $inviterName));
-
-        } catch(Exception $e){
-                echo "User invite data insertion error!";
-                exit;
-        }
-        }
-        
-
+    try {
+      $results = $db->prepare("INSERT INTO `groupInvites` (`groupId`, `userId`, `inviterName`,`accepted`,`inviteMsg`) VALUES (?,?,?,0,?)");
+      $results->execute(array($groupId, $userId, $inviterName,$inviteMsg));
+    } catch(Exception $e){
+      echo "User invite data insertion error!";
+      exit;
+    }
+  }
 }
 
 

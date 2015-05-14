@@ -47,6 +47,7 @@
           delay: 400,
           minLength: 1//search after two characters  
         });
+
         var timer;
         var delay = 1200; // 0.6 seconds delay after last input
  
@@ -56,34 +57,6 @@
                   changeNotificationStatus();
             }, delay);
         })
-
-        
-        $('#addGroup').submit(function(evt){
-          console.log("create group event detected!");
-          evt.preventDefault();
-          var url = $(this).attr("action");
-          var formData = $(this).serialize();
-          formData+='&action=createGroup';
-          console.log(formData)
-          $('#groupButton').attr('value',"Creating Group...");     
-          $.post(url, formData, function(response){
-              if (response="success") {
-                $('#addGroup').html("<p> Group Created! </p>");
-                //wait
-                //close
-                
-                $('#newGroupModal').foundation('reveal', 'close');
-                var evt = new CustomEvent('groupAdded');
-                window.dispatchEvent(evt);
-                resetGroupModalHTML();
-              }
-              else{
-                $('#addGroup').html("<p> Something seems to have gone wrong! Please try again later </p>");
-              }
-            
-          
-          }); //end post
-        }); //end submit
 
         $.getJSON('inc/invites.php', {action:"getGroupInvites"}, function(response){
           if (response.length>0) {
@@ -429,9 +402,11 @@
 
           </ul>
         </div>
+        Invite Message (optional):
+        <textarea name="groupInviteMsg" rows="4" cols="3" style="margin-bottom:0;"></textarea>
       </fieldset>
-     
-      <input class="button" type="submit" value="Create Group!" id="groupButton">
+      <p id="groupCreationError"><p>
+      <a class="button" id="groupButton" onclick="createNewGroup(); return false;">Create Group!</a>
       </form>
       <a class="close-reveal-modal" aria-label="Close">&#215;</a>
     </div>

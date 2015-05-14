@@ -21,7 +21,7 @@ include('inc/loggedInHeader.php'); ?>
       function getInvites(){
        
         $.getJSON('inc/invites.php', {action:"getGroupInvites"}, function(response){
-
+          console.log(response);
           
           if (response.length>0){
           inviteHTML = ' <div class="row"> <div class="large-12 columns"> <div class="panel"> <h2> Pending Invitations </h2> </div> </div> </div> <div class="row"><div class="large-10 large-offset-1 columns">';
@@ -33,6 +33,7 @@ include('inc/loggedInHeader.php'); ?>
           }
             
           inviteHTML+= '<div class="panel"> <h4> '+groupInfo['inviterName']+' invited you to join '+groupInfo['groupName']+'</h4>';
+          inviteHTML+= '<p style="font-size:1.25em; margin-bottom:15px;">"'+groupInfo['inviteMsg']+'"</p>';
           inviteHTML+='<ul class="button-group round"><li> <a onclick="acceptInvite('+groupInfo['groupId']+'); return false;" class="button success"> Accept</a></li><li> <a onclick="rejectInvite('+groupInfo['groupId']+'); return false;" class="button alert"> Reject</a></li> </ul> </div>';
 
           });// end each

@@ -163,8 +163,10 @@ include('inc/loggedInHeader.php'); ?>
           <ul id="inviteFriendZone">
           </ul>
         </div>
+        Invite Message (optional):
+      <textarea name="friendsInviteMsg" rows="4" cols="3" style="margin-bottom:0;"></textarea>
       </fieldset>
-     
+      
       <input class="button" type="submit" value="Invite Friends!" id="inviteButton">
       </form>
       <a class="close-reveal-modal" aria-label="Close">&#215;</a>

@@ -1,0 +1,9 @@
+<?php
+
+$password="test password";
+
+
+echo hash('sha256',$password);
+
+
+?>

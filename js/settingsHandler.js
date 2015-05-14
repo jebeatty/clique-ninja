@@ -8,6 +8,7 @@ function getCurrentUserData(){
             {
             console.log("response received");
             var userData =JSON.parse(xmlhttp.responseText);
+            console.log(userData);
             $('#settingsEmail').val(userData[0]['email']);
             $('#settingsUsername').val(userData[0]['userName']);
             }
@@ -126,6 +127,7 @@ function setPassword(){
         xmlhttp.onreadystatechange=function(){
           if (xmlhttp.readyState==4 && xmlhttp.status==200)
             {
+                console.log(xmlhttp.responseText);
                 if (xmlhttp.responseText=='"success"') {
                         $('#passwordErrorLabel').html("");
                         $('#newPasswordField').val('');

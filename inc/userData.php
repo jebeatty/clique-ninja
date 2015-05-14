@@ -1,15 +1,28 @@
 <?php
 session_start();
 
+require_once("../inc/config.php");
+require(ROOT_PATH."inc/database.php");
+require_once('helperFunctions.php');
+
 
 if (isset($_GET['newName'])) {
-        setUsername($_GET['newName']);
+        $userId=$_SESSION['userId'];
+        $oldPassword = $_GET['token'];
+        $newUsername=$_GET['newName'];
+        changeUsername($newUsername, $oldPassword, $userId);
 
 } else if(isset($_GET['newEmail'])){
-        setEmail($_GET['newEmail']);
+        $userId=$_SESSION['userId'];
+        $oldPassword = $_GET['token'];
+        $newEmail = $_GET['newEmail'];
+        changeEmail($newEmail, $oldPassword, $userId);
 
 } else if(isset($_GET['newPassword'])) {
-        setPassword($_GET['newPassword']);
+        $userId=$_SESSION['userId'];
+        $oldPassword = $_GET['token'];
+        $newPassword = $_GET['newPassword'];
+        changePassword($newPassword, $oldPassword, $userId);
 } else{
         getUserData();
 }
@@ -37,40 +50,36 @@ function getUserData(){
 
 }
 
-function setUsername($newUsername){
+function changeUsername($newUsername,  $oldPassword, $userId){
         require_once("../inc/config.php");
         require(ROOT_PATH."inc/database.php");
 
-        $userId=$_SESSION['userId'];
-        $password = $_GET['token'];
-        $passwordResponse = checkPassword($userId, $password);
-        if($passwordResponse=="success"){
-                try {
+        $authenticated = authenticateUser($userId, $oldPassword);
+        if($authenticated){
+        try {
         $results = $db->prepare("UPDATE users SET userName=? WHERE userId=?");
         $results->execute(array($newUsername,$userId));
 
-            } catch(Exception $e){
-                echo "Data selection error!";
-                exit;
-            }
-            
-            $json=json_encode("success");
-            echo $json;
+        } catch(Exception $e){
+        echo "Data selection error!";
+        exit;
+        }
+
+        $json=json_encode("success");
+        echo $json;
         }
         else{
-                $json=json_encode($passwordResponse);
+            $json=json_encode($authenticated);
             echo $json;
         }
 }       
 
-function setEmail($newEmail){
+function changeEmail($newEmail, $oldPassword, $userId){
         require_once("../inc/config.php");
         require(ROOT_PATH."inc/database.php");
 
-        $userId=$_SESSION['userId'];
-        $password = $_GET['token'];
-        $passwordResponse = checkPassword($userId, $password);
-        if($passwordResponse=="success"){
+        $authenticated = authenticateUser($userId, $oldPassword);
+        if($authenticated){
                 try {
         $results = $db->prepare("UPDATE users SET email=? WHERE userId=?");
         $results->execute(array($newEmail,$userId));
@@ -84,64 +93,27 @@ function setEmail($newEmail){
             echo $json;
         }
         else{
-                $json=json_encode($passwordResponse);
+            $json=json_encode($authenticated);
             echo $json;
         }
 }
 
-function setPassword($newPassword){
+function changePassword($newPassword, $oldPassword, $userId){
         require_once("../inc/config.php");
         require(ROOT_PATH."inc/database.php");
 
-        $userId=$_SESSION['userId'];
-        $password = $_GET['token'];
-        $passwordResponse = checkPassword($userId, $password);
-        if($passwordResponse=="success"){
-                try {
-        $results = $db->prepare("UPDATE users SET password=? WHERE userId=?");
-        $results->execute(array($newPassword,$userId));
-
-            } catch(Exception $e){
-                echo "Data selection error!";
-                exit;
-            }
-            
+        $authenticated = authenticateUser($userId, $oldPassword);
+        if($authenticated){
+            setPassword($newPassword,$userId);
             $json=json_encode("success");
             echo $json;
         }
         else{
-                $json=json_encode($passwordResponse);
+            $json=json_encode($authenticated);
             echo $json;
         }
 }
-
-function checkPassword($userId, $password){
-        require_once("../inc/config.php");
-        require(ROOT_PATH."inc/database.php");
-
-        if ($userId) {
-                try {
-                $results = $db->prepare("SELECT userName FROM users WHERE userId=? AND password=?");
-                $results->execute(array($userId,$password));
-
-            } catch(Exception $e){
-                return "data error";
-                exit;
-            }
-            $results=$results->fetchAll(PDO::FETCH_ASSOC);
-            if (count($results)>0) {
-                return "success";
-            }
-            else{
-                return "invalid password";
-            }
             
-        }
-        else{
-                return "invalid userId";
-        }
-        
-}               
 
 
 ?>

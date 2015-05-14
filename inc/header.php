@@ -12,55 +12,11 @@
     <link href="fonts/foundation-icons.css" rel="stylesheet" media="screen">
     <link href="css/my-styles.css" rel="stylesheet" media="screen">
     <link href=<?php echo CURRENT_PAGE_STYLE?> rel="stylesheet" media="screen">
-    <!-- sajflasjdh -->
     <script src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script src="js/authHelper.js"></script>
     <script>
       $(document).ready(function(){
-        $('#loginForm').submit(function(evt){
-          evt.preventDefault();
-          var url = $(this).attr("action");
-          console.log($(this));
-          var formData = $(this).serialize();
-          formData+='&action=login';
-                console.log(formData);
-          $.post(url, formData, function(response){
-           
-
-            if (response=="true") {
-              //$('#loginForm').html("<p> Login succeeded. Welcome <?php echo $_SESSION['username'] ?> </p>");
-              location.href="recent.php";
-              
-            } else if(response=='"No such user"'){
-                $('#loginModalTitle').html("<p> Invalid login credentials</p>");
-            }else if(response=='"Missing Login Data"'){
-                $('#loginModalTitle').html('<p class="error">Missing login credentials</p>');
-            }else{
-              $('#loginModalTitle').html("<p> Login failed for unknown reasons. Please try again later</p>");
-            };
-          
-          }); //end post - login
-        }); //end submit - login
-
-         $('#signupForm').submit(function(evt){
-          evt.preventDefault();
-          var url = $(this).attr("action");
-          var formData = $(this).serialize();
-          formData+='&action=signup';
-
-          $.post(url, formData, function(response){
-            
-
-            if (response=="true") {
-             // $('#signupForm').html("<p> Signup succeeded! Welcome to Clique, <?php echo $_SESSION['username'] ?> </p>");
-              location.href="recent.php";
-            } else if(response=='"Missing Login Data"'){
-              $('#signupModalTitle').html("<p> Missing sign up info</p>");
-            }else{
-              $('#signupModalTitle').html("<p> Signup failed. Please try again later</p>");
-            };
-          
-          }); //end post - signup
-        }); //end submit - signup
+        
       }); //end ready
 
     </script>
@@ -123,7 +79,8 @@
                         </label>
                 </div>
         </div>
-        <input type="submit" value="Login" class="button radius">
+        <a data-reveal-id="recoverPasswordModal"> Forgot your password or username? </a>
+        <a class="button radius" onclick="login(); return false;"> Login </a>
         </form>
      
       </div>
@@ -145,6 +102,15 @@
 
         ?>  
       </div>
+      <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+    </div>
+
+    <div id="recoverPasswordModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+      <h5>Login Recovery<h5>
+        <p>Please enter the email associated with your account and we will shoot you an email with instructions for how to reset your password/username!</p>
+        <input type="text" name="passwordRecoveryEmail" placeholder="you@email.com">
+        <p id="recoveryErrorLabel"></p>
+        <a class="button radius" onclick="recoverPassword();return false;"> Retrieve Credentials </a>
       <a class="close-reveal-modal" aria-label="Close">&#215;</a>
     </div>
 
@@ -176,7 +142,7 @@
                         </label>
                 </div>
         </div>
-        <input type="submit" value="Sign Up" class="button radius">
+        <a class="button radius" onclick="signup(); return false;"> Sign Up </a>
         </form>
       </div>
       OR <br>

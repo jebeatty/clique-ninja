@@ -68,7 +68,7 @@ include('inc/header.php');
   ga('send', 'pageview');
 
     $(document).foundation();
-    $(document).foundation('joyride','start');
+    
   </script>
   </body>
   

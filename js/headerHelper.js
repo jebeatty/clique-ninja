@@ -66,6 +66,38 @@ function postNewPost(){
   } 
 }
 
+function createNewGroup(){
+
+  if ($('[name=groupName]')[1].value!='') {
+    $('#groupCreationError').html("");
+    var url = $('#addGroup').attr("action");
+    var formData = $('#addGroup').serialize();
+    formData+='&action=createGroup';
+    console.log(formData)
+    $('#groupButton').html("Creating Group..."); 
+        
+    $.post(url, formData, function(response){
+        if (response=="success") {
+          $('#addGroup').html("<p> Group Created! </p>");       
+          $('#newGroupModal').foundation('reveal', 'close');
+          var evt = new CustomEvent('groupAdded');
+          window.dispatchEvent(evt);
+          resetGroupModalHTML();
+        }
+        else{
+          $('#addGroup').html("<p> Something seems to have gone wrong! Please try again later </p>");
+        }
+      
+    
+    }); //end post
+  } else{
+    $('#groupCreationError').html("Please input a name for your group!");
+  }
+    
+    
+
+}
+
 
 function resetPostModalHTML(){
       
@@ -86,9 +118,11 @@ function resetGroupModalHTML(){
   groupModalHTML+='Group Description: <textarea name="groupDesc" rows="4" cols="3"> </textarea><br>';
   groupModalHTML+='<fieldset><legend> Select Friends to Invite:</legend>';
   groupModalHTML+='<p> Enter each friend&#39;s email individually to add them to the invite list. If they are not yet a Clique user, ask them to join and they will see the group invite when they signup with the matching email! </p>';
-  groupModalHTML+='<div class="ui-widget"><input placeholder="Enter friend&#39;s email" id="autocomplete" size="30"><p id="warningArea"></p> <button onclick="addFriendToTable(); return false;"> Add Friend to Invite List</button></div>';
+  groupModalHTML+='<div class="ui-widget"><input placeholder="Enter friend&#39;s email" id="friendEmailInput" size="30"><p id="groupWarningArea"></p> <button onclick="addFriendToTable(); return false;"> Add Friend to Invite List</button></div>';
   groupModalHTML+='<div>Friends to Invite: <br><ul id="friendZone"></ul></div>';
-  groupModalHTML+='</fieldset><input class="button" type="submit" value="Create Group!" id="groupButton"></form>';
+  groupModalHTML+='Invite Message (optional):<textarea name="groupInviteMsg" rows="4" cols="3" style="margin-bottom:0;"></textarea>';
+  groupModalHTML+='</fieldset><p id="groupCreationError"><p>';
+  groupModalHTML+='<input class="button" value="Create Group!" id="groupButton" onclick="createNewGroup(); return false;"></form>';
   groupModalHTML+='<a class="close-reveal-modal" aria-label="Close">&#215;</a></div>';
 
 
