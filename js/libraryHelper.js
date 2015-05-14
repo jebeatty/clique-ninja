@@ -89,16 +89,9 @@ function getGroupChat(groupId){
     } else{
       $("#chatEmptyState").html('No discussion yet!');
       $('#chatMessages').html('');
-    } 
-    
-    
-
-
-    
+    }   
   });  
 }
-
-
 
 function postGroupChatComment(comment, groupId){
   console.log(comment +" received for group #"+groupId);
@@ -110,14 +103,8 @@ function postGroupChatComment(comment, groupId){
         $('#commentBox').val('');
         getGroupChat(groupId);
         //add the comment to the chat
-
-
     };
-
-
-
   });//end get
-
 }
 
 function addCommentToChat(comment){
@@ -125,7 +112,26 @@ function addCommentToChat(comment){
   $('#chatMessages').append(chatHTML);
 }
 
+//Invite Friends Function
 
+function inviteFriends(){
+  var groupId = getParameterByName('groupId');
+  var url = $('#inviteFriends').attr("action");
+  var formData = $('#inviteFriends').serialize();
+  formData+='&action=inviteFriends&groupId='+groupId;
+  $('#inviteButton').html('Inviting...Please Wait');
+  $.post(url, formData, function(response){
+     console.log(response);
+      if (response="success") {
+        $('#inviteFriendsModal').html("<p> Invites sent! </p>");
+        $('#inviteFriendsModal').foundation('reveal', 'close');
+        resetInviteFriendsModal();
+      }
+      else{
+        $('#inviteFriendsModal').html("<p> Something seems to have gone wrong! Please try again later </p>");
+      }
+  }); //end post
+}
 
 //Reset Functions
 function resetInviteFriendsModal(){
@@ -138,12 +144,12 @@ function resetInviteFriendsModal(){
   inviteFriendHTML+='<input placeholder="Enter friend&#39;s email" id="inviteAutocomplete" size="30"><p id="inviteWarningArea"></p> <button onclick="addFriendToInviteTable(); return false;">  Add Friend to Invite List</button>';
   inviteFriendHTML+='</div>';
   inviteFriendHTML+='<div>';
-  inviteFriendHTML+='Invite List: <br>';
+  inviteFriendHTML+='Selected Friends: <br>';
   inviteFriendHTML+='<ul id="inviteFriendZone">';
   inviteFriendHTML+='</ul>';
   inviteFriendHTML+='</div>';
   inviteFriendHTML+='</fieldset>'; 
-  inviteFriendHTML+='<input class="button radius" type="submit" value="Invite Friends!">';
+  inviteFriendHTML+='<a class="button" id="inviteButton" onclick="inviteFriends();return false;">Invite Friends!</a>';
   inviteFriendHTML+='</form>';
   inviteFriendHTML+='<a class="close-reveal-modal" aria-label="Close">&#215;</a>';
 

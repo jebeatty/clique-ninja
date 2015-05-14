@@ -14,18 +14,22 @@ include('inc/loggedInHeader.php'); ?>
     <div id="groupDescription" style="margin-bottom:-1px;" class="panel">
 
     </div>
+    <script src="js/vendor/autogrow.min.js"></script>
     <div id="groupChat" style="padding:0;" class="panel">
       <ul class="accordion" style="margin-left:0;margin-right:0;" data-accordion>
         <li class="accordion-navigation">
           <a href="#panel1a" style="background:#9164ab;color:white;">Group Chat</a>
           <div id="panel1a" class="content" style="text-align:left; padding-bottom:0;">
-            <div id="chatMessages" style="overflow:auto;height:300px;">
+            <div id="chatMessages" style="overflow:auto;height:230px;">
             
             </div>
             <p id="chatEmptyState"> No discussion yet! <p>
             <div id="commentArea">
-              <input type="text" id="commentBox" placeholder="Your comment..." style="margin-top:5px;">
+              <textarea rows="1" id="commentBox" placeholder="Your comment..." style="margin-top:5px; font-size:.9em; line-height:.9; width:100%; padding-bottom:0;"></textarea>
             </div>
+            <script>
+            $('#commentBox').autogrow();
+            </script>
             
           </div>
         </li>
@@ -77,26 +81,6 @@ include('inc/loggedInHeader.php'); ?>
           return false;
          }
         });
-
-      $('#inviteFriends').submit(function(evt){
-        console.log("inviteFriends event detected!");
-        evt.preventDefault();
-        var url = $(this).attr("action");
-        var formData = $(this).serialize();
-        formData+='&action=inviteFriends&groupId='+groupId;
-        $('#inviteButton').attr('value', 'Inviting...Please Wait');
-        $.post(url, formData, function(response){
-           console.log(response);
-            if (response="success") {
-              $('#inviteFriendsModal').html("<p> Invites sent! </p>");
-              $('#inviteFriendsModal').foundation('reveal', 'close');
-              resetInviteFriendsModal();
-            }
-            else{
-              $('#inviteFriendsModal').html("<p> Something seems to have gone wrong! Please try again later </p>");
-            }
-        }); //end post
-        }); //end InviteFriends Submit
 
     });//end ready
 
@@ -167,9 +151,9 @@ include('inc/loggedInHeader.php'); ?>
       <textarea name="friendsInviteMsg" rows="4" cols="3" style="margin-bottom:0;"></textarea>
       </fieldset>
       
-      <input class="button" type="submit" value="Invite Friends!" id="inviteButton">
+      <a class="button" id="inviteButton" onclick="inviteFriends();return false;">Invite Friends!</a>  
       </form>
-      <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+      <a class="close-reveal-modal" aria-label="Close" onclick="console.log('test click');">&#215;</a>
     </div>
 
     <div id="editGroupModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
@@ -264,6 +248,7 @@ include('inc/loggedInHeader.php'); ?>
         }
       }
 
+      
   </script>
   </body>
   

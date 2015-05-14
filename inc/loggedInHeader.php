@@ -77,12 +77,17 @@
            }
         });
 
-
+        $('[name=shareEmailInput]').keydown(function(event) { 
+          if (event.keyCode == 188) {
+              addFriendToEmailTable();
+              return false;
+           }
+        });
 
 
       }); //end ready
 
-
+      
     
     </script>
   </head>
@@ -326,32 +331,24 @@
 
     <!-- Email Share -->
     <div id="emailModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
-      <h2 id="emailTitle">Email Friends</h2>
+      <h2 id="emailTitle">Share via Email</h2>
+      <p id="emailErrorLabel"></p>
       <form method="post" action='inc/social.php' id="emailFriends">
-      Subject: <input name="groupName"> <br>
-      <br>
+        <div class="ui-widget">
+          To: <input placeholder="Enter friend's email" id="shareEmailInput" name="shareEmailInput"><a class="button" onclick="addFriendToEmailTable(); return false;" style="display:inline-block;padding:7px 10px 4px 10px;margin-bottom:0;"> Add </a><p id="emailWarningArea"></p> 
+        </div>
+        <div> 
+          <ul id="emailFriendZone">
+          </ul>
+        </div>
+      Subject: <input name="emailSubject"> <br>
       <br>
       Message:
       <textarea name="emailBody" rows="4" cols="3"></textarea><br>
-
-      <fieldset>
-        <legend> Select Recipients:</legend>
-        <p> Enter your friend&#39;s emails to add them to the email list </p>
-
-        <div class="ui-widget">
-          <input placeholder="Enter friend's email" id="friendEmailInput" size="30"><p id="warningArea"></p> <button onclick="addFriendToTable(); return false;"> Add Email </button>
-        </div>
-        <div>
-          Selected Recipients: <br>
-          <ul id="friendZone">
-
-          </ul>
-        </div>
-      </fieldset>
      
-      <input class="button" type="submit" value="Send Email!" id="emailButton">
+      <a class="button" id="emailButton" onclick="sendShareMail();">Share</a>
       </form>
-      <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+      <a class="close-reveal-modal" aria-label="Close" onclick="resetEmailModal();">&#215;</a>
     </div>
 
     <!-- New Post -->
@@ -374,7 +371,7 @@
      
       <a class="button" id="postButton" onclick="postNewPost();">Post!</a>
       </form>
-      <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+      <a class="close-reveal-modal" aria-label="Close" onclick="resetPostModalHTML();">&#215;</a>
     </div>
 
 
@@ -408,7 +405,7 @@
       <p id="groupCreationError"><p>
       <a class="button" id="groupButton" onclick="createNewGroup(); return false;">Create Group!</a>
       </form>
-      <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+      <a class="close-reveal-modal" aria-label="Close" onclick="resetGroupModalHTML();">&#215;</a>
     </div>
     <script src='js/headerHelper.js'></script>
     <script> getGroupList(); </script>

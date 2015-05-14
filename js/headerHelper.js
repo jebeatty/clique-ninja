@@ -87,21 +87,16 @@ function createNewGroup(){
         else{
           $('#addGroup').html("<p> Something seems to have gone wrong! Please try again later </p>");
         }
-      
-    
     }); //end post
   } else{
     $('#groupCreationError').html("Please input a name for your group!");
   }
-    
-    
-
 }
 
 
 function resetPostModalHTML(){
       
-  postModalHTML= '<h2 id="newPostTitle">New Post</h2><p id="newPostErrorLabel"></p><form method="post" action="inc/posts.php" id="addPosts">URL: <input name="url"> <br><br><br>';
+  postModalHTML= '<h2 id="newPostTitle">New Post</h2><p id="newPostErrorLabel"></p><form method="post" action="inc/posts.php" id="addPosts">URL: <input name="url" id="newPostUrl" style="width:85%;"> <br><br><br>';
   postModalHTML+= 'Comment: <textarea name="message" rows="5" cols="3"></textarea><br><fieldset><legend> Select Groups to Share With:</legend>';
   postModalHTML+= '<input type="checkbox" name="group[]" value="library"> Post to My Library<br>';
   postModalHTML+= '<div id="modalGroups"></div></fieldset>';
@@ -147,6 +142,84 @@ function addFriendToTable(){
     } 
     else{
       $('#groupWarningArea').html('Invalid Email');
+    
+    }  
+}
+
+function resetEmailModal(){
+      var emailHTML='<h2 id="emailTitle">Share via Email</h2>';
+      emailHTML+='<p id="emailErrorLabel"></p>';
+      emailHTML+='<form method="post" action="inc/social.php" id="emailFriends">';
+      emailHTML+='<div class="ui-widget">';
+      emailHTML+='To: <input placeholder="Enter friend&#39;s email" id="shareEmailInput" name="shareEmailInput"><a class="button" onclick="addFriendToEmailTable(); return false;" style="display:inline-block;padding:7px 10px 4px 10px;margin-bottom:0;"> Add </a><p id="emailWarningArea"></p>'; 
+      emailHTML+='</div>';
+      emailHTML+='<div> ';
+      emailHTML+='<ul id="emailFriendZone">';
+      emailHTML+='</ul>';
+      emailHTML+='</div>';
+      emailHTML+='Subject: <input name="emailSubject"> <br>';
+      emailHTML+='<br>';
+      emailHTML+='Message:';
+      emailHTML+='<textarea name="emailBody" rows="4" cols="3"></textarea><br>';
+      emailHTML+='<a class="button" id="emailButton" onclick="sendShareMail();">Share</a>';
+      $('#emailModal').html(emailHTML); 
+}
+
+function sendShareMail(){
+  
+  if (document.getElementsByName('shareMembers[]').length>0) {
+
+    if ($('[name=emailSubject]').val()!=''){
+     
+      if ($('[name=emailBody]').val()!=''){
+        var url = $('#emailFriends').attr("action");
+        var formData = $('#emailFriends').serialize();
+        formData+='&action=shareEmail';
+        console.log(formData)
+        $('#emailButton').html("Sharing...");
+      
+      $.post(url, formData, function(response){
+        console.log(response);
+        if (response=="success") {       
+          $('#emailModal').foundation('reveal', 'close');
+          resetEmailModalHTML();
+        }
+        else{
+           $('#emailErrorLabel').html("Something seems to have gone wrong. Pleas try again later");
+        }
+      }); //end post*/
+      } else{
+        $('#emailErrorLabel').html("Please enter a message!");
+        console.log("Mail error code 1");
+      } 
+    } else{
+      $('#emailErrorLabel').html("Please enter a subject!");
+      console.log("Mail error code 2");
+    } 
+  } else{
+    $('#emailErrorLabel').html("Please select people to share with!");
+    console.log("Mail error code 3");
+  }
+}
+
+
+function addFriendToEmailTable(){
+  var friendEmail = $('[name=shareEmailInput]').val();
+
+    if (friendEmail.indexOf('@')>0) {
+      var existingFriends = $('#emailFriendZone').html();
+      var newFriend = '<input type="checkbox" name="shareMembers[]" value="'+friendEmail;
+      if (existingFriends.indexOf(newFriend)==-1) {
+        $('#emailWarningArea').html('');
+        $('#emailFriendZone').append(newFriend+'" checked style="margin-bottom:0;"> '+friendEmail+'<br>');
+        $('[name=shareEmailInput]').val('');
+      }
+      else{
+        $('#emailWarningArea').html('Friend already selected');
+      }
+    } 
+    else{
+      $('#emailWarningArea').html('Invalid Email');
     
     }  
 }

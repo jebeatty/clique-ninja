@@ -70,7 +70,7 @@
 
     //Comments & Social
     itemHTML += '<p style="font-size:.60em; margin-bottom:2px; margin-top:-32px;"><a onclick="sharePost(&#39;'+post.url+'&#39;);"><i class="fi-share" style="display:inline-block; color:#9164ab; margin-left-5px;"></i></a>';
-    itemHTML += '<a onclick="emailPost(&#39;'+post.url+'&#39;);"><i class="fi-mail" style="display:inline-block; color:#9164ab; margin-left:10px;"></i></a></p>';
+    itemHTML += '<a onclick="emailPost(&#39;'+post.url+'&#39;);_gaq.push(["_trackevent", "Email", "Start"]);"><i class="fi-mail" style="display:inline-block; color:#9164ab; margin-left:10px;"></i></a></p>';
 
     itemHTML += '<ul class="button-group radius even-2">';
 
@@ -92,6 +92,8 @@
 
   function emailPost(postURL){
     console.log(postURL);
+
+    $('[name=emailBody]').val('Saw this on Clique and thought of you: '+postURL);
     $('#emailModal').foundation('reveal', 'open');
     //launch the email modal
 

@@ -8,6 +8,7 @@ require_once("config.php");
 require_once("database.php");
 require_once("helperFunctions.php");
 require_once("notificationFunctions.php");
+require_once("emailHelper.php");
 
 if (isset($_SESSION['username'])) {
 	if (isset($_POST["action"])) {
@@ -62,6 +63,15 @@ function socialActionSelector($action){
   else if ($action=="getGroupChat"){
     $groupId = $_GET['groupId'];
     getGroupChat($groupId);
+  }
+  else if ($action=="shareEmail"){
+    
+    $recipients=$_POST['shareMembers'];
+    $subject=$_POST['emailSubject'];
+    $body=$_POST['emailBody'];
+    if (count($recipients)>0) {
+      sendShareEmail($recipients, $subject, $body);
+    }
   }
   else{
     echo 'invalid action code!';
