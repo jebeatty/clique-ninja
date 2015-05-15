@@ -119,6 +119,8 @@ function createGroup($name,$desc,$public,$invites,$inviteMsg){
     if (count($invites)>0) {
       $inviterName=$_SESSION['username'];
       sendInvites($insertId, $inviterName, $invites,$inviteMsg); 
+    } else{
+      echo "success";
     }      
 }
 

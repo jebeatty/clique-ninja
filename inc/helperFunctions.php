@@ -133,7 +133,7 @@ function getGroupListForUser($userId){
     $results = $db->prepare("SELECT groupId, groupName
                               FROM userGroupRelations
                               WHERE userId=? 
-                              ");
+                              ORDER BY relationId DESC");
     $results->execute(array($userId));
 
     } catch(Exception $e){
@@ -393,7 +393,7 @@ function randString($length, $charset='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 //authentification functions
 function authenticateUser($userId,$password){
   global $db;
-  
+
   if ($userId!='') {
     //see if the id has a hashed password
     if(saltExists($userId)){

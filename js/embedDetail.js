@@ -70,7 +70,7 @@
 
     //Comments & Social
     itemHTML += '<p style="font-size:.60em; margin-bottom:2px; margin-top:-32px;"><a onclick="sharePost(&#39;'+post.url+'&#39;);"><i class="fi-share" style="display:inline-block; color:#9164ab; margin-left-5px;"></i></a>';
-    itemHTML += '<a onclick="emailPost(&#39;'+post.url+'&#39;);_gaq.push(["_trackevent", "Email", "Start"]);"><i class="fi-mail" style="display:inline-block; color:#9164ab; margin-left:10px;"></i></a></p>';
+    itemHTML += '<a onclick="emailPost(&#39;'+post.url+'&#39;);"><i class="fi-mail" style="display:inline-block; color:#9164ab; margin-left:10px;"></i></a></p>';
 
     itemHTML += '<ul class="button-group radius even-2">';
 
@@ -85,6 +85,7 @@
   }
 
   function sharePost(postURL){
+    ga("send", "event", "Share", "Start");
     $('#newPostUrl').val(postURL);
     $('#newPostModal').foundation('reveal', 'open');
 
@@ -92,7 +93,7 @@
 
   function emailPost(postURL){
     console.log(postURL);
-
+    ga("send", "event", "Email", "Start");
     $('[name=emailBody]').val('Saw this on Clique and thought of you: '+postURL);
     $('#emailModal').foundation('reveal', 'open');
     //launch the email modal
@@ -102,6 +103,12 @@
   function submitLike(likeType, postId){
     if (likeType=='ehs'||likeType=='likes'||likeType=='loves') {
       
+      if (likeType=='likes') {
+        ga("send", "event", "Like");
+      } else if (likeType=='loves') {
+        ga("send", "event", "Love");
+      }
+       
       $.getJSON('inc/social.php',{action:"submitLike",likeType:likeType, postId:postId},function(response){
         
 
@@ -166,6 +173,7 @@ function fillModal(postId, postURL, posterName){
 function postComment(postId){
   var url= 'inc/social.php';
   var formData = 'postId='+postId+'&comment='+$('#commentBox').val();
+  ga("send", "event", "Comment");
   formData+='&action=postComment';
  
 

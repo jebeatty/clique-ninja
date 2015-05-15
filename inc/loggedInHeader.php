@@ -134,8 +134,8 @@
       </nav>
     </div>
 
-    <a class="button radius left" data-reveal-id="newPostModal"> New Post </a>
-    <a class="button radius left" data-reveal-id="newGroupModal"> New Group </a>
+    <a class="button radius left" data-reveal-id="newPostModal" onclick="ga('send', 'event', 'New Post', 'Start');"> New Post </a>
+    <a class="button radius left" data-reveal-id="newGroupModal" onclick="ga('send', 'event', 'New Group', 'Start');"> New Group </a>
    
 
     </script>

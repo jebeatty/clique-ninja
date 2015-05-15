@@ -52,8 +52,10 @@ include('inc/loggedInHeader.php'); ?>
                var newHTML = '';
                newHTML += '<div class="row">';
                $.each(response, function(index, group){
+                
+                cleanName=encodeURI(group[0].groupName.replace("#",''));
 
-              newHTML+='<div class="large-12 columns"><div class="title panel"><p>'+group[0].groupName+' </p></div><ul class="large-block-grid-3">';
+                newHTML+='<div class="large-12 columns"><div class="title panel"><a style="color:white; width:100%; display:block;" href="groupLibrary.php?groupName='+ cleanName+'&groupId='+group[0].groupId+'">'+group[0].groupName+' </a></div><ul class="large-block-grid-3">';
 
                 $.each(group[1], function(index, post){
                   console.log(post);
@@ -62,7 +64,7 @@ include('inc/loggedInHeader.php'); ?>
                   newHTML +='</li>';
 
                 });
-                newHTML += '</ul><a class="button radius left" href="groupLibrary.php?groupName='+ encodeURI(group[0].groupName)+'&groupId='+group[0].groupId+'"> See More Posts in this Group </a><a class="button right" data-reveal-id="leaveGroupModal" onclick="setModalTitle(&#39;'+group[0].groupName+'&#39;,&#39;'+group[0].groupId+'&#39;);">Leave Group</a></div>';
+                newHTML += '</ul></div>';
 
               }); //end first each
              

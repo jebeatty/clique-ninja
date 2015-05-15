@@ -30,7 +30,7 @@ function postNewPost(){
 
     } else{
       formData+='&action=newPost';
-
+      
       $('#postButton').attr('value',"Posting...");          
       $.post(url, formData, function(response){
         
@@ -51,6 +51,7 @@ function postNewPost(){
 
           //and use the saved modal data to avoid calling ajax
           $('#modalGroups').html(modalGroupsHTML);
+          ga("send", "event", "New Post", "Finish");
 
         } else if(response=='failure'){
           $("#newPostErrorLabel").html("Something seems to be wrong with the URL. Please double check that it is a valid URL");
@@ -68,21 +69,24 @@ function postNewPost(){
 
 function createNewGroup(){
 
-  if ($('[name=groupName]')[1].value!='') {
+  if ($('[name=groupName]')[0].value!='') {
     $('#groupCreationError').html("");
     var url = $('#addGroup').attr("action");
     var formData = $('#addGroup').serialize();
     formData+='&action=createGroup';
     console.log(formData)
     $('#groupButton').html("Creating Group..."); 
-        
+          
     $.post(url, formData, function(response){
+        console.log(response);
         if (response=="success") {
+          ga("send", "event", "New Group", "Finish");
           $('#addGroup').html("<p> Group Created! </p>");       
           $('#newGroupModal').foundation('reveal', 'close');
           var evt = new CustomEvent('groupAdded');
           window.dispatchEvent(evt);
           resetGroupModalHTML();
+          
         }
         else{
           $('#addGroup').html("<p> Something seems to have gone wrong! Please try again later </p>");
@@ -162,6 +166,8 @@ function resetEmailModal(){
       emailHTML+='Message:';
       emailHTML+='<textarea name="emailBody" rows="4" cols="3"></textarea><br>';
       emailHTML+='<a class="button" id="emailButton" onclick="sendShareMail();">Share</a>';
+      emailHTML+='</form>';
+      emailHTML+='<a class="close-reveal-modal" aria-label="Close" onclick="resetEmailModal();">&#215;</a>';
       $('#emailModal').html(emailHTML); 
 }
 
@@ -177,7 +183,7 @@ function sendShareMail(){
         formData+='&action=shareEmail';
         console.log(formData)
         $('#emailButton').html("Sharing...");
-      
+      ga("send", "event", "Email", "Finish");
       $.post(url, formData, function(response){
         console.log(response);
         if (response=="success") {       

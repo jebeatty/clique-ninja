@@ -236,7 +236,7 @@ function getGroupData($groupId, $limit){
     $limit='15';
   }
 
-  $query = "SELECT posterName, url, postDate, postId, ehs, likes, loves, comment FROM posts WHERE groupId=".$groupId." ORDER BY postId DESC LIMIT ".$limit;
+  $query = "SELECT posterId, url, postDate, postId, ehs, likes, loves, comment FROM posts WHERE groupId=".$groupId." ORDER BY postId DESC LIMIT ".$limit;
 
   try {
     $results = $db->prepare($query);
@@ -263,6 +263,11 @@ function getGroupData($groupId, $limit){
     foreach ($groupPosts as &$groupItem) {
         $commentData = getCommentsForPost($groupItem['postId']);
         $groupItem['commentData']=$commentData;
+    }
+
+    foreach ($groupPosts as &$groupItem) {
+        $retrievedName = getUserNameForId($groupItem['posterId']);
+        $groupItem['posterName']=$retrievedName;
     }
 
     return $groupPosts;

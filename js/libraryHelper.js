@@ -97,6 +97,7 @@ function postGroupChatComment(comment, groupId){
   console.log(comment +" received for group #"+groupId);
   var url='inc/social.php';
   var formData = "comment="+comment+"&groupId="+groupId+"&action=postGroupComment";
+  ga("send", "event", "GroupComment");
   $.post(url,formData,function(response){
     console.log(response);
     if (response=='"success"') {
@@ -120,9 +121,11 @@ function inviteFriends(){
   var formData = $('#inviteFriends').serialize();
   formData+='&action=inviteFriends&groupId='+groupId;
   $('#inviteButton').html('Inviting...Please Wait');
+
   $.post(url, formData, function(response){
      console.log(response);
       if (response="success") {
+        ga("send", "event", "Invite Friends", "Finish");
         $('#inviteFriendsModal').html("<p> Invites sent! </p>");
         $('#inviteFriendsModal').foundation('reveal', 'close');
         resetInviteFriendsModal();
@@ -148,10 +151,11 @@ function resetInviteFriendsModal(){
   inviteFriendHTML+='<ul id="inviteFriendZone">';
   inviteFriendHTML+='</ul>';
   inviteFriendHTML+='</div>';
+  inviteFriendHTML+='Invite Message (optional):<textarea name="friendsInviteMsg" rows="4" cols="3" style="margin-bottom:0;"></textarea>';
   inviteFriendHTML+='</fieldset>'; 
   inviteFriendHTML+='<a class="button" id="inviteButton" onclick="inviteFriends();return false;">Invite Friends!</a>';
   inviteFriendHTML+='</form>';
-  inviteFriendHTML+='<a class="close-reveal-modal" aria-label="Close">&#215;</a>';
+  inviteFriendHTML+='<a class="close-reveal-modal" aria-label="Close" onclick="resetInviteFriendsModal();">&#215;</a>';
 
   $('#inviteFriendsModal').html(inviteFriendHTML);        
 }

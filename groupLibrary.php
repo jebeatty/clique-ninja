@@ -45,7 +45,7 @@ include('inc/loggedInHeader.php'); ?>
 
         //write the invite/leave button html here with groupId
         var optionButtonHTML ='';
-        optionButtonHTML +='<a class="button radius left" data-reveal-id="inviteFriendsModal"> Invite Friends to Group</a>';
+        optionButtonHTML +='<a class="button radius left" data-reveal-id="inviteFriendsModal" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Invite Friends&#39;, &#39;Start&#39;);"> Invite Friends to Group</a>';
         optionButtonHTML +='<a class="button radius left" data-reveal-id="leaveGroupModal" onclick="setModalContent(&#39;'+groupName+'&#39;,&#39;'+groupId+'&#39;);"> Leave Group </a>';
         $('#groupOptionButtons').html(optionButtonHTML);
 
@@ -153,7 +153,7 @@ include('inc/loggedInHeader.php'); ?>
       
       <a class="button" id="inviteButton" onclick="inviteFriends();return false;">Invite Friends!</a>  
       </form>
-      <a class="close-reveal-modal" aria-label="Close" onclick="console.log('test click');">&#215;</a>
+      <a class="close-reveal-modal" aria-label="Close" onclick="resetInviteFriendsModal();">&#215;</a>
     </div>
 
     <div id="editGroupModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
@@ -210,6 +210,7 @@ include('inc/loggedInHeader.php'); ?>
       }
 
       function leaveGroup(groupId){
+        ga("send", "event", "Leave Group");
         $.getJSON('inc/invites.php',{action:"leaveGroup", rejectedGroupId:groupId},function(response){
           console.log(response);
           if (response=="success") {
@@ -248,7 +249,7 @@ include('inc/loggedInHeader.php'); ?>
         }
       }
 
-      
+
   </script>
   </body>
   
