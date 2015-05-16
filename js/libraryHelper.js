@@ -1,9 +1,9 @@
 function getParameterByName(name) {
-                name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-                var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
-                results = regex.exec(location.search);
-                return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-        }
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+  results = regex.exec(location.search);
+  return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
 function refreshGroupLibrary(groupId){
   $.getJSON('inc/posts.php',{action:"getGroupData",groupId:groupId},function(response){
@@ -76,22 +76,61 @@ function getGroupChat(groupId){
 
   var url='inc/social.php';
   var formData = "groupId="+groupId+"&action=getGroupChat";
-  console.log("getting Group Chat");
   $.getJSON(url,formData,function(response){
     console.log(response);
     //put the results into the table
     if (response.length>0) {
+      lastMessage = response[response.length-1];
       $("#chatEmptyState").html('');
       $("#chatMessages").html('');
       $.each(response, function(index, comment){
         addCommentToChat(comment);  
       });
     } else{
+      lastMessage='';
       $("#chatEmptyState").html('No discussion yet!');
       $('#chatMessages').html('');
     }   
-  });  
+  }); 
+  timerInterval=5000;
+  chatPoll=window.setTimeout(function(){refreshGroupChat(groupId);},timerInterval);
+
 }
+
+function refreshGroupChat(groupId){
+  var url = 'inc/social.php';
+  var formData = "groupId="+groupId+"&action=getGroupChat";
+    $.getJSON(url,formData,function(response){
+        if (response.length>0) {
+            var newLastMessage = response[response.length-1];
+            console.log("comparing " + newLastMessage['timePosted'] + " to " + lastMessage['timePosted']);
+            if (newLastMessage['timePosted']!=lastMessage['timePosted']) {
+                $("#chatEmptyState").html('');
+                $("#chatMessages").html('');
+                $.each(response, function(index, comment){
+                    addCommentToChat(comment);  
+                });
+                timerInterval=5000;
+                chatPoll=window.setTimeout(function(){refreshGroupChat(groupId);},timerInterval);
+            } else{
+              timerInterval=timerInterval*2;
+              console.log(timerInterval/1000);
+              chatPoll=window.setTimeout(function(){refreshGroupChat(groupId);},timerInterval);
+            }
+        } else {
+            timerInterval=timerInterval*2;
+            console.log(timerInterval/1000);
+            chatPoll=window.setTimeout(function(){refreshGroupChat(groupId);},timerInterval);
+        }
+    });
+}
+
+$(document).ready(function() {
+    timerInterval = 5000;
+    $('#commentBox').keyup(function() {
+        timerInterval = 5000;
+    });
+});
 
 function postGroupChatComment(comment, groupId){
   console.log(comment +" received for group #"+groupId);
@@ -138,24 +177,24 @@ function inviteFriends(){
 
 //Reset Functions
 function resetInviteFriendsModal(){
-  var inviteFriendHTML='';
-  
-  inviteFriendHTML+='<form method="post" action="inc/invites.php" id="inviteFriends">';
-  inviteFriendHTML+='<fieldset>';
-  inviteFriendHTML+='<legend> Select Friends to Invite:</legend>';
-  inviteFriendHTML+='<div class="ui-widget">';
-  inviteFriendHTML+='<input placeholder="Enter friend&#39;s email" id="inviteAutocomplete" size="30"><p id="inviteWarningArea"></p> <button onclick="addFriendToInviteTable(); return false;">  Add Friend to Invite List</button>';
-  inviteFriendHTML+='</div>';
-  inviteFriendHTML+='<div>';
-  inviteFriendHTML+='Selected Friends: <br>';
-  inviteFriendHTML+='<ul id="inviteFriendZone">';
-  inviteFriendHTML+='</ul>';
-  inviteFriendHTML+='</div>';
-  inviteFriendHTML+='Invite Message (optional):<textarea name="friendsInviteMsg" rows="4" cols="3" style="margin-bottom:0;"></textarea>';
-  inviteFriendHTML+='</fieldset>'; 
-  inviteFriendHTML+='<a class="button" id="inviteButton" onclick="inviteFriends();return false;">Invite Friends!</a>';
-  inviteFriendHTML+='</form>';
-  inviteFriendHTML+='<a class="close-reveal-modal" aria-label="Close" onclick="resetInviteFriendsModal();">&#215;</a>';
+    var inviteFriendHTML='';
 
-  $('#inviteFriendsModal').html(inviteFriendHTML);        
+    inviteFriendHTML+='<form method="post" action="inc/invites.php" id="inviteFriends">';
+    inviteFriendHTML+='<fieldset>';
+    inviteFriendHTML+='<legend> Select Friends to Invite:</legend>';
+    inviteFriendHTML+='<div class="ui-widget">';
+    inviteFriendHTML+='<input placeholder="Enter friend&#39;s email" id="inviteAutocomplete" size="30"><p id="inviteWarningArea"></p> <button onclick="addFriendToInviteTable(); return false;">  Add Friend to Invite List</button>';
+    inviteFriendHTML+='</div>';
+    inviteFriendHTML+='<div>';
+    inviteFriendHTML+='Selected Friends: <br>';
+    inviteFriendHTML+='<ul id="inviteFriendZone">';
+    inviteFriendHTML+='</ul>';
+    inviteFriendHTML+='</div>';
+    inviteFriendHTML+='Invite Message (optional):<textarea name="friendsInviteMsg" rows="4" cols="3" style="margin-bottom:0;"></textarea>';
+    inviteFriendHTML+='</fieldset>'; 
+    inviteFriendHTML+='<a class="button" id="inviteButton" onclick="inviteFriends();return false;">Invite Friends!</a>';
+    inviteFriendHTML+='</form>';
+    inviteFriendHTML+='<a class="close-reveal-modal" aria-label="Close" onclick="resetInviteFriendsModal();">&#215;</a>';
+
+    $('#inviteFriendsModal').html(inviteFriendHTML);        
 }

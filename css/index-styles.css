@@ -62,26 +62,26 @@ section.top-bar-section{
 
 #facebookLoginArea>a{
         background: #3b5998;
-        padding: 10 6 10 6;
+        padding: 16.5 20.5 16.5 20.5;
         color: white;
 }
 
 #facebookLoginArea>a:visited{
         background: #3b5998;
-        padding: 10 6 10 6;
+        padding: 16.5 17.5 16.5 17.5;
         color: white;
 
 }
 
 #facebookSignupArea>a{
         background: #3b5998;
-        padding: 10 6 10 6;
+        padding: 16.5 17.5 16.5 17.5;
         color: white;
 }
 
 #facebookSignupArea>a:visited{
         background: #3b5998;
-        padding: 10 6 10 6;
+        padding: 16.5 17.5 16.5 17.5;
         color: white;
 
 }
@@ -93,6 +93,7 @@ section.top-bar-section{
         border-width: 3.5px;
         padding-left: 16px;
         padding-right: 16px;
+
         height: 2.7em;
         font-weight: bold;
         font-family: 'walkway_ultraboldregular', sans-serif;

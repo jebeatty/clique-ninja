@@ -11,7 +11,7 @@ include('inc/loggedInHeader.php'); ?>
 
       
     </div>
-    <div class="row"><div class="large-12 columns"><div class="panel"><h2> My Groups </h2></div></div></div>
+    <div class="row" style="margin-top:2px;"><div class="large-12 columns"><div class="panel"><h2> My Groups </h2></div></div></div>
     <div id="content"> 
      
       
@@ -55,7 +55,7 @@ include('inc/loggedInHeader.php'); ?>
                 
                 cleanName=encodeURI(group[0].groupName.replace("#",''));
 
-                newHTML+='<div class="large-12 columns"><div class="title panel"><a style="color:white; width:100%; display:block;" href="groupLibrary.php?groupName='+ cleanName+'&groupId='+group[0].groupId+'">'+group[0].groupName+' </a></div><ul class="large-block-grid-3">';
+                newHTML+='<div class="large-12 columns"><div class="title panel"><a style="color:white; width:100%; display:block;" href="groupLibrary.php?groupName='+ cleanName+'&groupId='+group[0].groupId+'">'+group[0].groupName+' </a></div><ul class="large-block-grid-3" style="margin-left:-1px; margin-right:-1px;">';
 
                 $.each(group[1], function(index, post){
                   console.log(post);
@@ -139,7 +139,6 @@ include('inc/loggedInHeader.php'); ?>
       $(document).ready(function(){
           getInvites();
           getGroups();
-
           window.addEventListener('groupAdded', function (e) {
             console.log("group addition detected");
             getGroups();
@@ -200,9 +199,24 @@ include('inc/loggedInHeader.php'); ?>
 
   <!--Footer-->
       <footer id="footer">
-          <p> &copy; 2015 Clique </p>
+          <p style="margin-bottom:2px; margin-top:12px;"> &copy; 2015 Clique </p>
+          <p style="color:white;display:inline-block;margin-top:5px;margin-bottom:0;"> 220 2nd Ave S., Seattle, WA | </a>
+          <a data-reveal-id="contactModal" style="color:white;">Contact Us</a>
       </footer>
-  
+
+      <div id="contactModal" class="reveal-modal small" data-reveal>
+      <h2 id="contactModalTitle">Contact Us!</h2>
+      <p id="contactIntro"> We'd love to hear anything you have to say - help requests, comments, or recommendations on how we can improve Clique! Please fill out the information below, and be sure to include whether you'd like us to get back to you! If you'd like us to contact you via a different email than your account email, please specify. </p>
+        <p id="contactErrorLabel"></p>
+      <form method="post" action='inc/posts.php' id="contactRequest">
+      Name: <input name="name" id="contacterName" style="width:85%;"> <br>
+      <br>
+      Comment:
+      <textarea name="contactMessage" rows="6" cols="3"></textarea><br>
+    </form>
+    <a class="button radius" onclick="sendContactRequest(); return false;">Send!</a>
+        <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+     </div>
   
     </div>
 

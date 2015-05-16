@@ -1,7 +1,7 @@
   function writeItemHTML(post){
     var itemHTML = '';
     var cleanURL = encodeURI(post.url);
-    itemHTML += '<div class="panel radius">';
+    itemHTML += '<div class="panel">';
     itemHTML += '<p class="itemTitle"> Recommended by '+post.posterName+'</p>';
     
     if (post.comment!=null) {
@@ -25,6 +25,8 @@
       itemHTML += '<li><a id="like'+post.postId+'" class="button socialButton" onclick="submitLike(&#39;likes&#39;,&#39;'+post.postId+'&#39;);">'+post.likes+' Likes</a></li>';
       itemHTML += '<li><a id="love'+post.postId+'" class="button success socialButton" onclick="submitLike(&#39;loves&#39;,&#39;'+post.postId+'&#39;);">'+post.loves+' Loves</a></li>';
 
+      
+      
     } else{
       itemHTML += '<li><a id="like'+post.postId+'" class="button socialButton" onclick="submitLike(&#39;likes&#39;,&#39;'+post.postId+'&#39;);">Like It</a></li>';
       itemHTML += '<li><a id="love'+post.postId+'" class="button success socialButton" onclick="submitLike(&#39;loves&#39;,&#39;'+post.postId+'&#39;);">Love It</a></li>';
@@ -44,7 +46,7 @@
   function writeItemHTMLForLibrary(post){
     var itemHTML = '';
     var cleanURL = encodeURI(post.url);
-    itemHTML += '<div class="panel radius">';
+    itemHTML += '<div class="panel">';
     
     var postedString = '';
     if(post.postCount>1){
@@ -148,7 +150,7 @@ function callEmbedlyAPIForDiv(itemIdTag, postURL){
        customEmbedHTML +='<p class="objectDesc">No description! How mysterious...check out the link below to see more</p>';
     }
    
-    customEmbedHTML +=' <a href="'+obj.original_url+'" target="_blank"> See more at '+obj.provider_name+' > </a></div>';
+    customEmbedHTML +=' <a href="'+obj.original_url+'" target="_blank"> See the rest at '+obj.provider_name+' > </a></div>';
     $('#'+itemIdTag).html(customEmbedHTML);
   });
 }

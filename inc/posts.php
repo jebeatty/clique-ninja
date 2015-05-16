@@ -42,11 +42,12 @@ function actionSelector($action){
     $json = json_encode(getGroupData($_GET['groupId'],'25'));
     echo $json;
   }
-  else if($action="newPost"){
+  else if($action=="newPost"){
       addNewPost($_POST['group'],$_SESSION['userId'],$_POST['url'],$_POST['message']);
       
-  }
-  else {
+  } else if($action=="contactRequest"){
+      addContactRequest($_POST['name'],$_POST['contactMessage'],$_SESSION['userId']);
+  } else {
     $json = json_encode("Action Code Not Recognized");
     echo $json;
   }
@@ -98,6 +99,21 @@ function addNewPost($groups, $userId, $url, $comment){
   }
 }
 
+function addContactRequest($name,$message,$userId){
+    global $db;
+
+    try {
+    $results = $db->prepare("INSERT INTO `contactRequests` (`name`, `message`, `userId`)
+                              VALUES (?,?,?)
+                              ");
+    $results->execute(array($name, $message, $userId));
+    } catch(Exception $e){
+        echo "Data loading error!".$e;
+        exit;
+    }
+
+    echo json_encode("success");
+}
 
 //Recent Functions
 function getRecent($userId){

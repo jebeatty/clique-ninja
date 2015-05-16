@@ -329,4 +329,20 @@ a{
                 margin-left: 0px;
         }
 
+        .button.radius.right.logout{
+            background: #9164ab;
+            border-color: transparent;
+            margin-right: 0;
+            display: block;
+            font-size: 1em;
+            float: none !important;
+            max-width: 118.984px;
+            border-radius:0;
+            margin-bottom: -1px;
+        }
+
+        .button.radius.right.logout:hover{
+            background: #774d8f;
+           
+        }
 }

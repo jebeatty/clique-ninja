@@ -133,21 +133,39 @@
         <a class="button radius right logout" data-reveal-id="settingsModal"> Settings </a>
       </nav>
     </div>
+    <button id="newActionButton" style="position:fixed;right:2px;top:50%;z-index:1;opacity:1.0;padding: 9.3px 14px 10.3px 14px; border-radius:19px;" onclick="revealNewButtons();">+</button>
+    <div id="createButtonArea" style="position:fixed;right:-200px;top:50%;z-index:1;opacity:1.0;">
+    <a class="button radius" data-reveal-id="newPostModal" onclick="ga('send', 'event', 'New Post', 'Start');" style="width:100%; display:block; margin-bottom:3px;"> New Post </a>
+    <a class="button radius" data-reveal-id="newGroupModal" onclick="ga('send', 'event', 'New Group', 'Start');" style="width:100%; display:block; margin-bottom:3px;"> New Group </a>
+   </div>
+  <script>
+  function revealNewButtons(){
+    var currentButtonPosition=document.getElementById('newActionButton').style.right;
 
-    <a class="button radius left" data-reveal-id="newPostModal" onclick="ga('send', 'event', 'New Post', 'Start');"> New Post </a>
-    <a class="button radius left" data-reveal-id="newGroupModal" onclick="ga('send', 'event', 'New Group', 'Start');"> New Group </a>
-   
+    if (currentButtonPosition=='2px') {
+        document.getElementById('createButtonArea').style.right="2px";
+        document.getElementById('newActionButton').style.right="150px";
+        $('#newActionButton').html('>');
 
-    </script>
+    } else{
+      document.getElementById('createButtonArea').style.right="-200px";
+      document.getElementById('newActionButton').style.right="2px";
+      $('#newActionButton').html('+');
+    }
+  }
+
+   </script>
     <!-- End Navigation -->
     <!-- Modal Windows -->
 
     <!-- Logout -->
-    <div id="logoutModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <div id="logoutModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog" style="text-align:center;">
       <h2 id="modalTitle">Are you sure?</h2>
+      <a class="button radius" onclick="$('#logoutModal').foundation('reveal', 'close');">No, Never Mind</a>
       <form method="post" action='inc/userAuth.php' id="logoutForm">
       <input class="button radius alert" type="submit" value="Yes, Do it">
       </form>
+
       <a class="close-reveal-modal" aria-label="Close">&#215;</a>
     </div>
 

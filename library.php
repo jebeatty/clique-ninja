@@ -35,7 +35,7 @@ include('inc/loggedInHeader.php'); ?>
               }); //end getJSON
             }
           </script>
-       <ul class="large-block-grid-3" id="itemGrid"> 
+       <ul class="medium-block-grid-3" id="itemGrid" style="margin: 4px 33px 2px 33px;"> 
         <script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
       </ul>
       
@@ -79,8 +79,24 @@ include('inc/loggedInHeader.php'); ?>
   <!-- End Modal Content -->
   <!--Footer-->
       <footer id="footer">
-          <p> &copy; 2015 Clique </p>
+          <p style="margin-bottom:2px; margin-top:12px;"> &copy; 2015 Clique </p>
+          <p style="color:white;display:inline-block;margin-top:5px;margin-bottom:0;"> 220 2nd Ave S., Seattle, WA | </a>
+          <a data-reveal-id="contactModal" style="color:white;">Contact Us</a>
       </footer>
+
+      <div id="contactModal" class="reveal-modal small" data-reveal>
+          <h2 id="contactModalTitle">Contact Us!</h2>
+          <p id="contactIntro"> We'd love to hear anything you have to say - help requests, comments, or recommendations on how we can improve Clique! Please fill out the information below, and be sure to include whether you'd like us to get back to you! If you'd like us to contact you via a different email than your account email, please specify. </p>
+          <p id="contactErrorLabel"></p>
+          <form method="post" action='inc/posts.php' id="contactRequest">
+            Name: <input name="name" id="contacterName" style="width:85%;"> <br>
+            <br>
+            Comment:
+            <textarea name="contactMessage" rows="6" cols="3"></textarea><br>
+          </form>
+          <a class="button radius" onclick="sendContactRequest(); return false;">Send!</a>
+          <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+     </div>
   
   
     </div>

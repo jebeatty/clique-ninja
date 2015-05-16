@@ -7,18 +7,21 @@ include('inc/loggedInHeader.php'); ?>
     
 
     <!--Feature Content-->
-    <div id="groupOptionButtons">
-      <br>
+    
+    <div id="groupOptions" style="margin-top:6px; margin-bottom:-1px;" class="panel">
+        <div id="groupDescription">
 
-    </div>
-    <div id="groupDescription" style="margin-bottom:-1px;" class="panel">
+        </div>
+        <div id="groupOptionButtons" style="margin-top:3px; margin-bottom:6px;">
 
+
+        </div>
     </div>
     <script src="js/vendor/autogrow.min.js"></script>
     <div id="groupChat" style="padding:0;" class="panel">
       <ul class="accordion" style="margin-left:0;margin-right:0;" data-accordion>
         <li class="accordion-navigation">
-          <a href="#panel1a" style="background:#9164ab;color:white;">Group Chat</a>
+          <a href="#panel1a" style="background:#9164ab;color:white;font-family: 'walkway_boldregular', sans-serif;">Group Chat</a>
           <div id="panel1a" class="content" style="text-align:left; padding-bottom:0;">
             <div id="chatMessages" style="overflow:auto;height:230px;">
             
@@ -45,8 +48,11 @@ include('inc/loggedInHeader.php'); ?>
 
         //write the invite/leave button html here with groupId
         var optionButtonHTML ='';
-        optionButtonHTML +='<a class="button radius left" data-reveal-id="inviteFriendsModal" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Invite Friends&#39;, &#39;Start&#39;);"> Invite Friends to Group</a>';
-        optionButtonHTML +='<a class="button radius left" data-reveal-id="leaveGroupModal" onclick="setModalContent(&#39;'+groupName+'&#39;,&#39;'+groupId+'&#39;);"> Leave Group </a>';
+        console.log(groupName);
+        if (groupName.indexOf("Discovery Group")!=0) {
+          optionButtonHTML +='<a data-reveal-id="inviteFriendsModal" onclick="ga(&#39;send&#39;, &#39;event&#39;, &#39;Invite Friends&#39;, &#39;Start&#39;);"> Invite Friends to Group | </a>';
+        }
+        optionButtonHTML +='<a data-reveal-id="leaveGroupModal" onclick="setModalContent(&#39;'+groupName+'&#39;,&#39;'+groupId+'&#39;);"> Leave Group </a>';
         $('#groupOptionButtons').html(optionButtonHTML);
 
         getGroupMemberInfo(groupId);
@@ -175,8 +181,24 @@ include('inc/loggedInHeader.php'); ?>
   <!-- End Modal Views -->
   <!--Footer-->
       <footer id="footer">
-          <p> &copy; 2015 Clique </p>
+          <p style="margin-bottom:2px; margin-top:12px;"> &copy; 2015 Clique </p>
+          <p style="color:white;display:inline-block;margin-top:5px;margin-bottom:0;"> 220 2nd Ave S., Seattle, WA | </a>
+          <a data-reveal-id="contactModal" style="color:white;">Contact Us</a>
       </footer>
+
+      <div id="contactModal" class="reveal-modal small" data-reveal>
+          <h2 id="contactModalTitle">Contact Us!</h2>
+          <p id="contactIntro"> We'd love to hear anything you have to say - help requests, comments, or recommendations on how we can improve Clique! Please fill out the information below, and be sure to include whether you'd like us to get back to you! If you'd like us to contact you via a different email than your account email, please specify. </p>
+          <p id="contactErrorLabel"></p>
+          <form method="post" action='inc/posts.php' id="contactRequest">
+            Name: <input name="name" id="contacterName" style="width:85%;"> <br>
+            <br>
+            Comment:
+            <textarea name="contactMessage" rows="6" cols="3"></textarea><br>
+          </form>
+          <a class="button radius" onclick="sendContactRequest(); return false;">Send!</a>
+          <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+     </div>
   
   
     </div>
@@ -205,8 +227,6 @@ include('inc/loggedInHeader.php'); ?>
       $('#leaveGroupModalTitle').html("Are you sure you'd like to leave "+titleInput+"?");
 
        $('#modalButtons').html('<a class="button left" onclick="leaveGroup(&#39;'+groupId+'&#39;); return false;"> Yes, Leave Group </a><a class="button right" onclick="customModalClose();"> No, Never Mind </a>');
-
-
       }
 
       function leaveGroup(groupId){
@@ -220,9 +240,7 @@ include('inc/loggedInHeader.php'); ?>
           } else{
             alert("Something went wrong!");
           }
-
         });
-
       }
 
       function customModalClose(){

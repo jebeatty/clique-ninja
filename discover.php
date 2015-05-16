@@ -10,7 +10,7 @@ include('inc/loggedInHeader.php'); ?>
     <div id="content">  
       <script async src="//cdn.embedly.com/widgets/platform.js" charset="UTF-8"></script>
 
-      <div class="row">
+      <div class="row" style="margin-top:5px;">
         <div class="large-12 columns" id="discoveryGroups">
           <div class="panel radius">
             <h4>Join a Discovery Group!</h4>
@@ -21,25 +21,6 @@ include('inc/loggedInHeader.php'); ?>
               and see parts of the world, both on and offline, that you never knew existed. There's a big world out there - join a Discovery Group and check it out!
             </p>
             <a class="button" data-reveal-id="discoveryModal" onclick="addToDiscovery();"> Sign Me Up, Scotty! </a>
-        </div>
-      </div>
-
-       <div class="row">
-        <div class="large-6 columns">
-          <div class="panel radius">
-            <h4>Browse Popular Content</h4>
-          </div>
-          <div id = "popularContent">
-            Nothing Here Yet!
-          </div>
-        </div>
-        <div class="large-6 columns">
-          <div class="panel radius">
-            <h4> Browse Popular Public Groups</h4>
-          </div>
-          <div id = "popularGroups">
-            Nothing Here Yet!
-          </div>
         </div>
       </div>
     </div>
@@ -81,8 +62,24 @@ include('inc/loggedInHeader.php'); ?>
 
   <!--Footer-->
       <footer id="footer">
-          <p> &copy; 2015 Clique </p>
+          <p style="margin-bottom:2px; margin-top:12px;"> &copy; 2015 Clique </p>
+          <p style="color:white;display:inline-block;margin-top:5px;margin-bottom:0;"> 220 2nd Ave S., Seattle, WA | </a>
+          <a data-reveal-id="contactModal" style="color:white;">Contact Us</a>
       </footer>
+
+      <div id="contactModal" class="reveal-modal small" data-reveal>
+          <h2 id="contactModalTitle">Contact Us!</h2>
+          <p id="contactIntro"> We'd love to hear anything you have to say - help requests, comments, or recommendations on how we can improve Clique! Please fill out the information below, and be sure to include whether you'd like us to get back to you! If you'd like us to contact you via a different email than your account email, please specify. </p>
+          <p id="contactErrorLabel"></p>
+          <form method="post" action='inc/posts.php' id="contactRequest">
+            Name: <input name="name" id="contacterName" style="width:85%;"> <br>
+            <br>
+            Comment:
+            <textarea name="contactMessage" rows="6" cols="3"></textarea><br>
+          </form>
+          <a class="button radius" onclick="sendContactRequest(); return false;">Send!</a>
+          <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+     </div>
   
   
     </div>

@@ -5,10 +5,13 @@ function recoverPassword(){
 			$.post('inc/userAuth.php', 'action=recoverPassword&email='+email, function(response){
 				console.log(response);
 				if (response=='"success"') {
-					$('#recoveryErrorLabel').html('Password Recovered');
+					$('#recoveryErrorLabel').html('Account found - please check your email for your information');
+				}
+				else if (response=='"No such email"'){
+					$('#recoveryErrorLabel').html('No user account found for that email');
 				}
 				else{
-					$('#recoveryErrorLabel').html('No user account found for that email');
+					$('#recoveryErrorLabel').html('Something seems to have gone wrong. Please email us at admin@discoverclique.com');
 				}
 			}); //end post
 		} else{

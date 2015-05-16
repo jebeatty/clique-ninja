@@ -72,22 +72,23 @@
                 </div>
         </div>
         <div class="row">
-  
                 <div class="small-12 columns">
                         <label> Password
-                        <input type="password" id="passLabelLI" name="password" placeholder="">
+                        <input type="password" id="passLabelLI" name="password" placeholder="" style="margin-bottom:1px;">
                         </label>
+                <a data-reveal-id="recoverPasswordModal" > Forgot your password or username? </a>
                 </div>
         </div>
-        <a data-reveal-id="recoverPasswordModal"> Forgot your password or username? </a>
-        <a class="button radius" onclick="login(); return false;"> Login </a>
         </form>
-     
-      </div>
-     
-       OR <br>
-      <br>
-      <div id="facebookLoginArea">
+        <div class="row" style="margin-top:10px;">
+                <div class="small-6 small-centered columns">
+                      <a class="button" onclick="login(); return false;" style="display:block;width:100%;margin-bottom:5px;"> Login </a>  
+                </div>
+        </div>
+      </div>  
+      <div id="facebookLoginArea" style="text-align:center;">
+       <p style="color:rgb(200, 200, 200);margin-bottom:5px;"> ________ </p>
+        <br>
         <?php
         require_once("vendor/autoload.php");
         use Facebook\FacebookSession;
@@ -122,7 +123,7 @@
 
                 <div class="small-12 columns">
                         <label> Username
-                        <input type="text" id="nameLabelSU" name="username" placeholder="Jane Doe">
+                        <input type="text" id="nameLabelSU" name="username" placeholder="jane_doe">
                         </label>
                 </div>
         </div>
@@ -142,12 +143,18 @@
                         </label>
                 </div>
         </div>
-        <a class="button radius" onclick="signup(); return false;"> Sign Up </a>
+        <div class="row" style="margin-top:10px;">
+                <div class="small-6 small-centered columns">
+                       <a class="button" onclick="signup(); return false;" style="display:block;width:100%;margin-bottom:5px;"> Sign Up </a>  
+                </div>
+        </div>
+       
         </form>
       </div>
-      OR <br>
-      <br>
-      <div id="facebookSignUpArea">
+      
+      <div id="facebookSignUpArea" style="text-align:center;">
+        <p style="color:rgb(200, 200, 200); margin-bottom:5px;"> ________ </p>
+        <br>
         <?php
        
         echo '<a href="' . $loginURL . '">Signup with Facebook</a>';

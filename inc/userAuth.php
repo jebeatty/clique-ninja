@@ -96,7 +96,7 @@ function logInUser($username, $password){
         startUserSession($username, $userId);
         echo json_encode(true);
       } else{
-        echo json_encode("No such user - invalid password");
+        echo json_encode("No such user");
       }
       //else do an unhashed password check
     } else{
@@ -114,11 +114,11 @@ function logInUser($username, $password){
         startUserSession($username,$userId);
         echo json_encode(true);
       } else{
-        echo json_encode("No such user - attempted plaintext check");
+        echo json_encode("No such user");
       }
     }
   } else{
-    echo json_encode("No such user - no userid found");
+    echo json_encode("No such user");
   }
 }
 

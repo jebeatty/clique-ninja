@@ -1,4 +1,5 @@
 
+
 function getGroupList(){
   $.getJSON('inc/posts.php',{action:"getGroupList"},function(response){
     groupListHTML ='';
@@ -228,4 +229,21 @@ function addFriendToEmailTable(){
       $('#emailWarningArea').html('Invalid Email');
     
     }  
+}
+
+function sendContactRequest(){
+      var url = $('#contactRequest').attr("action");
+      var formData = $('#contactRequest').serialize();
+      formData+='&action=contactRequest';
+      console.log(formData)
+      $('#contactButton').html("Sending...");
+      $.post(url, formData, function(response){
+        console.log(response);
+        if (response=='"success"') {
+          $('#contactModal').foundation('reveal', 'close');
+        } else{
+          $('#contactIntro').html('');
+          $('#contactErrorLabel').html("Something seems to have gone wrong. Shoot us an email at admin@discoverclique.com");
+        }
+      });
 }

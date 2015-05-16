@@ -6,7 +6,7 @@ use phpmailer\PHPMailerAutoload;
 function sendRecoveryEmail($email, $password, $username){
 	$mail = new PHPMailer;
 
-	$mail->SMTPDebug = 1;                               // Enable verbose debug output
+	$mail->SMTPDebug = 3;                               // Enable verbose debug output
 
 	$mail->isSMTP();                                      // Set mailer to use SMTP
 	$mail->Host = 'mail.discoverclique.com';  // Specify main and backup SMTP servers
@@ -46,7 +46,7 @@ function sendRecoveryEmail($email, $password, $username){
 function sendShareEmail($recipients, $subject, $body){
 	$mail = new PHPMailer;
 
-	$mail->SMTPDebug = 1;                               // Enable verbose debug output
+	$mail->SMTPDebug = 3;                               // Enable verbose debug output
 
 	$mail->isSMTP();                                      // Set mailer to use SMTP
 	$mail->Host = 'mail.discoverclique.com';  // Specify main and backup SMTP servers

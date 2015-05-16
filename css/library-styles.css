@@ -27,6 +27,9 @@ body{
 
 }
 
+#itemGrid>li{
+	padding:0;
+}
 
 .button.radius.right{
 	border-width: 1.5px;
