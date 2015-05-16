@@ -8,7 +8,7 @@ include('inc/loggedInHeader.php'); ?>
 
     <!--Feature Content-->
     
-    <div id="groupOptions" style="margin-top:6px; margin-bottom:-1px;" class="panel">
+    <div id="groupOptions" style="margin-top:6px; margin-bottom:-1px;margin-left:10px;margin-right:10px;" class="panel">
         <div id="groupDescription">
 
         </div>
@@ -18,7 +18,7 @@ include('inc/loggedInHeader.php'); ?>
         </div>
     </div>
     <script src="js/vendor/autogrow.min.js"></script>
-    <div id="groupChat" style="padding:0;" class="panel">
+    <div id="groupChat" style="padding:0;margin-left:10px;margin-right:10px;" class="panel">
       <ul class="accordion" style="margin-left:0;margin-right:0;" data-accordion>
         <li class="accordion-navigation">
           <a href="#panel1a" style="background:#9164ab;color:white;font-family: 'walkway_boldregular', sans-serif;">Group Chat</a>
@@ -93,7 +93,7 @@ include('inc/loggedInHeader.php'); ?>
         
 
       </script>
-       <ul class="large-block-grid-3" id="itemGrid" data-equalizer> 
+       <ul class="medium-block-grid-3" id="itemGrid" data-equalizer style="margin-left:30px;margin-right:30px;"> 
        
       </ul>
       

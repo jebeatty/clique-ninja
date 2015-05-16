@@ -133,8 +133,8 @@
         <a class="button radius right logout" data-reveal-id="settingsModal"> Settings </a>
       </nav>
     </div>
-    <button id="newActionButton" style="position:fixed;right:2px;top:50%;z-index:1;opacity:1.0;padding: 9.3px 14px 10.3px 14px; border-radius:19px;" onclick="revealNewButtons();">+</button>
-    <div id="createButtonArea" style="position:fixed;right:-200px;top:50%;z-index:1;opacity:1.0;">
+    <button id="newActionButton" style="position:fixed;right:2px;top:57%;z-index:1;opacity:0.75;padding: 9.3px 14px 10.3px 14px; border-radius:19px;" onclick="revealNewButtons();">+</button>
+    <div id="createButtonArea" style="position:fixed;right:-200px;top:57%;z-index:1;opacity:1.0;">
     <a class="button radius" data-reveal-id="newPostModal" onclick="ga('send', 'event', 'New Post', 'Start');" style="width:100%; display:block; margin-bottom:3px;"> New Post </a>
     <a class="button radius" data-reveal-id="newGroupModal" onclick="ga('send', 'event', 'New Group', 'Start');" style="width:100%; display:block; margin-bottom:3px;"> New Group </a>
    </div>
@@ -145,6 +145,7 @@
     if (currentButtonPosition=='2px') {
         document.getElementById('createButtonArea').style.right="2px";
         document.getElementById('newActionButton').style.right="150px";
+        document.getElementById('newActionButton').style.opacity="1.0";
         $('#newActionButton').html('>');
 
     } else{

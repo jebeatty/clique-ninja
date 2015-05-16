@@ -47,6 +47,17 @@ function actionSelector($action){
       
   } else if($action=="contactRequest"){
       addContactRequest($_POST['name'],$_POST['contactMessage'],$_SESSION['userId']);
+
+  } else if($action=="editPost"){
+      $editPostIds=$_POST['postIds'];
+      $newURL=$_POST['url'];
+      $newComment=$_POST['message'];
+      editPost($editPostIds,$newURL,$newComment);
+
+  } else if($action=="deletePost"){
+      $deletePostIds=$_POST['postIds'];
+      deletePost($deletePostIds);
+
   } else {
     $json = json_encode("Action Code Not Recognized");
     echo $json;
@@ -99,6 +110,37 @@ function addNewPost($groups, $userId, $url, $comment){
   }
 }
 
+function editPost($editIds, $newURL, $newComment){
+  global $db;
+
+  foreach ($editIds as $editId) {
+    try {
+    $results = $db->prepare("UPDATE posts SET url=?, comment=? WHERE postId=?");
+    $results->execute(array($newURL,$newComment,$editId));
+    } catch(Exception $e){
+        echo "Data loading error!".$e;
+        exit;
+    }
+  }
+  echo json_encode("success");
+}
+
+function deletePost($deleteIds){
+  global $db;
+
+  foreach ($deleteIds as $deleteId) {
+    try {
+    $results = $db->prepare("DELETE FROM posts WHERE postId=?");
+    $results->execute(array($deleteId));
+    } catch(Exception $e){
+        echo "Data loading error!".$e;
+        exit;
+    }
+  }
+  echo json_encode("success");
+
+}
+
 function addContactRequest($name,$message,$userId){
     global $db;
 
@@ -129,7 +171,7 @@ function getRecent($userId){
   }
 
   //create a SQL query with WHERE posterid!=userId and (groupId=? or groupId=?)
-  $SQLQuery = "SELECT posterName, groupId, url, postDate, postId, comment, ehs, likes, loves FROM posts WHERE posterId!=? AND (";
+  $SQLQuery = "SELECT posterId, groupId, url, postDate, postId, comment, ehs, likes, loves FROM posts WHERE posterId!=? AND (";
 
   //a For loop that concatenates groupId=? onto the SQL query, with ORs included except for the last iteration of the loop
 
@@ -161,12 +203,17 @@ function getRecent($userId){
     foreach ($recent as &$recentPost) {
       $postLiked = checkIfUserLikedPost($recentPost['postId'], $userId);
       $recentPost['postLiked']=$postLiked;
+
+      $commentData = getCommentsForPost($recentPost['postId']);
+      $recentPost['commentData']=$commentData;
+
+      $retrievedName = getUserNameForId($recentPost['posterId']);
+      $recentPost['posterName']=$retrievedName;
+
+      $recentPost['userPosted']=false;
     }
 
-    foreach ($recent as &$recentPost) {
-        $commentData = getCommentsForPost($recentPost['postId']);
-        $recentPost['commentData']=$commentData;
-    }
+   
 
     $json = json_encode($recent);
     echo $json;
@@ -200,15 +247,18 @@ function getLibrary($userId){
     for ($i=0; $i<count($library); $i=$i+1) {
         $newUrl = $library[$i]["url"];
         $newGroupName = getGroupNameForId($library[$i]['groupId']);
-        
+        $newId=$library[$i]['postId'];
+
         if ($url==$newUrl){
             $maxIndex = count($cleanLibrary)-1;
             $cleanLibrary[$maxIndex]['postCount']=$cleanLibrary[$maxIndex]['postCount']+1;
             array_push($cleanLibrary[$maxIndex]['groupList'], $newGroupName); 
+            array_push($cleanLibrary[$maxIndex]['postIdList'], $newId); 
         
         } else{
             $library[$i]['postCount']=1;
             $library[$i]['groupList']=array($newGroupName);
+            $library[$i]['postIdList']=array($newId);
             array_push($cleanLibrary, $library[$i]);
             $url=$newUrl;
         }
@@ -273,17 +323,18 @@ function getGroupData($groupId, $limit){
       $postLiked = checkIfUserLikedPost($groupItem['postId'], $userId);
       $groupItem['postLiked']=$postLiked;
 
-    }
+      $commentData = getCommentsForPost($groupItem['postId']);
+      $groupItem['commentData']=$commentData;
 
-    //add comments
-    foreach ($groupPosts as &$groupItem) {
-        $commentData = getCommentsForPost($groupItem['postId']);
-        $groupItem['commentData']=$commentData;
-    }
+      $retrievedName = getUserNameForId($groupItem['posterId']);
+      $groupItem['posterName']=$retrievedName;
 
-    foreach ($groupPosts as &$groupItem) {
-        $retrievedName = getUserNameForId($groupItem['posterId']);
-        $groupItem['posterName']=$retrievedName;
+      if ($userId==$groupItem['posterId']) {
+        $groupItem['userPosted']=true;
+      }else{
+        $groupItem['userPosted']=false;
+      }
+
     }
 
     return $groupPosts;

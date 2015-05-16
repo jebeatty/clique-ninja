@@ -35,6 +35,12 @@
     itemHTML += '</ul>';
 
     
+    if (post.postLiked && !post.userPosted) {
+       itemHTML += '<div id="unlikeArea'+post.postId+'" style="text-align:left;margin-left:3px;margin-top:-34px;"><a id="unlike'+post.postId+'" onclick="undoLike(&#39;'+post.postId+'&#39;);">Undo</a></div>'; 
+    } else{
+      itemHTML += '<div id="unlikeArea'+post.postId+'" style="text-align:left;margin-left:3px;margin-top:-34px;"></div>';
+    }
+    
 
 
     itemHTML += '<p class="discussionStats">'+post.commentData.length+' Comments </p>';
@@ -59,6 +65,7 @@
     	postedString = post.groupList[0];
     }
     itemHTML += '<p class="itemTitle"> Posted to '+postedString+'</p>';
+
     
     if (post.comment!=''&& post.comment!=null) {
       itemHTML += '<p class="posterComment"> '+post.comment+' </p>'
@@ -80,8 +87,15 @@
     itemHTML += '<li><a id="love'+post.postId+'" class="button success socialButton" onclick="submitLike(&#39;loves&#39;,&#39;'+post.postId+'&#39;);">'+post.loves+' Loves</a></li>';
 
     itemHTML += '</ul>';
+
+    //edit option
+    
+
     itemHTML += '<p class="discussionStats">'+post.commentData.length+' Comments </p>';
-    itemHTML += '<p class="seeDiscussion"><a data-reveal-id="detailModal" onclick="fillModal(&#39;'+post.postId+'&#39;,&#39;'+cleanURL+'&#39;,&#39;'+post.posterName+'&#39;);"> <i class="fi-comments"></i> See Discussion</a></p> </div>';
+    itemHTML += '<p class="seeDiscussion"><a data-reveal-id="detailModal" onclick="fillModal(&#39;'+post.postId+'&#39;,&#39;'+cleanURL+'&#39;,&#39;'+post.posterName+'&#39;);"> <i class="fi-comments"></i> See Discussion</a></p>'; 
+
+    itemHTML += '<div style="margin-top:-12px;font-size:0.8em;"><a id="editPost_'+post.postId+'"> Edit Post |</a><a id="deletePost_'+post.postId+'"> Delete Post</a></div></div>';
+
 
     return itemHTML;
   }
@@ -112,16 +126,27 @@
       }
        
       $.getJSON('inc/social.php',{action:"submitLike",likeType:likeType, postId:postId},function(response){
-        
-
         if (response) {
           $('#like'+postId).html(response[0]['likes']+" Likes");
           $('#love'+postId).html(response[0]['loves']+" Loves");
+          $('#unlikeArea'+postId).html('<a id="unlike'+postId+'" onclick="undoLike(&#39;'+postId+'&#39;);">Undo</a>');
         }
+      });
+    }
+  }
 
+  function undoLike(postId){
+      console.log("unliking post#"+postId);
+          
+      $.getJSON('inc/social.php',{action:"undoLike", postId:postId},function(response){
+          console.log(response);
+          $('#like'+postId).html('Like It');
+          $('#love'+postId).html('Love It');
+          $('#unlikeArea'+postId).html('');
       });
 
-    }
+    
+
   }
    
 function callEmbedlyAPIForDiv(itemIdTag, postURL){

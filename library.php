@@ -21,16 +21,24 @@ include('inc/loggedInHeader.php'); ?>
             function refreshLibrary(){
               $.getJSON('inc/posts.php',{action:"library"},function(response){
                 console.log(response);
-                var blockgridHTML = '';
-
+                
+                $('#itemGrid').html('');
                 $.each(response, function(index, post){
+                  var blockgridHTML = '';
                   blockgridHTML += '<li>';
                   blockgridHTML += writeItemHTMLForLibrary(post);
                   blockgridHTML += '</li>';
-                  
-                });//end each
+                  $('#itemGrid').append(blockgridHTML).hide().show('normal');
+                  document.getElementById('editPost_'+post.postId).addEventListener('click',function(){
+                    launchEditPostModal(post.url,post.comment,post.postIdList);
+                  });
 
-                $('#itemGrid').html(blockgridHTML);
+                  document.getElementById('deletePost_'+post.postId).addEventListener('click',function(){
+                    launchDeletePostModal(post.postIdList);
+                  });
+
+
+                });//end each
 
               }); //end getJSON
             }
@@ -72,8 +80,32 @@ include('inc/loggedInHeader.php'); ?>
       
             
       <a class="close-reveal-modal" aria-label="Close">&#215;</a>
-      
+    </div>
 
+
+    <div id="deletePostModal" class="reveal-modal small" data-reveal>
+      <h2 id="deletePostModalTitle">Delete This Post?</h2>
+      <p> Are you sure you want to delete this post? This will delete this post from our servers and cannot be undone. <p>
+        <div id="modalButtons">
+          <a class="button alert left" onclick="submitDeletePost();"> Yes - Delete </a>
+          <a class="button right" onclick="$('#deletePostModal').foundation('reveal', 'close');"> No, Never mind </a>
+        </div>
+    </div>
+
+    <!-- Edit Post -->
+    <div id="editPostModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+      <h2 id="editPostTitle">Edit Post</h2>
+      <p id="editPostErrorLabel"></p>
+      <form method="post" action='inc/posts.php' id="editPosts">
+      URL: <input name="url" id="editPostUrl" style="width:85%;"> <br>
+      <br>
+      <br>
+      Comment:
+      <textarea name="message" id="editPostComment" rows="6" cols="3"></textarea><br>
+     
+      <a class="button left" id="editPostButton" onclick="submitPostEdits();">Save Changes</a>
+      <a class="button right" id="closeEditsButton" onclick="$('#editPostModal').foundation('reveal', 'close');">Never mind</a>
+      </form>
     </div>
 
   <!-- End Modal Content -->
@@ -119,6 +151,8 @@ include('inc/loggedInHeader.php'); ?>
   ga('send', 'pageview');
     $(document).foundation();
     $(document).foundation('equalizer','reflow');
+
+
   </script>
   </body>
   

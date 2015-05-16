@@ -4,6 +4,7 @@ function getGroupList(){
   $.getJSON('inc/posts.php',{action:"getGroupList"},function(response){
     groupListHTML ='';
     modalListHTML ='';
+
     $.each(response, function(index, group){
       cleanName = group.groupName.replace("#","");
       groupListHTML += '<li><a href="groupLibrary.php?groupName='+cleanName+'&amp;groupId='+group.groupId+'"> '+group.groupName+'</a></li>';
@@ -13,6 +14,7 @@ function getGroupList(){
 
     $('#modalGroups').html(modalListHTML);
     $('#groupMenu').html(groupListHTML);
+
   }); //end getJSON 
 }
 
@@ -108,6 +110,66 @@ function resetPostModalHTML(){
   postModalHTML+='<a class="button" id="postButton" onclick="postNewPost();">Post!</a></form><a class="close-reveal-modal" aria-label="Close">&#215;</a>';
 
   $('#newPostModal').html(postModalHTML);
+}
+
+
+function launchEditPostModal(url,comment,postIdList){
+    $('#editPostUrl').val(url);
+    $('#editPostComment').val(comment);
+    $('#editPostErrorLabel').html('');
+    editPostList=postIdList;
+    $('#editPostModal').foundation('reveal', 'open');
+}
+
+function submitPostEdits(){
+  var url="inc/posts.php";
+  var formData = $('#editPosts').serialize();
+  formData += "&action=editPost";
+  $.each(editPostList, function(index, postId){
+    formData+="&postIds[]="+postId;
+  });
+  console.log(formData);
+  
+  $.post(url, formData, function(response){
+    console.log(response);
+    if (response=='"success"') {
+      $('#editPostModal').foundation('reveal', 'close');
+      var evt = new CustomEvent('itemUpdated');
+      window.dispatchEvent(evt);
+    } else{
+      $('#editPostErrorLabel').html('Something seems to have gone wrong. Please refresh and try again');
+    }
+  });
+
+}
+
+
+
+function launchDeletePostModal(postIdList){
+    deletePostList = postIdList;
+    $('#deletePostNotice').html('Are you sure you want to delete this post? This will delete this post from our servers and cannot be undone.');
+    $('#deletePostModal').foundation('reveal', 'open');
+}
+
+function submitDeletePost(){
+  var url="inc/posts.php";
+  var formData="action=deletePost";
+  $.each(deletePostList, function(index, postId){
+    formData+="&postIds[]="+postId;
+  });
+  console.log(formData);
+  $.post(url, formData, function(response){
+    console.log(response);
+    if (response=='"success"') {
+      $('#deletePostModal').foundation('reveal', 'close');
+      var evt = new CustomEvent('itemUpdated');
+      window.dispatchEvent(evt);
+    } else{
+      $('#deletePostNotice').html('Something seems to have gone wrong. Please refresh and try again');
+    }
+  });
+
+
 }
 
 //Group Modal Functions

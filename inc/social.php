@@ -33,21 +33,25 @@ function socialActionSelector($action){
   	$userId = $_SESSION['userId'];
   	addLikeToPost($postId, $userId, $likeType);
 
-  }
-  else if ($action=="postComment") {
+  } else if ($action=="undoLike"){
+    $postId = $_GET['postId'];
+    $userId = $_SESSION['userId'];
+    removeLikeFromPost($postId, $userId);
+
+
+  } else if ($action=="postComment") {
     $comment = $_POST['comment'];
     $userId=$_SESSION['userId'];
     $postId = $_POST['postId'];
     addCommentToPost($postId,$userId,$comment);
 
-  }else if ($action=="postGroupComment") {
+  } else if ($action=="postGroupComment") {
     $comment = $_POST['comment'];
     $userId=$_SESSION['userId'];
     $groupId = $_POST['groupId'];
     addGroupCommentToChat($groupId,$userId,$comment);
 
-  }
-  else if ($action=="getComments"){
+  } else if ($action=="getComments"){
     $postId = $_GET['postId'];
     $json = getCommentsForPost($postId);
 
@@ -59,12 +63,11 @@ function socialActionSelector($action){
     $json = json_encode($json);
     echo $json;
 
-  }
-  else if ($action=="getGroupChat"){
+  } else if ($action=="getGroupChat"){
     $groupId = $_GET['groupId'];
     getGroupChat($groupId);
-  }
-  else if ($action=="shareEmail"){
+
+  } else if ($action=="shareEmail"){
     
     $recipients=$_POST['shareMembers'];
     $subject=$_POST['emailSubject'];
@@ -107,10 +110,50 @@ function addLikeToPost($postId, $userId, $likeType){
 	    $json = json_encode($likeData);
 	    echo $json;
 	}
-	
-
 }
 
+
+function removeLikeFromPost($postId, $userId){
+  global $db;
+
+  //get the like type
+  try{
+    $results = $db->prepare("SELECT responseType FROM userPostRelations WHERE postId=? AND userId=? LIMIT 1");
+    $results->execute(array($postId, $userId));
+
+  } catch(Exception $e){
+    echo "User-post selection data error!".$e;
+    exit;
+  }
+
+  $likeResults = $results->fetchAll(PDO::FETCH_ASSOC);
+ 
+  $likeType = $likeResults[0]['responseType'];
+ 
+  //delete the userpostrelation
+  try{
+    $results = $db->prepare("DELETE FROM userPostRelations WHERE postId=? AND userId=? AND responseType=? LIMIT 1");
+    $results->execute(array($postId, $userId, $likeType));
+
+  } catch(Exception $e){
+    echo "User-post deletion data error!".$e;
+    exit;
+  }
+
+  //decrement the like type count
+  $SQLQuery = "UPDATE posts SET ".$likeType." = ".$likeType."-1 WHERE postId = ".$postId;
+  try{
+    $results = $db->prepare($SQLQuery);
+    $results->execute(array());
+
+  } catch(Exception $e){
+    echo "User-post decrementation data error!".$e;
+    exit;
+  }
+
+  echo json_encode("success");
+
+}
 
 function addUserPostRelation($postId, $userId, $likeType){
 	  require_once("../inc/config.php");
@@ -121,8 +164,8 @@ function addUserPostRelation($postId, $userId, $likeType){
   		$results->execute(array($postId, $userId, $likeType));
 
   	} catch(Exception $e){
-  		 echo "User-post insertion data error!";
-        exit;
+  		 echo "User-post insertion data error!".$e;
+      exit;
   	}
 
 }
