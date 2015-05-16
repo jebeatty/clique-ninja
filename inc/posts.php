@@ -213,6 +213,8 @@ function getRecent($userId){
       $recentPost['userPosted']=false;
     }
 
+    resetPendingPosts($userId);
+    resetPendingComments($userId);
    
 
     $json = json_encode($recent);
@@ -288,6 +290,9 @@ function getGroupDataForUser($userId){
     array_push($groupDataArray, $newGroupData); 
     }
     
+    resetPendingPosts($userId);
+    resetPendingComments($userId);
+
     $json = json_encode($groupDataArray);
     echo $json;
 }

@@ -373,13 +373,13 @@
     <!-- New Post -->
     <div id="newPostModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
       <h2 id="newPostTitle">New Post</h2>
-      <p id="newPostErrorLabel"></p>
+      
       <form method="post" action='inc/posts.php' id="addPosts">
       URL: <input name="url" id="newPostUrl" style="width:85%;"> <br>
       <br>
       <br>
       Comment:
-      <textarea name="message" rows="6" cols="3"></textarea><br>
+      <textarea name="message" id="newPostComment" rows="6" cols="3"></textarea><br>
       <fieldset>
         <legend> Select Groups to Share With:</legend>
         <input type="checkbox" name="group[]" value="library"> Save to My Library
@@ -387,7 +387,7 @@
           <div id="modalGroups">
           </div>
       </fieldset>
-     
+      <p id="newPostErrorLabel"></p>
       <a class="button" id="postButton" onclick="postNewPost();">Post!</a>
       </form>
       <a class="close-reveal-modal" aria-label="Close" onclick="resetPostModalHTML();">&#215;</a>

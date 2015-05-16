@@ -313,6 +313,26 @@ function checkForExistingEmail($email){
   }
 }
 
+function checkForExistingGroupName($groupName){
+  global $db;
+
+  try {
+  $results = $db->prepare("SELECT groupId FROM groups WHERE groupName=?");
+  $results->execute(array($groupName));
+
+  } catch(Exception $e){
+      echo "Username membership data error!";
+      exit;
+  }
+
+  $resultCount = $results->rowCount();
+  if ($resultCount>0) {
+      return true;
+  }
+  else{
+      return false;
+  }
+}
 //General utility functions
 function cleanURL($inputURL){
   //clean it

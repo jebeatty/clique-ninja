@@ -28,11 +28,16 @@ function actionSelector($action){
   
   if ($action=="createGroup") {
     $groupName = $_POST['groupName'];
-    $groupDesc = $_POST['groupDesc'];
-    $public = $_POST['public'];
-    $invitedMembers = $_POST['members'];
-    $inviteMsg=$_POST['groupInviteMsg'];
-    createGroup($groupName,$groupDesc,$public,$invitedMembers,$inviteMsg);
+    if (!checkForExistingGroupName($groupName)) {
+      $groupDesc = $_POST['groupDesc'];
+      $public = $_POST['public'];
+      $invitedMembers = $_POST['members'];
+      $inviteMsg=$_POST['groupInviteMsg'];
+      createGroup($groupName,$groupDesc,$public,$invitedMembers,$inviteMsg);
+    } else{
+      echo json_encode("group name taken");
+    }
+    
   }
   else if ($action=="inviteFriends") {
     $invitedMembers = $_POST['members'];

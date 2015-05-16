@@ -43,7 +43,13 @@
     
 
 
-    itemHTML += '<p class="discussionStats">'+post.commentData.length+' Comments </p>';
+    if (post.commentData.length==1) {
+      itemHTML += '<p class="discussionStats" id="discussionStats_'+post.postId+'">'+post.commentData.length+' Comment </p>';
+    }
+    else{
+      itemHTML += '<p class="discussionStats" id="discussionStats_'+post.postId+'">'+post.commentData.length+' Comments </p>';
+    }
+
     itemHTML += '<p class="seeDiscussion"><a data-reveal-id="detailModal" onclick="fillModal(&#39;'+post.postId+'&#39;,&#39;'+cleanURL+'&#39;,&#39;'+post.posterName+'&#39;);"> <i class="fi-comments"></i> See Discussion</a></p> </div>';
 
     return itemHTML;
@@ -90,8 +96,13 @@
 
     //edit option
     
-
-    itemHTML += '<p class="discussionStats">'+post.commentData.length+' Comments </p>';
+    if (post.commentData.length==1) {
+      itemHTML += '<p class="discussionStats" id="discussionStats_'+post.postId+'">'+post.commentData.length+' Comment </p>';
+    }
+    else{
+      itemHTML += '<p class="discussionStats" id="discussionStats_'+post.postId+'">'+post.commentData.length+' Comments </p>';
+    }
+    
     itemHTML += '<p class="seeDiscussion"><a data-reveal-id="detailModal" onclick="fillModal(&#39;'+post.postId+'&#39;,&#39;'+cleanURL+'&#39;,&#39;'+post.posterName+'&#39;);"> <i class="fi-comments"></i> See Discussion</a></p>'; 
 
     itemHTML += '<div style="margin-top:-12px;font-size:0.8em;"><a id="editPost_'+post.postId+'"> Edit Post |</a><a id="deletePost_'+post.postId+'"> Delete Post</a></div></div>';
@@ -215,8 +226,12 @@ function postComment(postId){
 function getCommentsForPost(postId){
   var commentsHTML = '';
   $.getJSON('inc/social.php', {action:"getComments", postId:postId}, function(response){
-      
-
+      console.log(response);
+      if (response.length==1) {
+          $('#discussionStats_'+postId).html('1 Comment');
+      } else{
+          $('#discussionStats_'+postId).html(response.length+' Comments');
+      }
       
       $.each(response, function(index, comment){
         commentsHTML +='<p class="commenterName"> '+comment.userName+': </p><p class="comment">'+comment.comment+'</p><p class="timeStamp"></p>';

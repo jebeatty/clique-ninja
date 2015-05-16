@@ -100,7 +100,29 @@ function sendNotificationsToAliases($text, $url, $aliases){
 	echo $result;
 }
 
+function resetPendingPosts($userId){
+	global $db;
 
+	try{
+		$updates = $db->prepare("UPDATE notifications SET pendingPosts=0 WHERE userId=?");
+		$updates->execute(array($userId));
+	} catch (Exception $e){
+		echo "notification update error";
+		exit();
+	}
+}
+
+function resetPendingComments($userId){
+	global $db;
+
+	try{
+		$updates = $db->prepare("UPDATE notifications SET pendingComments=0 WHERE userId=?");
+		$updates->execute(array($userId));
+	} catch (Exception $e){
+		echo "notification update error";
+		exit();
+	}
+}
 
 
 ?>

@@ -1,6 +1,7 @@
 
 
 function getGroupList(){
+  HTTPAlertActive = true;
   $.getJSON('inc/posts.php',{action:"getGroupList"},function(response){
     groupListHTML ='';
     modalListHTML ='';
@@ -21,53 +22,61 @@ function getGroupList(){
 
 //Post Modal Functions
 function postNewPost(){
-  var url = $('#addPosts').attr("action");
-  var formData = $('#addPosts').serialize();
+  var inputURL = $('#newPostUrl').val();
+  if ((inputURL.length<6 || inputURL.substr(0,4)!='http') && HTTPAlertActive) {
+    $("#newPostErrorLabel").html("Warning - URLs without http:// or https:// will not display properly <a onclick='disableHTTPAlert();'>Ignore Warning</a>");
+  } else{
+    var url = $('#addPosts').attr("action");
+    var formData = $('#addPosts').serialize();
 
-  if (formData.search("url=&")>-1) {
-    $("#newPostErrorLabel").html("Please input a URL");
+    if (formData.search("url=&")>-1) {
+      $("#newPostErrorLabel").html("Please input a URL");
 
     } else{
-    if (formData.search("group%5B%5D=")<0) {
-      $("#newPostErrorLabel").html("Please select at least one group (or your library) to post to");
+      if (formData.search("group%5B%5D=")<0) {
+        $("#newPostErrorLabel").html("Please select at least one group (or your library) to post to");
 
-    } else{
-      formData+='&action=newPost';
-      
-      $('#postButton').attr('value',"Posting...");          
-      $.post(url, formData, function(response){
+      } else{
+        formData+='&action=newPost';
         
+        $('#postButton').attr('value',"Posting...");          
+        $.post(url, formData, function(response){
+          
 
-        response=response.substr(1,7);
-        if (response=='success') {
-          $("#newPostErrorLabel").html("");
-          console.log("Response Successful");
-          //save the modal group data
-          var modalGroupsHTML = $('#modalGroups').html();
+          response=response.substr(1,7);
+          if (response=='success') {
+            $("#newPostErrorLabel").html("");
+            console.log("Response Successful");
 
-          //reset everything    
-          $('#addPosts').html("<p> Post Successful</p>");
-          var evt = new CustomEvent('itemUpdated');
-          window.dispatchEvent(evt);
-          $('#newPostModal').foundation('reveal', 'close');
-          resetPostModalHTML();
+            //reset everything    
 
-          //and use the saved modal data to avoid calling ajax
-          $('#modalGroups').html(modalGroupsHTML);
-          ga("send", "event", "New Post", "Finish");
+            var evt = new CustomEvent('itemUpdated');
+            window.dispatchEvent(evt);
+            $('#newPostModal').foundation('reveal', 'close');
+            resetPostModalHTML();
 
-        } else if(response=='failure'){
-          $("#newPostErrorLabel").html("Something seems to be wrong with the URL. Please double check that it is a valid URL");
-          $('#postButton').attr('value',"Post");
-        }
-        else{
-          console.log("Response unsuccessful");
-          $("#newPostErrorLabel").html("Uh-oh, something seems to have gone wrong. Please try again later!");
-          $('#postButton').attr('value',"Post");
-        }
-      });  
-    }
-  } 
+            //and use the saved modal data to avoid calling ajax
+            $('#modalGroups').html(modalGroupsHTML);
+            ga("send", "event", "New Post", "Finish");
+
+          } else if(response=='failure'){
+            $("#newPostErrorLabel").html("Something seems to be wrong with the URL. Please double check that it is a valid URL");
+            $('#postButton').attr('value',"Post");
+          }
+          else{
+            console.log("Response unsuccessful");
+            $("#newPostErrorLabel").html("Uh-oh, something seems to have gone wrong. Please try again later!");
+            $('#postButton').attr('value',"Post");
+          }
+        });  
+      }
+    } 
+  }
+}
+
+function disableHTTPAlert(){
+  HTTPAlertActive = false;
+  $("#newPostErrorLabel").html("");
 }
 
 function createNewGroup(){
@@ -90,8 +99,9 @@ function createNewGroup(){
           window.dispatchEvent(evt);
           resetGroupModalHTML();
           
-        }
-        else{
+        } else if (response=='"group name taken"') {
+          $('#groupCreationError').html("That group name is already taken - please choose another");
+        } else{
           $('#addGroup').html("<p> Something seems to have gone wrong! Please try again later </p>");
         }
     }); //end post
@@ -103,13 +113,14 @@ function createNewGroup(){
 
 function resetPostModalHTML(){
       
-  postModalHTML= '<h2 id="newPostTitle">New Post</h2><p id="newPostErrorLabel"></p><form method="post" action="inc/posts.php" id="addPosts">URL: <input name="url" id="newPostUrl" style="width:85%;"> <br><br><br>';
-  postModalHTML+= 'Comment: <textarea name="message" rows="5" cols="3"></textarea><br><fieldset><legend> Select Groups to Share With:</legend>';
-  postModalHTML+= '<input type="checkbox" name="group[]" value="library"> Post to My Library<br>';
-  postModalHTML+= '<div id="modalGroups"></div></fieldset>';
-  postModalHTML+='<a class="button" id="postButton" onclick="postNewPost();">Post!</a></form><a class="close-reveal-modal" aria-label="Close">&#215;</a>';
-
-  $('#newPostModal').html(postModalHTML);
+  $('#newPostErrorLabel').html('');
+  $('#newPostUrl').val('');
+  $('#newPostComment').val('');
+  var groups=document.getElementsByName('group[]');
+  $.each(groups ,function(index, group){
+    group.checked=false;
+  });
+  HTTPAlertActive = true;
 }
 
 

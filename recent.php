@@ -10,16 +10,20 @@ include('inc/loggedInHeader.php');
 
     <!--Feature Content-->
     <div id="content">
+      
       <div class="row" id="mainColumn">
         <div class="large-12 columns" id="headline">
           <div class="panel radius" id="headerPanel">
             <h4> Recommendations for You </p>
           </div>
+          
         </div>
+        <div id="recentEmptyState"></div>
         <script>
             $(document).ready(function(){
               
               $.getJSON('inc/posts.php',{action:"recent"},function(response){
+                if (response.length>0) {
                 var column1HTML = '<p>';
                 var column2HTML = '<p>';
 
@@ -38,6 +42,12 @@ include('inc/loggedInHeader.php');
                 column2HTML += '</p>';
                 $('#leftFeedColumn').html(column1HTML);
                 $('#rightFeedColumn').html(column2HTML);
+
+
+                } else{
+                    $('#recentEmptyState').html('<p style="font-size:1.4em;text-align:center;"> <br> <br><br> Nothing here yet! <br><br><br><a data-reveal-id="newGroupModal">Create a group</a> or <a href="discover.php">join a discovery group</a> to get things started...</p>')
+                }
+                
               }); //end getJSON
                 
             });//end ready

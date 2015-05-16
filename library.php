@@ -8,7 +8,7 @@ include('inc/loggedInHeader.php'); ?>
 
     <!--Feature Content-->
     <div id="content">
-      
+        <div id="libraryEmptyState"><div>
         <script>
             $(document).ready(function(){
               refreshLibrary();
@@ -23,22 +23,25 @@ include('inc/loggedInHeader.php'); ?>
                 console.log(response);
                 
                 $('#itemGrid').html('');
-                $.each(response, function(index, post){
-                  var blockgridHTML = '';
-                  blockgridHTML += '<li>';
-                  blockgridHTML += writeItemHTMLForLibrary(post);
-                  blockgridHTML += '</li>';
-                  $('#itemGrid').append(blockgridHTML).hide().show('normal');
-                  document.getElementById('editPost_'+post.postId).addEventListener('click',function(){
-                    launchEditPostModal(post.url,post.comment,post.postIdList);
-                  });
+                if(response.length>0){
+                    $.each(response, function(index, post){
+                        var blockgridHTML = '';
+                        blockgridHTML += '<li>';
+                        blockgridHTML += writeItemHTMLForLibrary(post);
+                        blockgridHTML += '</li>';
+                        $('#itemGrid').append(blockgridHTML).hide().show('normal');
+                        document.getElementById('editPost_'+post.postId).addEventListener('click',function(){
+                          launchEditPostModal(post.url,post.comment,post.postIdList);
+                        });
 
-                  document.getElementById('deletePost_'+post.postId).addEventListener('click',function(){
-                    launchDeletePostModal(post.postIdList);
-                  });
-
-
-                });//end each
+                        document.getElementById('deletePost_'+post.postId).addEventListener('click',function(){
+                          launchDeletePostModal(post.postIdList);
+                        });
+                    });//end each
+                } else{
+                    $('#libraryEmptyState').html('<p style="font-size:1.4em;text-align:center;"><br><br> <br>Looks like you havent saved anything to your library yet. <br> <br> <br> <a data-reveal-id="newPostModal">Click here to make a new post!</a><br><br>  <br>You can also click the + on the right side of the screen to make posts </p>');
+                }
+                
 
               }); //end getJSON
             }
@@ -85,7 +88,7 @@ include('inc/loggedInHeader.php'); ?>
 
     <div id="deletePostModal" class="reveal-modal small" data-reveal>
       <h2 id="deletePostModalTitle">Delete This Post?</h2>
-      <p> Are you sure you want to delete this post? This will delete this post from our servers and cannot be undone. <p>
+      <p id="deletePostNotice"> Are you sure you want to delete this post? This will delete this post from our servers and cannot be undone. <p>
         <div id="modalButtons">
           <a class="button alert left" onclick="submitDeletePost();"> Yes - Delete </a>
           <a class="button right" onclick="$('#deletePostModal').foundation('reveal', 'close');"> No, Never mind </a>
