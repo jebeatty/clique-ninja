@@ -67,6 +67,14 @@ require_once("inc/welcomeHeader.php");
 
   ga('create', 'UA-62236049-1', 'auto');
   ga('send', 'pageview');
+
+
+  _roost.push(['alias', <?php echo $_SESSION['userId']?>]);
+  _roost.push(['onresult', function(data){
+  		
+      registeredForNotifications();
+    }]); 
+
   </script>
   </body>
   

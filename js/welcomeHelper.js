@@ -246,11 +246,11 @@ function showNotificationScreen(){
 	$("#welcomeBody").html('Because every recommendation on Clique comes to you directly from your friends, new posts can be a little irregular. <br><br>We <i>highly</i> recommend signing up for browser notifications so you don&#39;t miss a thing! You can always adjust the frequency of the notifications and even disable them via the settings menu');
 	
 	var notificationHTML='';
-	notificationHTML+='<script>var _roost = _roost || [];</script>';
-	notificationHTML+='<a class="button" onclick="_roost.prompt();_roost.push([&#39;alias&#39;, &#39;<?php echo $_SESSION[userId]?>&#39;]);"> Sign Up for Notifications </a>';
-
+	notificationHTML+='<a class="button" onclick="_roost.prompt();"> Sign Up for Notifications </a>';
+	
 	$("#screenDetail").html(notificationHTML);
 	$("#nextScreenButton").html('');
+	$("#skipButton").html('<a onclick="goToNextScreen();">Skip this step</a>');
 
 
 }
@@ -268,7 +268,19 @@ function finishWelcomeSequence(){
 
 }
 
-function promptNotifications(){
+function registeredForNotifications(){
+	
+	var formData = "action=toggleNotifications&enabled=true";
+	$.post('inc/notifications.php',formData,function(response){
+    	console.log(response);
+    	if (response=='"success"') {
+    		$("#screenDetail").html('<h5 style="font-family:&#39;walkway_ultraboldregular&#39;, sans-serif;""> Notifications Enabled! </h5><br><a class="button success" onclick="goToNextScreen();">Finish Set-Up</a>');
+    		$('#skipButton').html('');
+    	}
+    	else{
+    		$("#screenDetail").html("Something has gone wrong in changing your notification settings...");
+    	}
+    }); 
 
 
 }

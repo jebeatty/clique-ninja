@@ -188,7 +188,7 @@ function getRecent($userId){
 
     //prepare $db call
     //execute with array of groupIds
-  echo $SQLQuery;
+
     try {
       $results = $db->prepare($SQLQuery);
       $results->execute($groupIdList);

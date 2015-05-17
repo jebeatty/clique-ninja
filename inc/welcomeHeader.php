@@ -19,6 +19,11 @@
     <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
     <script src="https://cdn.embed.ly/jquery.embedly-3.1.1.min.js" type="text/javascript"></script>
     <script src='//cdn.goroost.com/roostjs/pvneqf9i8wdjrh7yj0pxw000xy3ex3me' async></script>
+    <script>
+    var _roost = _roost || []; 
+    _roost.push(['autoprompt', false]);
+    
+    </script>
     <script src='js/notificationHelper.js'></script>
     <script src='js/welcomeHelper.js'></script>
     </head>

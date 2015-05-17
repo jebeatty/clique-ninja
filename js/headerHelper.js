@@ -172,6 +172,7 @@ function createNewGroup(){
           var evt = new CustomEvent('groupAdded');
           window.dispatchEvent(evt);
           resetGroupModalHTML();
+          getGroupList();
           
         } else if (response=='"group name taken"') {
           $('#groupCreationError').html("That group name is already taken - please choose another");
