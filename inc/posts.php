@@ -163,62 +163,67 @@ function getRecent($userId){
   
   //get the group list
   $groups = getGroupListForUser($userId);
+  if (count($groups)>0) {
+    //create an array of groupIds
+    $groupIdList = array();
+    foreach ($groups as $value) {
+      array_push($groupIdList, $value["groupId"]);
+    }
 
-  //create an array of groupIds
-  $groupIdList = array();
-  foreach ($groups as $value) {
-    array_push($groupIdList, $value["groupId"]);
+    //create a SQL query with WHERE posterid!=userId and (groupId=? or groupId=?)
+    $SQLQuery = "SELECT posterId, groupId, url, postDate, postId, comment, ehs, likes, loves FROM posts WHERE posterId!=? AND (";
+
+    //a For loop that concatenates groupId=? onto the SQL query, with ORs included except for the last iteration of the loop
+
+    for ($i=0; $i < count($groupIdList); $i++) { 
+      $SQLQuery .= "groupId=? ";
+      $remainingLoops = (count($groupIdList)-$i)-1;
+      if ($remainingLoops!==0) {
+        $SQLQuery .= "OR ";
+      }
+    }
+
+    array_unshift($groupIdList, $userId);
+    $SQLQuery .= ") ORDER BY postId DESC LIMIT 15";
+
+    //prepare $db call
+    //execute with array of groupIds
+  echo $SQLQuery;
+    try {
+      $results = $db->prepare($SQLQuery);
+      $results->execute($groupIdList);
+
+      } catch(Exception $e){
+          echo "Data loading error!".$e;
+          exit;
+
+      }
+
+      $recent = $results->fetchAll(PDO::FETCH_ASSOC);
+      //need to overlay userPostRelation & like data
+      foreach ($recent as &$recentPost) {
+        $postLiked = checkIfUserLikedPost($recentPost['postId'], $userId);
+        $recentPost['postLiked']=$postLiked;
+
+        $commentData = getCommentsForPost($recentPost['postId']);
+        $recentPost['commentData']=$commentData;
+
+        $retrievedName = getUserNameForId($recentPost['posterId']);
+        $recentPost['posterName']=$retrievedName;
+
+        $recentPost['userPosted']=false;
+      }
+
+      resetPendingPosts($userId);
+      resetPendingComments($userId);
+     
+
+      $json = json_encode($recent);
+      echo $json;
+  } else{
+    echo json_encode(array());
   }
-
-  //create a SQL query with WHERE posterid!=userId and (groupId=? or groupId=?)
-  $SQLQuery = "SELECT posterId, groupId, url, postDate, postId, comment, ehs, likes, loves FROM posts WHERE posterId!=? AND (";
-
-  //a For loop that concatenates groupId=? onto the SQL query, with ORs included except for the last iteration of the loop
-
-  for ($i=0; $i < count($groupIdList); $i++) { 
-    $SQLQuery .= "groupId=? ";
-    $remainingLoops = (count($groupIdList)-$i)-1;
-    if ($remainingLoops!==0) {
-      $SQLQuery .= "OR ";
-    }
-  }
-
-  array_unshift($groupIdList, $userId);
-  $SQLQuery .= ") ORDER BY postId DESC LIMIT 15";
-
-  //prepare $db call
-  //execute with array of groupIds
-  try {
-    $results = $db->prepare($SQLQuery);
-    $results->execute($groupIdList);
-
-    } catch(Exception $e){
-        echo "Data loading error!";
-        exit;
-
-    }
-
-    $recent = $results->fetchAll(PDO::FETCH_ASSOC);
-    //need to overlay userPostRelation & like data
-    foreach ($recent as &$recentPost) {
-      $postLiked = checkIfUserLikedPost($recentPost['postId'], $userId);
-      $recentPost['postLiked']=$postLiked;
-
-      $commentData = getCommentsForPost($recentPost['postId']);
-      $recentPost['commentData']=$commentData;
-
-      $retrievedName = getUserNameForId($recentPost['posterId']);
-      $recentPost['posterName']=$retrievedName;
-
-      $recentPost['userPosted']=false;
-    }
-
-    resetPendingPosts($userId);
-    resetPendingComments($userId);
-   
-
-    $json = json_encode($recent);
-    echo $json;
+  
 
  }
   

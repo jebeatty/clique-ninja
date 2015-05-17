@@ -30,7 +30,8 @@ function login(){
   	$('#loginModalTitle').html('<p class="error">Missing login credentials</p>');
   } else{
   	$.post(url, formData, function(response){
-  		console.log(response);
+  	console.log(response);
+  	
     if (response=="true") {
       location.href="recent.php";
       
@@ -39,7 +40,7 @@ function login(){
     }else{
       $('#loginModalTitle').html("<p> Login failed for unknown reasons. Please try again later</p>");
     };
-  
+  	
  	}); //end post - login
   }   
 }
@@ -57,7 +58,7 @@ function signup(){
 		$.post(url, formData, function(response){
 		console.log(response);
 	    if (response=="true") {
-	      location.href="recent.php";
+	      location.href="welcome.php";
 	    } else if(response=='"Username taken"'){
 	    	$('#signupModalTitle').html("<p> An account already exists with that username. Please try another</p>");
 	    } else if(response=='"Email taken"'){

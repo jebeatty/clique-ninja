@@ -23,6 +23,7 @@ include('inc/loggedInHeader.php');
             $(document).ready(function(){
               
               $.getJSON('inc/posts.php',{action:"recent"},function(response){
+                console.log(response.length);
                 if (response.length>0) {
                 var column1HTML = '<p>';
                 var column2HTML = '<p>';
