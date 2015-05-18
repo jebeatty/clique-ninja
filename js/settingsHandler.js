@@ -137,7 +137,7 @@ function setPassword(){
                         $('#changePasswordModal').foundation('reveal', 'close');
 
                 } else if(xmlhttp.responseText=='"invalid password"'){
-                        $('#passwordErrorLabel').html("Incorrect password");
+                        $('#passwordErrorLabel').html("Incorrect current password");
                 } else{
                         $('#passwordErrorLabel').html("Something seems to have gone wrong. Please refresh and try again");
                 }

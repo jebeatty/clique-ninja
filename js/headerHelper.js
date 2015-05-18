@@ -261,25 +261,26 @@ function sendShareMail(){
         $('#emailButton').html("Sharing...");
       ga("send", "event", "Email", "Finish");
       $.post(url, formData, function(response){
-        console.log(response);
-        if (response=="success") {       
+        console.log('response:'+response);
+        if (response=='Message has been sent') {       
           $('#emailModal').foundation('reveal', 'close');
-          resetEmailModalHTML();
+          resetEmailModal();
         }
         else{
            $('#emailErrorLabel').html("Something seems to have gone wrong. Pleas try again later");
         }
       }); //end post*/
       } else{
-        $('#emailErrorLabel').html("Please enter a message!");
+        $('#shareEmailErrorLabel').html("Please enter a message!");
         console.log("Mail error code 1");
       } 
     } else{
-      $('#emailErrorLabel').html("Please enter a subject!");
+      $('#shareEmailErrorLabel').html("Please enter a subject!");
       console.log("Mail error code 2");
     } 
   } else{
-    $('#emailErrorLabel').html("Please select people to share with!");
+    console.log($('#emailErrorLabel'));
+    $('#shareEmailErrorLabel').html("Please select people to share with!");
     console.log("Mail error code 3");
   }
 }

@@ -63,8 +63,9 @@ include('inc/loggedInHeader.php'); ?>
                 refreshGroupLibrary(groupId);
         });
                                      
-        $('#commentArea').keyup(function(event) {
+        $('#commentBox').keyup(function(event) {
         if (event.keyCode == 13) {
+            console.log("chat event!");
             postGroupChatComment($('#commentBox').val(), groupId);
             return false;
          }

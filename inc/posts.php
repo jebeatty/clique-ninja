@@ -43,7 +43,10 @@ function actionSelector($action){
     echo $json;
   }
   else if($action=="newPost"){
+    if (count($_POST['group'])>0) {
       addNewPost($_POST['group'],$_SESSION['userId'],$_POST['url'],$_POST['message']);
+    }
+      
       
   } else if($action=="contactRequest"){
       addContactRequest($_POST['name'],$_POST['contactMessage'],$_SESSION['userId']);
@@ -351,17 +354,6 @@ function getGroupData($groupId, $limit){
 
 }
 
-function addUserPostRelation($postId, $userId, $likeType){
-    global $db;
 
-    try{
-      $results = $db->prepare("INSERT INTO `userPostRelations` (`postId`, `userId`, `responseType`) VALUES (?,?,?)");
-      $results->execute(array($postId, $userId, $likeType));
-
-    } catch(Exception $e){
-       echo "User-post insertion data error!";
-        exit;
-    }
-}
 
 ?>

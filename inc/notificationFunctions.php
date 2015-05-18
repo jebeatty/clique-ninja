@@ -18,14 +18,18 @@ function updateNotifications($groups, $type){
 		exit();
 	}
 
-	echo $freq;
-	echo $category;
+	
 	//group array is just the id
 	foreach ($groups as $group) {
 		$groupId = $group;
 		if ($groupId!='library') {
 			$groupName=getGroupNameForId($groupId); 
-			$groupMembers = array_column(getMemberIdsForGroup($groupId),'userId');
+			$memberArray=getMemberIdsForGroup($groupId);
+
+			$groupMembers = array();
+			foreach($memberArray as $member){
+				array_push($groupMembers,$member['userId']);
+			} 
 
 			$immediateSendList = array();
 
@@ -57,10 +61,8 @@ function updateNotifications($groups, $type){
 		    	if ($member['enabled']=='1') {
 		    		echo "member note code: ".$member[$freq];
 		    		if ($member[$freq]=='0') {
-		    			array_push($immediateSendList, $member['userId']); //member to be notified
-		    			echo "User ".$member['userId']." to be notified ";
+		    			array_push($immediateSendList, $member['userId']); //member to be notified	
 		    		} else {
-		    			echo "User ".$member['userId']." to be updated ";
 		    			try{
 		    				$updateQuery = "UPDATE notifications SET ".$category."=".$category."+1 WHERE userId=".$member['userId'];
 						 	$updates = $db->prepare($updateQuery);
@@ -74,7 +76,6 @@ function updateNotifications($groups, $type){
 		    }
 
 		    $urlforgroupLibrary="https://www.discoverclique.com/doublesecretbeta/groupLibrary.php?groupName=".$groupName."&groupId=".$groupId;
-		    echo var_dump($immediateSendList);
 		    if (count($immediateSendList)>0) {
 		    	sendNotificationsToAliases("There's been a ".$type." to ".$groupName, $urlforgroupLibrary, $immediateSendList);
 		    }
@@ -87,7 +88,7 @@ function updateNotifications($groups, $type){
 function sendNotificationsToAliases($text, $url, $aliases){
 	$data=array("alert"=>$text, "url"=>$url,"aliases"=>$aliases);
 	$payload=json_encode($data);
-	echo $payload;
+
 
 	$req=curl_init("https://api.goroost.com/api/push");
 	curl_setopt($req, CURLOPT_CUSTOMREQUEST, "POST");                                                                     

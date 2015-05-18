@@ -138,7 +138,7 @@ function postGroupChatComment(comment, groupId){
   var formData = "comment="+comment+"&groupId="+groupId+"&action=postGroupComment";
   ga("send", "event", "GroupComment");
   $.post(url,formData,function(response){
-    console.log(response);
+    console.log("updateChatresponse:"+response);
     if (response=='"success"') {
         $('#commentBox').val('');
         getGroupChat(groupId);

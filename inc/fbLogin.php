@@ -23,15 +23,15 @@ $helper = new FacebookRedirectLoginHelper('inc/fbLogin.php');
 echo '<a href="' . $helper->getLoginUrl() . '">Login with Facebook</a>'
 */
 FacebookSession::setDefaultApplication('432912816865715', '8e7e5fc1b821813c0e341b9385d9f3b9');
-$helper = new FacebookRedirectLoginHelper('https://www.discoverclique.com/doublesecretbeta/inc/fbLogin.php');
+$helper = new FacebookRedirectLoginHelper('https://www.discoverclique.com/misc_dev/inc/fbLogin.php');
 try {
     $session = $helper->getSessionFromRedirect();
    
     } catch( FacebookRequestException $ex ) {
       	
       	echo "FB Login Failure:";
-      	$FBerror = $ex->getErrorType();
-      	echo $FBerror;
+      	echo "Exception occured, code: " . $ex->getCode();
+      echo " with message: " . $ex->getMessage();
     } catch( Exception $ex ) {
       echo "Local failure:";
       echo $ex->getMessage();
@@ -73,18 +73,23 @@ function loginFBUser($user_profile, $loop){
 	if (count($user)>0) {
 		//we found the right user
 		setSessionParams($user);
-		header("Location: ../recent.php");
-    	}
-    else {
-    	//no such user - let's sign them up! But only if this isn't going to start an infinite loop...
-    	if ($loop) {
-    		exit;
-    	}
-    	else{
-    		signupFBUser($user_profile);
-    	}
-    	
+    //$loop only gets set when we came back from sign-up, which means its time for the welcome sequence!
+    if ($loop) {
+      header("Location: ../welcome.php");
+    } else{
+      header("Location: ../recent.php");
     }
+		
+  }
+  else {
+  	//no such user - let's sign them up! But only if this isn't going to start an infinite loop...
+  	if ($loop) {
+  		exit;
+  	}
+  	else{
+  		signupFBUser($user_profile);
+  	}
+  }
 }
 
 function signupFBUser($user_profile){

@@ -103,7 +103,7 @@ function getCommentsForPost($postId){
 }
 
 function getGroupNameForId($groupId){
-        global $db;
+  global $db;
 
   if($groupId>0){
   
@@ -125,6 +125,31 @@ function getGroupNameForId($groupId){
     return "Library";   
   }
 }
+
+
+function getGroupIdForName($groupName){
+  global $db;
+
+  if($groupName!='library'){
+  
+    try {
+    $results = $db->prepare("SELECT groupId FROM groups WHERE groupName = ?");
+    $results->execute(array($groupName));
+
+    } catch(Exception $e){
+        echo "Data selection error!";
+        exit;
+    }
+
+    $groupData = $results->fetchAll(PDO::FETCH_ASSOC);
+
+    return $groupData[0]["groupId"];
+  }
+  else{
+    return "0";   
+  }
+}
+
 
 function getGroupListForUser($userId){
   global $db;
@@ -333,6 +358,21 @@ function checkForExistingGroupName($groupName){
       return false;
   }
 }
+
+// Add functions
+function addUserPostRelation($postId, $userId, $likeType){
+    global $db;
+
+    try{
+      $results = $db->prepare("INSERT INTO `userPostRelations` (`postId`, `userId`, `responseType`) VALUES (?,?,?)");
+      $results->execute(array($postId, $userId, $likeType));
+
+    } catch(Exception $e){
+       echo "User-post insertion data error!";
+        exit;
+    }
+}
+
 //General utility functions
 function cleanURL($inputURL){
   //clean it

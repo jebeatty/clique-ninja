@@ -74,6 +74,7 @@ function socialActionSelector($action){
     $body=$_POST['emailBody'];
     if (count($recipients)>0) {
       sendShareEmail($recipients, $subject, $body);
+      
     }
   }
   else{
@@ -152,21 +153,6 @@ function removeLikeFromPost($postId, $userId){
   }
 
   echo json_encode("success");
-
-}
-
-function addUserPostRelation($postId, $userId, $likeType){
-	  require_once("../inc/config.php");
-  	require(ROOT_PATH."inc/database.php");
-
-  	try{
-  		$results = $db->prepare("INSERT INTO `userPostRelations` (`postId`, `userId`, `responseType`) VALUES (?,?,?)");
-  		$results->execute(array($postId, $userId, $likeType));
-
-  	} catch(Exception $e){
-  		 echo "User-post insertion data error!".$e;
-      exit;
-  	}
 
 }
 

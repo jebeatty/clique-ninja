@@ -50,7 +50,6 @@
   
           </section>
     
-    
         <div id="loginButtonArea">
           <a class="button radius right" data-reveal-id="loginModal"> Login </a>
           <a class="button radius right" data-reveal-id="signupModal"> Sign Up </a>
@@ -96,7 +95,7 @@
 
         FacebookSession::setDefaultApplication('432912816865715', '8e7e5fc1b821813c0e341b9385d9f3b9');
 
-        $helper = new FacebookRedirectLoginHelper('https://www.discoverclique.com/doublesecretbeta/inc/fbLogin.php');
+        $helper = new FacebookRedirectLoginHelper('https://www.discoverclique.com/misc_dev/inc/fbLogin.php');
         $params = array('email','public_profile', 'user_status', 'user_friends');
         $loginURL = $helper->getLoginUrl($params);
         echo '<a href="' . $loginURL . '">Login with Facebook</a>';

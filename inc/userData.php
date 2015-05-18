@@ -109,7 +109,7 @@ function changePassword($newPassword, $oldPassword, $userId){
             echo $json;
         }
         else{
-            $json=json_encode($authenticated);
+            $json=json_encode("invalid password");
             echo $json;
         }
 }

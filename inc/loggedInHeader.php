@@ -351,7 +351,7 @@
     <!-- Email Share -->
     <div id="emailModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
       <h2 id="emailTitle">Share via Email</h2>
-      <p id="emailErrorLabel"></p>
+      <p id="shareEmailErrorLabel">Enter the emails of friends to share with - Use the Add button to share with multiple people</p>
       <form method="post" action='inc/social.php' id="emailFriends">
         <div class="ui-widget">
           To: <input placeholder="Enter friend's email" id="shareEmailInput" name="shareEmailInput"><a class="button" onclick="addFriendToEmailTable(); return false;" style="display:inline-block;padding:7px 10px 4px 10px;margin-bottom:0;"> Add </a><p id="emailWarningArea"></p> 
