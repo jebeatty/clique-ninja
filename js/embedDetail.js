@@ -198,6 +198,13 @@ function fillModal(postId, postURL, posterName){
   callEmbedlyAPIForDiv(modalItemIdTag,postURL);
   $('#detailModalContent').html(modalHTML);
 
+  $('#commentBoxDiv').html('<input type="text" id="commentBox_'+postId+'" placeholder="Your comment...">');
+  $('#commentBox_'+postId).keydown(function(event) { 
+    if (event.keyCode == 13) {
+        postComment(postId);
+        return false;
+     }
+  });
   //comments
   getCommentsForPost(postId);
   
@@ -210,7 +217,7 @@ function fillModal(postId, postURL, posterName){
 
 function postComment(postId){
   var url= 'inc/social.php';
-  var formData = 'postId='+postId+'&comment='+$('#commentBox').val();
+  var formData = 'postId='+postId+'&comment='+$('#commentBox_'+postId).val();
   ga("send", "event", "Comment");
   formData+='&action=postComment';
  
@@ -239,7 +246,7 @@ function getCommentsForPost(postId){
 
 
       $('#commentSection').html(commentsHTML);
-      $('#commentBox').val('');
+      $('#commentBox_'+postId).val('');
       
   });
 

@@ -9,8 +9,8 @@ include('inc/header.php');
     <!--Feature Content-->
 
     <div class="jumbotron">
-      
-        <img src="img/welcomePic.png" alt="Mountain View">
+        <img src="img/landingImgCompressed.png" alt="Woman Chatting">
+
       
       
     </div>

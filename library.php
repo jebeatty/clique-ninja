@@ -69,8 +69,8 @@ include('inc/loggedInHeader.php'); ?>
           <div class="row">
             <div class="large-12 columns">
               <div class="row collapse">
-                <div class="small-10 columns">
-                  <input type="text" id="commentBox" placeholder="Your comment...">
+                <div class="small-10 columns" id='commentBoxDiv'>
+                  
                 </div>
                 <div class="small-2 columns" id="postCommentButton">
                   

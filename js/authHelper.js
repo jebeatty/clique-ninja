@@ -4,7 +4,7 @@ function recoverPassword(){
 		if(email.indexOf('@')>0){
 			$.post('inc/userAuth.php', 'action=recoverPassword&email='+email, function(response){
 				console.log(response);
-				if (response=='"success"') {
+				if (response=='Message has been sent') {
 					$('#recoveryErrorLabel').html('Account found - please check your email for your information');
 				}
 				else if (response=='"No such email"'){

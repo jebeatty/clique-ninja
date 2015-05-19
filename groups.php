@@ -171,23 +171,11 @@ include('inc/loggedInHeader.php'); ?>
           <div class="row">
             <div class="large-12 columns">
               <div class="row collapse">
-                <div class="small-10 columns">
-                  <input type="text" id="commentBox" placeholder="Your comment...">
+                <div class="small-10 columns" id='commentBoxDiv'>
+                  
                 </div>
                 <div class="small-2 columns" id="postCommentButton">
                 </div>
-                <script>
-                function postComment(postId){
-                  var url= '/inc/social.php';
-                  var formData = 'postId='+postId+'&comment='+$('#commentBox').val();
-                  formData+='&action=postComment';
-                  console.log(formData);
-                  $.post(url,formData,function(response){
-                    console.log('Response:' + response);
-                    getCommentsForPost(postId);
-                  });
-                }
-                </script>
               </div>
             </div>
           </div>

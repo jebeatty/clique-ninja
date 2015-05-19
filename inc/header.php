@@ -111,7 +111,7 @@
         <input type="text" name="passwordRecoveryEmail" placeholder="you@email.com">
         <p id="recoveryErrorLabel"></p>
         <a class="button radius" onclick="recoverPassword();return false;"> Retrieve Credentials </a>
-      <a class="close-reveal-modal" aria-label="Close">&#215;</a>
+      <a class="close-reveal-modal" aria-label="Close" onclick="$('#recoveryErrorLabel').html('');$('[name=passwordRecoveryEmail]')[0].value='';">&#215;</a>
     </div>
 
     <div id="signupModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">

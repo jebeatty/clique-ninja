@@ -248,7 +248,8 @@ function resetEmailModal(){
 }
 
 function sendShareMail(){
-  
+  addFriendToEmailTable();
+  $('#emailErrorLabel').html("");
   if (document.getElementsByName('shareMembers[]').length>0) {
 
     if ($('[name=emailSubject]').val()!=''){
@@ -288,7 +289,7 @@ function sendShareMail(){
 
 function addFriendToEmailTable(){
   var friendEmail = $('[name=shareEmailInput]').val();
-
+  if (friendEmail.length>0){
     if (friendEmail.indexOf('@')>0) {
       var existingFriends = $('#emailFriendZone').html();
       var newFriend = '<input type="checkbox" name="shareMembers[]" value="'+friendEmail;
@@ -304,7 +305,8 @@ function addFriendToEmailTable(){
     else{
       $('#emailWarningArea').html('Invalid Email');
     
-    }  
+    } 
+  } 
 }
 
 function sendContactRequest(){

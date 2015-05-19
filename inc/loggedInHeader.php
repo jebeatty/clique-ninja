@@ -354,7 +354,7 @@
       <p id="shareEmailErrorLabel">Enter the emails of friends to share with - Use the Add button to share with multiple people</p>
       <form method="post" action='inc/social.php' id="emailFriends">
         <div class="ui-widget">
-          To: <input placeholder="Enter friend's email" id="shareEmailInput" name="shareEmailInput"><a class="button" onclick="addFriendToEmailTable(); return false;" style="display:inline-block;padding:7px 10px 4px 10px;margin-bottom:0;"> Add </a><p id="emailWarningArea"></p> 
+          To: <input placeholder="Enter friend's email" id="shareEmailInput" name="shareEmailInput" style="width:65%"><a class="button" onclick="addFriendToEmailTable(); return false;" style="display:inline-block;padding:7px 10px 4px 10px;margin-bottom:0;"> Add </a><p id="emailWarningArea"></p> 
         </div>
         <div> 
           <ul id="emailFriendZone">

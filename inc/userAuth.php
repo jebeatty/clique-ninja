@@ -27,7 +27,7 @@ if ($action==="recoverPassword") {
 
     $username=getUserNameForId($userId);
     sendRecoveryEmail($email, $password, $username);
-    echo json_encode("success");
+    
   }else{
     echo json_encode("No such email");
   }
