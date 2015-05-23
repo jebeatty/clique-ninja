@@ -213,8 +213,8 @@
         })
         .on('click.fndtn.topbar', '[' + this.attr_name() + '] .has-dropdown>a', function (e) {
           if (self.breakpoint()) {
-
-            e.preventDefault();
+            
+            //e.preventDefault();
 
             var $this = S(this),
                 topbar = $this.closest('[' + self.attr_name() + ']'),
@@ -226,6 +226,7 @@
             $selectedLi.addClass('moved');
 
             if (!self.rtl) {
+              
               section.css({left : -(100 * topbar.data('index')) + '%'});
               section.find('>.name').css({left : 100 * topbar.data('index') + '%'});
             } else {

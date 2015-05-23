@@ -91,6 +91,7 @@ include('inc/loggedInHeader.php'); ?>
   </script>
   <script src="js/foundation.min.js"></script>
   <script src="js/foundation/foundation.equalizer.js"></script>
+  <script src="js/foundation/foundation.topbar.js"></script>
   <script>
 
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

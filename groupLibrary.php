@@ -212,6 +212,7 @@ include('inc/loggedInHeader.php'); ?>
   <script src="js/embedDetail.js"></script>
   <script src="js/foundation.min.js"></script>
   <script src="js/foundation/foundation.equalizer.js"></script>
+  <script src="js/foundation/foundation.topbar.js"></script>
   <script>
     $(document).foundation();
     $(document).foundation('equalizer','reflow');

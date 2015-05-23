@@ -134,6 +134,7 @@ include('inc/loggedInHeader.php');
   <script src="js/embedDetail.js"></script>
   <script src="js/vendor/modernizr.js"></script>
   <script src="js/foundation.min.js"></script>
+  <script src="js/foundation/foundation.topbar.js"></script>
   <script>
 
     $(document).foundation();
