@@ -1,4 +1,8 @@
 
+$(document).ready(function(){
+    window.onbeforeunload = warnOnLeaving(false);
+ });
+
 function initializeWelcomeSequence(){
 currentPage=0;
 pendingInvitesExist=false;
@@ -23,7 +27,7 @@ function goToNextScreen(){
 			showNewGroupScreen(true);	
 			break;
 		case 2:
-			showDiscoveryScreen();
+			showNewPostScreen();
 			break;
 		case 3:
 			showNotificationScreen();
@@ -121,12 +125,12 @@ function showNewGroupScreen(pending){
 	currentPage=2;
 	$("#welcomeProgressBar").css("width","49%");
 	if (pending) {
-		$("#welcomeHeadline").html('Create Additional Groups');
+		$("#welcomeHeadline").html('Create Additional Groups to Share With');
 		$("#welcomeBody").html('You&#39;ve already got some groups, but the more the merrier. Fill out the information below to create a group<br><br> And don&#39;t be shy in inviting folks either - groups do best with at least 5 members');
 
 	} else{
-		$("#welcomeHeadline").html('Create A Group');
-		$("#welcomeBody").html('Clique is based on the power of groups, and without one, there&#39;s not a lot to do! Fill out the information below to create a group.<br><br> And don&#39;t be shy in inviting folks either - groups do best with at least 5 members');
+		$("#welcomeHeadline").html('Create Groups to Share With');
+		$("#welcomeBody").html('Clique doesn&#39;t have channels - it has groups. Groups are how you organize your posts and feed, so you&#39;ll want at least one. <br><br> Fill out the information below to create a group.<br><br> And don&#39;t be shy in inviting folks either - groups do best with at least 5 members');
 
 	}
 		generateGroupHTML();
@@ -155,7 +159,7 @@ function createNewGroup(){
         if (response=="success") {
           ga("send", "event", "New Group", "Welcome");
           $('#newGroupTitle').html("Group Created");
-          $('#addGroup').html("<p style='margin-top:15px;'> <a class='button' onclick='generateGroupHTML();' style='margin-right:5px;'> Another! </a><a class='button' onclick='goToNextScreen();' style='margin-left:5px;'> Next </a> </p>");       
+          $('#addGroup').html("<p style='margin-top:15px;'> <a class='button' onclick='generateGroupHTML();' style='margin-right:5px;'> Make another group! </a><a class='button' onclick='goToNextScreen();' style='margin-left:5px;'> Next </a> </p>");       
 
           
         } else if (response=='"group name taken"') {
@@ -176,7 +180,7 @@ function generateGroupHTML(){
   groupHTML+='<form method="post" action="inc/invites.php" id="addGroup"><div style="text-align:left;"> Group Name <input name="groupName" style="width:100%"></div> <br><br><br>';
   groupHTML+='<div style="text-align:left;">Group Description </div><textarea name="groupDesc" rows="4" cols="3"> </textarea><br>';
   groupHTML+='<fieldset style="text-align:left;"><legend style="background:transparent;"> Select Friends to Invite:</legend>';
-  groupHTML+='<p> Enter each friend&#39;s email individually to add them to the invite list. If they are not yet a Clique user, ask them to join and they will see the group invite when they signup with the matching email! </p>';
+  groupHTML+='<p> Enter friend&#39;s emails to add them to the invite list. If they are not yet a Clique user, they will get an email invite and see the group invite when they signup with the matching email! </p>';
   groupHTML+='<div class="ui-widget"><input placeholder="Enter friend&#39;s email" name="friendEmailInput" size="30"><p id="groupWarningArea"></p></div> <a class="button" id="addFriendButton"> Add Friend to Invite List</a>';
   groupHTML+='<div>Friends to Invite: <br><ul id="groupFriendZone"></ul></div>';
   groupHTML+='Invite Message (optional):<textarea name="groupInviteMsg" rows="4" cols="3" style="margin-bottom:0;"></textarea>';
@@ -208,33 +212,142 @@ function addFriendToTable(){
     }  
 }
 
-function showDiscoveryScreen(){
+function showNewPostScreen(){
 	currentPage=3;
 	$("#welcomeProgressBar").css("width","66%");
-	$("#welcomeHeadline").html('Join a &#39;Discovery&#39; Group');
-	$("#welcomeBody").html('Great, we&#39;ve covered the options for folks you know - but what about those you don&#39;t? <br><br> Clique has special groups called &#39;Discovery&#39; groups, small groups of totally random users that give you a chance to break out of your bubble and get a glimpse at the unexpected. Everyone just throws in something interesting they&#39;ve seen that week. You&#39;ll be surprised at what&#39;s out there<br>');
-	$("#nextScreenButton").html('<a class="button" onclick="joinDiscoveryGroup();">Join a Discovery Group</a>');
+	$("#welcomeHeadline").html('Make Your First Post!');
+	$("#welcomeBody").html('To get started, think about the most interesting thing you&#39;ve seen online this week...'); 
 	$("#screenDetail").html('');
+	$("#nextScreenButton").html('<a class="button" onclick="showNewPostInput();">Okay - Got It</a>');
+	$("#skipButton").html('');
 	//add eventlistener
 
 
 }
 
-function joinDiscoveryGroup(){
-	$.getJSON('inc/discovery.php',{action:"joinDiscovery"},function(response){
-                
-        //get back the groupid and groupname - that way we can add a "go there now" button
-        $("#nextScreenButton").html('<a class="button" onclick="goToNextScreen();"> Next </a>');
-        if (response) {
-          cleanName = response.groupName.replace("#","");
-          var discoveryModalHTML = '<h2 id="discoveryModalTitle">Success!</h2><p> Welcome to '+response.groupName+'! <br><br> You can check it out through the Groups menu once set-up is complete. Just post whatever strikes your fancy. ';
-          $('#screenDetail').html(discoveryModalHTML);
 
-        }else{
-        	$('#screenDetail').html('Oops! Something seems to have gone wrong - you can sign up for a discovery group at any time by going to the Discover tab.');
-        }
-      }); //end getJSON
-	
+function showNewPostInput(){
+	$("#welcomeBody").html('Great! Enter the URL and a comment to post it to your library and selected groups<br>'); 
+	$("#screenDetail").html(generateNewPostHTML());
+	$("#nextScreenButton").html('');
+	$("#skipButton").html('<a onclick="goToNextScreen();">Skip this step</a>');
+	getGroupList();
+
+}
+
+function generateNewPostHTML(){
+	var postHTML='';
+
+	postHTML+='<h2 id="newPostTitle">New Post</h2>';  
+    postHTML+=' <form method="post" action="inc/posts.php" id="addPosts">';
+	postHTML+='URL <input name="url" id="newPostUrl" style="width:85%;"> <br>';
+	postHTML+='<br>';
+	postHTML+='<br>';
+	postHTML+='<div style="text-align:left;">Comment </div>';
+	postHTML+='<textarea name="message" id="newPostComment" rows="2" cols="3"></textarea><br>';
+	postHTML+='<fieldset style="text-align:left;">';
+	postHTML+='<legend style="background:transparent;"> Select Groups to Share With:</legend>';
+	postHTML+='<input type="checkbox" name="group[]" value="library"> Save to My Library';
+	postHTML+='<br>';
+	postHTML+='<div id="modalGroups">';
+	postHTML+=' Loading Additional Groups...'
+	postHTML+='</div>';
+	postHTML+='</fieldset>';
+	postHTML+='<p id="newPostErrorLabel"></p>';
+	postHTML+='<a class="button" id="postButton" onclick="makeNewPost();">Post!</a>';
+	postHTML+='</form>';
+
+	return postHTML;
+}
+
+function getGroupList(){
+  HTTPAlertActive = true;
+  $.getJSON('inc/posts.php',{action:"getGroupList"},function(response){
+    modalListHTML ='';
+
+    $.each(response, function(index, group){
+      cleanName = group.groupName.replace("#","");
+      modalListHTML += '<input type="checkbox" name="group[]" value="'+group.groupId+'"> '+group.groupName+'<br>';
+    });//end each
+
+    $('#modalGroups').html(modalListHTML);
+
+  }); //end getJSON 
+}
+
+function makeNewPost(){
+  var inputURL = $('#newPostUrl').val();
+  if ((inputURL.length<6 || inputURL.substr(0,4)!='http') && HTTPAlertActive) {
+    $("#newPostErrorLabel").html("Warning - URLs without http:// or https:// will not display properly <a onclick='disableHTTPAlert();'>Ignore Warning </a> <a onclick='appendHTTP();'>| Add http:// for me </a>");
+  } else{
+    var url = $('#addPosts').attr("action");
+    var formData = $('#addPosts').serialize();
+
+    if (formData.search("url=&")>-1) {
+      $("#newPostErrorLabel").html("Please input a URL");
+
+    } else{
+      if (formData.search("group%5B%5D=")<0) {
+        $("#newPostErrorLabel").html("Please select at least one group (or your library) to post to");
+
+      } else{
+        formData+='&action=newPost';
+        
+        $('#postButton').attr('value',"Posting...");          
+        $.post(url, formData, function(response){
+          
+
+          response=response.substr(1,7);
+          if (response=='success') {
+            $("#newPostErrorLabel").html("");
+            console.log("Response Successful");
+
+            //reset everything    
+
+            resetPostModalHTML();
+
+            ga("send", "event", "New Post", "Welcome");
+
+          } else if(response=='failure'){
+            $("#newPostErrorLabel").html("Something seems to be wrong with the URL. Please double check that it is a valid URL");
+            $('#postButton').attr('value',"Post");
+          }
+          else{
+            console.log("Response unsuccessful");
+            $("#newPostErrorLabel").html("Uh-oh, something seems to have gone wrong. Please try again later!");
+            $('#postButton').attr('value',"Post");
+          }
+        });  
+      }
+    } 
+  }
+}
+
+function appendHTTP(){
+  $('#newPostUrl').val("http://"+ $('#newPostUrl').val()); 
+  $("#newPostErrorLabel").html("");
+}
+
+function disableHTTPAlert(){
+  HTTPAlertActive = false;
+  $("#newPostErrorLabel").html("");
+
+}
+
+function resetPostModalHTML(){
+      
+  $('#newPostErrorLabel').html('Post Successful! Feel free to make another if you like.');
+
+  $('#newPostUrl').val('');
+  $('#newPostComment').val('');
+  var groups=document.getElementsByName('group[]');
+  $.each(groups ,function(index, group){
+    group.checked=false;
+  });
+  HTTPAlertActive = true;
+  $("#nextScreenButton").html('<a class="button" onclick="goToNextScreen();"> Next </a>');
+  $("#skipButton").html('');
+
 }
 
 //notifications
@@ -255,9 +368,14 @@ function showNotificationScreen(){
 
 }
 
-
+function warnOnLeaving(canLeave){
+	if (!canLeave) {
+    	return "Are you sure? This will abort the welcome sequence"
+    } 
+}
 
 function finishWelcomeSequence(){
+	window.onbeforeunload = warnOnLeaving(true);
 	currentPage=5;
 	$("#welcomeProgressBar").css("width","100%");
 	$("#welcomeHeadline").html('Ready To Go!');

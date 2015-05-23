@@ -142,7 +142,11 @@ include('inc/loggedInHeader.php'); ?>
           window.addEventListener('groupAdded', function (e) {
             console.log("group addition detected");
             getGroups();
-        });
+          });
+
+          window.addEventListener('itemUpdated', function (e) {
+            getGroups();
+          });
       });//end ready
 
       

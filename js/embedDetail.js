@@ -168,7 +168,7 @@ function callEmbedlyAPIForDiv(itemIdTag, postURL){
 
     obj=results[0];
     var customEmbedHTML = '';
-    customEmbedHTML +='<div class="panel customEmbedCard"><h5 class="itemHeadline"> '+obj.title+' </h5>';
+    customEmbedHTML +='<div class="panel customEmbedCard"><h5 class="itemHeadline"><a href="'+postURL+'" style="color:black;" target="_blank"> '+obj.title+' </a></h5>';
 
     if (obj.html) {
       customEmbedHTML +='<div class="flex-video">';

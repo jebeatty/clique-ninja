@@ -110,7 +110,7 @@
         <p>Please enter the email associated with your account and we will shoot you an email with instructions for how to reset your password/username!</p>
         <input type="text" name="passwordRecoveryEmail" placeholder="you@email.com">
         <p id="recoveryErrorLabel"></p>
-        <a class="button radius" onclick="recoverPassword();return false;"> Retrieve Credentials </a>
+        <a class="button radius" id="recoveryActionButton" onclick="recoverPassword();return false;"> Retrieve Credentials </a>
       <a class="close-reveal-modal" aria-label="Close" onclick="$('#recoveryErrorLabel').html('');$('[name=passwordRecoveryEmail]')[0].value='';">&#215;</a>
     </div>
 

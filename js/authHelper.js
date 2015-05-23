@@ -6,6 +6,10 @@ function recoverPassword(){
 				console.log(response);
 				if (response=='Message has been sent') {
 					$('#recoveryErrorLabel').html('Account found - please check your email for your information');
+					$('#recoveryActionButton').html('Return to Login');
+					console.log($('#recoveryActionButton').attr('onclick'));
+					document.getElementById('recoveryActionButton').onclick=returnToLogin;
+					
 				}
 				else if (response=='"No such email"'){
 					$('#recoveryErrorLabel').html('No user account found for that email');
@@ -18,6 +22,16 @@ function recoverPassword(){
 			$('#recoveryErrorLabel').html('Invalid Email');
 		}
 	}
+}
+
+function returnToLogin(){
+	$('#loginModal').foundation('reveal', 'open');
+
+	//reset the recovery modal
+	$('#recoveryErrorLabel').html('');
+	$('#recoveryActionButton').html('Retrieve Credentials');
+	document.getElementById('recoveryActionButton').onclick=recoverPassword;
+	$('[name=passwordRecoveryEmail').val('');
 }
 
 function login(){

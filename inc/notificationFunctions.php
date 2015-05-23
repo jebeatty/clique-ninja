@@ -59,7 +59,6 @@ function updateNotifications($groups, $type){
 		    //now take each of the members of the group and update or notify as need be
 		    foreach ($membersToUpdate as $member) {
 		    	if ($member['enabled']=='1') {
-		    		echo "member note code: ".$member[$freq];
 		    		if ($member[$freq]=='0') {
 		    			array_push($immediateSendList, $member['userId']); //member to be notified	
 		    		} else {
@@ -98,7 +97,7 @@ function sendNotificationsToAliases($text, $url, $aliases){
 	curl_setopt($req, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
 
 	$result = curl_exec($req);
-	echo $result;
+	
 }
 
 function resetPendingPosts($userId){

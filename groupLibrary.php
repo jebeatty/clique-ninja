@@ -60,7 +60,7 @@ include('inc/loggedInHeader.php'); ?>
         refreshGroupLibrary(groupId);
 
         window.addEventListener('itemUpdated', function (e) {
-                refreshGroupLibrary(groupId);
+            refreshGroupLibrary(groupId);
         });
                                      
         $('#commentBox').keyup(function(event) {

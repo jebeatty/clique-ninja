@@ -24,7 +24,7 @@ function getGroupList(){
 function postNewPost(){
   var inputURL = $('#newPostUrl').val();
   if ((inputURL.length<6 || inputURL.substr(0,4)!='http') && HTTPAlertActive) {
-    $("#newPostErrorLabel").html("Warning - URLs without http:// or https:// will not display properly <a onclick='disableHTTPAlert();'>Ignore Warning</a>");
+    $("#newPostErrorLabel").html("Warning - URLs without http:// or https:// will not display properly <a onclick='disableHTTPAlert();'>Ignore Warning </a> <a onclick='appendHTTP();'>| Add http:// for me </a>");
   } else{
     var url = $('#addPosts').attr("action");
     var formData = $('#addPosts').serialize();
@@ -56,7 +56,6 @@ function postNewPost(){
             resetPostModalHTML();
 
             //and use the saved modal data to avoid calling ajax
-            $('#modalGroups').html(modalGroupsHTML);
             ga("send", "event", "New Post", "Finish");
 
           } else if(response=='failure'){
@@ -74,9 +73,15 @@ function postNewPost(){
   }
 }
 
+function appendHTTP(){
+  $('#newPostUrl').val("http://"+ $('#newPostUrl').val()); 
+  $("#newPostErrorLabel").html("");
+}
+
 function disableHTTPAlert(){
   HTTPAlertActive = false;
   $("#newPostErrorLabel").html("");
+
 }
 
 
