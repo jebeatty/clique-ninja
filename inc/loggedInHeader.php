@@ -133,7 +133,7 @@
         <a class="button radius right logout" data-reveal-id="settingsModal"> Settings </a>
       </nav>
     </div>
-    <button id="newActionButton" style="position:fixed;right:2px;top:57%;z-index:1;opacity:0.75;padding: 9.3px 14px 10.3px 14px; border-radius:19px;" onclick="revealNewButtons();">+</button>
+    <button id="newActionButton" style="position:fixed;right:2px;top:57%;z-index:1;opacity:0.75;padding: 9.3px 16.2px 10.3px 16.2px; border-radius:24px;font-size:1.25em;" onclick="revealNewButtons();"><b>+</b></button>
     <div id="createButtonArea" style="position:fixed;right:-200px;top:57%;z-index:1;opacity:1.0;">
     <a class="button radius" data-reveal-id="newPostModal" onclick="ga('send', 'event', 'New Post', 'Start');" style="width:100%; display:block; margin-bottom:3px;"> New Post </a>
     <a class="button radius" data-reveal-id="newGroupModal" onclick="ga('send', 'event', 'New Group', 'Start');" style="width:100%; display:block; margin-bottom:3px;"> New Group </a>

@@ -23,26 +23,32 @@ include('inc/loggedInHeader.php');
             $(document).ready(function(){
               
               $.getJSON('inc/posts.php',{action:"recent"},function(response){
-                console.log(response.length);
+                column1HTML='';
+                column2HTML='';
                 if (response.length>0) {
-                var column1HTML = '<p>';
-                var column2HTML = '<p>';
+                //var column1HTML = '<p>';
+                //var column2HTML = '<p>';
 
                 $.each(response, function(index, post){
                   var mod = index%2;
-                 
+                  var itemCode='<p>';
+                  var effect="drop";
+           
                   if (mod===1) {
-                    column1HTML += writeItemHTML(post);
+                    itemCode += writeItemHTML(post);
+                    itemCode+='</p>';
+                    $('#leftFeedColumn').append(itemCode).hide().show(effect,{direction:"up"},250);
+
                   }
                   else{
-                    column2HTML += writeItemHTML(post);
-                  }
-                });
+                    itemCode += writeItemHTML(post);
+                    itemCode+='</p>';
+                    $('#rightFeedColumn').append(itemCode).hide().show(effect,{direction:"up"},250);
 
-                column1HTML += '</p>';
-                column2HTML += '</p>';
-                $('#leftFeedColumn').html(column1HTML);
-                $('#rightFeedColumn').html(column2HTML);
+                  }
+
+
+                });
 
 
                 } else{
