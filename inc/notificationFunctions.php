@@ -49,7 +49,7 @@ function updateNotifications($groups, $type){
 		    $results->execute($groupMembers);
 
 		    } catch(Exception $e){
-		        echo "Data loading error!";
+		        echo "Data loading error!".$e;
 		        exit;
 
 		    }

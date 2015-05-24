@@ -29,6 +29,7 @@ function notificationsChanged(){
   }else{
     setNotificationUIStatus(false);
   }
+  changeNotificationStatus();
 }
 
 function frequencyChanged(){
@@ -39,7 +40,6 @@ function frequencyChanged(){
 function changeNotificationStatus(){
 	var formData = "action=toggleNotifications&enabled="+document.getElementById("notificationsSwitch").checked;
 	$.post('inc/notifications.php',formData,function(response){
-    	console.log(response);
     	if (response=='"success"') {}
     	else{
     		$("#notificationNotice").html("Something has gone wrong in changing your notification settings...");
@@ -52,9 +52,7 @@ function changeNotificationSettings(){
   if (!document.getElementById("saveNotificationsSettingsButton").disabled) {
     document.getElementById("saveNotificationsSettingsButton").value="Saving Changes...";
     var formData = "action=changeSettings&postFreq="+$('input:radio[name=row-1]:checked').val()+"&commentFreq="+$('input:radio[name=row-2]:checked').val();
-    console.log(formData);
     $.post('inc/notifications.php',formData,function(response){
-    	console.log(response);
     	if (response=='"success"') {
     		document.getElementById("saveNotificationsSettingsButton").disabled=true;
     		document.getElementById("saveNotificationsSettingsButton").className="button secondary";

@@ -24,8 +24,6 @@
     <script src='js/notificationHelper.js'></script>
     <script>
       var _roost = _roost || [];
-      
-      _roost.push(['alias', <?php echo $_SESSION['userId']?>]);
     </script>
     <script>
       $(document).ready(function(){
@@ -226,14 +224,17 @@
       <script>
               
         _roost.push(['onresult', function(data){
-
+          console.log('onresult data:');
+          console.log(data);
           //if the user isn't registered, then we can prompt, or we have to advise.
           if (data['registered']) {
+            console.log('writing notification section');
             setNotificationStatus(data['enabled']);
-
+            
             if (data['firstTime']) {
               //if it is the first time, we should insert the user into the notification database
-              changeNotificationSettings();
+              console.log('adding user to db');
+              changeNotificationStatus();
             }
 
             
@@ -242,7 +243,7 @@
           }
           
         }]);
-        
+        _roost.push(['alias', <?php echo $_SESSION['userId']?>]);
       </script>
       <div id="digestSection">
       </div>

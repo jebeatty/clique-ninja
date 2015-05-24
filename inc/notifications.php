@@ -29,6 +29,11 @@ function notificationActions($action){
 		
 	} else if($action=='toggleNotifications'){
 		$status=$_POST["enabled"];
+		if ($status=="true") {
+			$status=1;
+		} else{
+			$status=0;
+		}
 		$userId=$_SESSION["userId"];
 		toggleNotifications($userId,$status);
 		
@@ -46,9 +51,9 @@ function setSettingsForUser($userId, $postFreq, $commentFreq){
 	if ($alreadyRegistered) {
 		try{
 		 	$results = $db->prepare("UPDATE notifications SET enabled=?, postCode=?, commentCode=? WHERE userId=?");
-		 	$results->execute(array(true,$postFreq,$commentFreq,$userId));
+		 	$results->execute(array(1,$postFreq,$commentFreq,$userId));
 		} catch (Exception $e){
-			echo "notification update error";
+			echo "notification update error".$e;
 			exit();
 		}
 		
@@ -59,10 +64,10 @@ function setSettingsForUser($userId, $postFreq, $commentFreq){
 	      $results = $db->prepare("INSERT INTO `notifications` (`userId`, `enabled`, `postCode`, `commentCode`, `pendingPosts`, `pendingComments`)
 	                                VALUES (?,?,?,?,?,?)
 	                                ");
-	      $results->execute(array($userId,true,$postFreq,$commentFreq,0,0));
+	      $results->execute(array($userId,1,$postFreq,$commentFreq,0,0));
 	     
 	    } catch(Exception $e){
-	       echo "Data loading error!";
+	       echo "Data loading error!".$e;
 	       exit;
 	    }
 
@@ -76,7 +81,7 @@ function toggleNotifications($userId, $status){
 	$alreadyRegistered = checkUserNotificationRegistration($userId);
 	if ($alreadyRegistered) {
 		try{
-		 	$results = $db->prepare("UPDATE notifications SET enabled=? WHERE userId=?");
+		 	$results = $db->prepare("UPDATE notifications SET enabled=?, postCode=1, commentCode=1 WHERE userId=?");
 		 	$results->execute(array($status, $userId));
 		} catch (Exception $e){
 			echo "notification update error";

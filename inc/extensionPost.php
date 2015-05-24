@@ -56,8 +56,13 @@ function addNewPost($groups, $userId, $url, $comment){
     foreach ($groups as $group) {
 
       $groupName = $group;
-      $groupId=getGroupIdForName($groupName);
-      array_push($groupIdList,$groupId);
+      if($groupName=='library'){
+        $groupId=0;
+      }else{
+        $groupId=getGroupIdForName($groupName);
+        array_push($groupIdList,$groupId);
+      }
+      
 
       
       try {
@@ -81,9 +86,9 @@ function addNewPost($groups, $userId, $url, $comment){
     header("Connection: close");
     ob_end_flush();
 
-
-    updateNotifications($groupIdList,"post");
-      
+    if (count($groupIdList)>0) {
+        updateNotifications($groupIdList,"post");
+    }     
   }
 }
 
