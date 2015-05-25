@@ -88,6 +88,9 @@
       
     
     </script>
+<!-- start Mixpanel --><script type="text/javascript">(function(f,b){if(!b.__SV){var a,e,i,g;window.mixpanel=b;b._i=[];b.init=function(a,e,d){function f(b,h){var a=h.split(".");2==a.length&&(b=b[a[0]],h=a[1]);b[h]=function(){b.push([h].concat(Array.prototype.slice.call(arguments,0)))}}var c=b;"undefined"!==typeof d?c=b[d]=[]:d="mixpanel";c.people=c.people||[];c.toString=function(b){var a="mixpanel";"mixpanel"!==d&&(a+="."+d);b||(a+=" (stub)");return a};c.people.toString=function(){return c.toString(1)+".people (stub)"};i="disable track track_pageview track_links track_forms register register_once alias unregister identify name_tag set_config people.set people.set_once people.increment people.append people.union people.track_charge people.clear_charges people.delete_user".split(" ");
+for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a,e,d])};b.__SV=1.2;a=f.createElement("script");a.type="text/javascript";a.async=!0;a.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";e=f.getElementsByTagName("script")[0];e.parentNode.insertBefore(a,e)}})(document,window.mixpanel||[]);
+mixpanel.init("acdc7100349e96b3c6337920bd091e42");</script><!-- end Mixpanel -->
   </head>
 
   <body>
@@ -133,12 +136,13 @@
     </div>
     <button id="newActionButton" style="position:fixed;right:2px;top:57%;z-index:1;opacity:0.75;padding: 9.3px 16.2px 10.3px 16.2px; border-radius:24px;font-size:1.25em;" onclick="revealNewButtons();"><b>+</b></button>
     <div id="createButtonArea" style="position:fixed;right:-200px;top:57%;z-index:1;opacity:1.0;">
-    <a class="button radius" data-reveal-id="newPostModal" onclick="ga('send', 'event', 'New Post', 'Start');" style="width:100%; display:block; margin-bottom:3px;"> New Post </a>
-    <a class="button radius" data-reveal-id="newGroupModal" onclick="ga('send', 'event', 'New Group', 'Start');" style="width:100%; display:block; margin-bottom:3px;"> New Group </a>
+    <a class="button radius" data-reveal-id="newPostModal" onclick="ga('send', 'event', 'New Post', 'Start'); mixpanel.track('Start New Post');" style="width:100%; display:block; margin-bottom:3px;"> New Post </a>
+    <a class="button radius" data-reveal-id="newGroupModal" onclick="ga('send', 'event', 'New Group', 'Start');mixpanel.track('Start New Group')" style="width:100%; display:block; margin-bottom:3px;"> New Group </a>
    </div>
   <script>
   function revealNewButtons(){
     var currentButtonPosition=document.getElementById('newActionButton').style.right;
+    mixpanel.track("Video play");
 
     if (currentButtonPosition=='2px') {
         document.getElementById('createButtonArea').style.right="2px";
@@ -428,6 +432,7 @@
       <a class="close-reveal-modal" aria-label="Close" onclick="resetGroupModalHTML();">&#215;</a>
     </div>
     <script src='js/headerHelper.js'></script>
+
     <script> getGroupList(); </script>
 
 

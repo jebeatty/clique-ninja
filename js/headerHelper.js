@@ -57,6 +57,7 @@ function postNewPost(){
 
             //and use the saved modal data to avoid calling ajax
             ga("send", "event", "New Post", "Finish");
+            mixpanel.track('Finish New Group');
 
           } else if(response=='failure'){
             $("#newPostErrorLabel").html("Something seems to be wrong with the URL. Please double check that it is a valid URL");
@@ -147,6 +148,7 @@ function submitDeletePost(){
     console.log(response);
     if (response=='"success"') {
       $('#deletePostModal').foundation('reveal', 'close');
+      mixpanel.track('Delete Post');
       var evt = new CustomEvent('itemUpdated');
       window.dispatchEvent(evt);
     } else{
@@ -178,6 +180,7 @@ function createNewGroup(){
           window.dispatchEvent(evt);
           resetGroupModalHTML();
           getGroupList();
+          mixpanel.track('Finish New Group');
           
         } else if (response=='"group name taken"') {
           $('#groupCreationError').html("That group name is already taken - please choose another");
@@ -270,6 +273,7 @@ function sendShareMail(){
         console.log('response:'+response);
         if (response=='Message has been sent') {       
           $('#emailModal').foundation('reveal', 'close');
+          mixpanel.track('Finish Share Email');
           resetEmailModal();
         }
         else{
@@ -302,6 +306,7 @@ function addFriendToEmailTable(){
         $('#emailWarningArea').html('');
         $('#emailFriendZone').append(newFriend+'" checked style="margin-bottom:0;"> '+friendEmail+'<br>');
         $('[name=shareEmailInput]').val('');
+        mixpanel.track('Invite Friend, New Group');
       }
       else{
         $('#emailWarningArea').html('Friend already selected');
@@ -323,6 +328,8 @@ function sendContactRequest(){
       $.post(url, formData, function(response){
         console.log(response);
         if (response=='"success"') {
+           mixpanel.track('Contact/Help Ticket');
+
           $('#contactModal').foundation('reveal', 'close');
         } else{
           $('#contactIntro').html('');

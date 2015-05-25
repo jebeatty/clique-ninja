@@ -237,6 +237,7 @@ include('inc/loggedInHeader.php'); ?>
           console.log(response);
           if (response=="success") {
             customModalClose();
+            mixpanel.track('Leave Group');
             location.replace('groups.php');
 
           } else{
@@ -259,6 +260,7 @@ include('inc/loggedInHeader.php'); ?>
             $('#inviteWarningArea').html('');
             $('#inviteFriendZone').append(newFriend+'" checked> '+friendEmail+'<br>');
             $('#inviteAutocomplete').val('');
+            mixpanel.track('Invite Friend, Existing Group');
           }
           else{
             $('#inviteWarningArea').html('Friend already selected');

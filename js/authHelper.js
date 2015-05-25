@@ -9,6 +9,8 @@ function recoverPassword(){
 					$('#recoveryActionButton').html('Return to Login');
 					console.log($('#recoveryActionButton').attr('onclick'));
 					document.getElementById('recoveryActionButton').onclick=returnToLogin;
+					mixpanel.track('Recover Password');
+
 					
 				}
 				else if (response=='"No such email"'){
@@ -47,6 +49,7 @@ function login(){
   	console.log(response);
   	
     if (response=="true") {
+    	mixpanel.track('Log In');
       location.href="recent.php";
       
     } else if(response=='"No such user"'){
@@ -72,6 +75,7 @@ function signup(){
 		$.post(url, formData, function(response){
 		console.log(response);
 	    if (response=="true") {
+	      mixpanel.track('Sign Up');
 	      location.href="welcome.php";
 	    } else if(response=='"Username taken"'){
 	    	$('#signupModalTitle').html("<p> An account already exists with that username. Please try another</p>");

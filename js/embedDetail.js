@@ -113,6 +113,7 @@
 
   function sharePost(postURL){
     ga("send", "event", "Share", "Start");
+    mixpanel.track('Reshare Start');
     $('#newPostUrl').val(postURL);
     $('#newPostModal').foundation('reveal', 'open');
 
@@ -121,6 +122,7 @@
   function emailPost(postURL){
     console.log(postURL);
     ga("send", "event", "Email", "Start");
+    mixpanel.track('Start Email Share');
     $('[name=emailBody]').val('Saw this on Clique and thought of you: '+postURL);
     $('#emailModal').foundation('reveal', 'open');
     //launch the email modal
@@ -132,8 +134,10 @@
       
       if (likeType=='likes') {
         ga("send", "event", "Like");
+        mixpanel.track('New Like');
       } else if (likeType=='loves') {
         ga("send", "event", "Love");
+         mixpanel.track('New Love');
       }
        
       $.getJSON('inc/social.php',{action:"submitLike",likeType:likeType, postId:postId},function(response){
@@ -219,6 +223,7 @@ function postComment(postId){
   var url= 'inc/social.php';
   var formData = 'postId='+postId+'&comment='+$('#commentBox_'+postId).val();
   ga("send", "event", "Comment");
+  mixpanel.track('Post Comment');
   formData+='&action=postComment';
  
 

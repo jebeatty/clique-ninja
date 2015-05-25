@@ -7,7 +7,8 @@ function initializeWelcomeSequence(){
 currentPage=0;
 pendingInvitesExist=false;
 checkForPendingInvites();
-console.log("start");
+mixpanel.track('Start Welcome');
+
 }
 
 
@@ -36,6 +37,7 @@ function goToNextScreen(){
 			finishWelcomeSequence();
 			break;
 		case 5:
+			mixpanel.track('Finish Welcome');
 			location.href='recent.php';
 			break;
 		default:
@@ -158,6 +160,7 @@ function createNewGroup(){
         console.log(response);
         if (response=="success") {
           ga("send", "event", "New Group", "Welcome");
+          mixpanel.track('New Group Welcome');
           $('#newGroupTitle').html("Group Created");
           $('#addGroup').html("<p style='margin-top:15px;'> <a class='button' onclick='generateGroupHTML();' style='margin-right:5px;'> Make another group! </a><a class='button' onclick='goToNextScreen();' style='margin-left:5px;'> Next </a> </p>");       
 
@@ -201,6 +204,7 @@ function addFriendToTable(){
         $('#groupWarningArea').html('');
         $('#groupFriendZone').append(newFriend+'" checked> '+friendEmail+'<br>');
         $('[name=friendEmailInput]').val('');
+        mixpanel.track('Invite Friend, New Group, Welcome');
       }
       else{
         $('#groupWarningArea').html('Friend already selected');
@@ -305,6 +309,7 @@ function makeNewPost(){
             //reset everything    
 
             resetPostModalHTML();
+            mixpanel.track('New Post Welcome');
 
             ga("send", "event", "New Post", "Welcome");
 

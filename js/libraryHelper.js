@@ -140,6 +140,7 @@ function postGroupChatComment(comment, groupId){
   $.post(url,formData,function(response){
     console.log("updateChatresponse:"+response);
     if (response=='"success"') {
+        mixpanel.track('Group Chat Comment');
         $('#commentBox').val('');
         getGroupChat(groupId);
         //add the comment to the chat
@@ -165,6 +166,7 @@ function inviteFriends(){
      console.log(response);
       if (response="success") {
         ga("send", "event", "Invite Friends", "Finish");
+        mixpanel.track('Invite Friends to Group');
         $('#inviteFriendsModal').html("<p> Invites sent! </p>");
         $('#inviteFriendsModal').foundation('reveal', 'close');
         resetInviteFriendsModal();
