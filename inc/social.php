@@ -72,8 +72,9 @@ function socialActionSelector($action){
     $recipients=$_POST['shareMembers'];
     $subject=$_POST['emailSubject'];
     $body=$_POST['emailBody'];
+    $username = $_SESSION['username'];
     if (count($recipients)>0) {
-      sendShareEmail($recipients, $subject, $body);
+      sendShareEmail($recipients, $subject, $body, $username);
       
     }
   }

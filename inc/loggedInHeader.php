@@ -95,11 +95,6 @@
                 mixpanel.identify(<?php $username = $_SESSION['username'];echo '"'."$username".'"';?>);
                 mixpanel.people.increment("groupsStarted");
               });
-        window.addEventListener('shareEmailSent', function (e) {
-                
-                mixpanel.identify(<?php $username = $_SESSION['username'];echo '"'."$username".'"';?>);
-                mixpanel.people.increment("shares");
-              });
 
       }); //end ready
 
@@ -110,9 +105,7 @@
 for(g=0;g<i.length;g++)f(c,i[g]);b._i.push([a,e,d])};b.__SV=1.2;a=f.createElement("script");a.type="text/javascript";a.async=!0;a.src="undefined"!==typeof MIXPANEL_CUSTOM_LIB_URL?MIXPANEL_CUSTOM_LIB_URL:"//cdn.mxpnl.com/libs/mixpanel-2-latest.min.js";e=f.getElementsByTagName("script")[0];e.parentNode.insertBefore(a,e)}})(document,window.mixpanel||[]);
 mixpanel.init("acdc7100349e96b3c6337920bd091e42");</script><!-- end Mixpanel -->
 
-  <script>
-   
-  </script>
+  
   </head>
 
   <body>
@@ -164,7 +157,6 @@ mixpanel.init("acdc7100349e96b3c6337920bd091e42");</script><!-- end Mixpanel -->
   <script>
   function revealNewButtons(){
     var currentButtonPosition=document.getElementById('newActionButton').style.right;
-    mixpanel.track("Video play");
 
     if (currentButtonPosition=='2px') {
         document.getElementById('createButtonArea').style.right="2px";

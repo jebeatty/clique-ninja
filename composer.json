@@ -2,7 +2,7 @@
     "require": {
         "facebook/php-sdk-v4" : "4.0.*",
         "phpmailer/phpmailer": "5.2.*",
-        
+        "mixpanel/mixpanel-php" : "2.*"
     }
 }
 

@@ -161,7 +161,7 @@ function createInviteForNonuser($userInvite,$groupId, $inviterName,$inviteMsg){
           exit;
       }
 
-      //sendInviteEmail($userInvite,$inviterName, getGroupNameForId($groupId));
+      sendInviteEmail($userInvite,$inviterName, getGroupNameForId($groupId));
 }
 
 

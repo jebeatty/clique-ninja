@@ -52,17 +52,17 @@
     },
     {
         "name": "phpmailer/phpmailer",
-        "version": "v5.2.9",
-        "version_normalized": "5.2.9.0",
+        "version": "v5.2.10",
+        "version_normalized": "5.2.10.0",
         "source": {
             "type": "git",
             "url": "https://github.com/PHPMailer/PHPMailer.git",
-            "reference": "73b61679809615850706f1dbf88e6df2ddc05745"
+            "reference": "07005ecbb80d11ec8c0f067bb37e8909cc7fcbb7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/73b61679809615850706f1dbf88e6df2ddc05745",
-            "reference": "73b61679809615850706f1dbf88e6df2ddc05745",
+            "url": "https://api.github.com/repos/PHPMailer/PHPMailer/zipball/07005ecbb80d11ec8c0f067bb37e8909cc7fcbb7",
+            "reference": "07005ecbb80d11ec8c0f067bb37e8909cc7fcbb7",
             "shasum": ""
         },
         "require": {
@@ -70,16 +70,18 @@
         },
         "require-dev": {
             "phpdocumentor/phpdocumentor": "*",
-            "phpunit/phpunit": "4.1.*"
+            "phpunit/phpunit": "4.3.*"
         },
-        "time": "2014-09-26 18:33:30",
+        "time": "2015-05-04 12:37:21",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
             "classmap": [
                 "class.phpmailer.php",
+                "class.smtp.php",
                 "class.pop3.php",
-                "class.smtp.php"
+                "extras/EasyPeasyICS.php",
+                "extras/ntlm_sasl_client.php"
             ]
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -104,5 +106,52 @@
             }
         ],
         "description": "PHPMailer is a full-featured email creation and transfer class for PHP"
+    },
+    {
+        "name": "mixpanel/mixpanel-php",
+        "version": "2.6.2",
+        "version_normalized": "2.6.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/mixpanel/mixpanel-php.git",
+            "reference": "7031e213554436793e0927184f41be72dcd63eb6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/mixpanel/mixpanel-php/zipball/7031e213554436793e0927184f41be72dcd63eb6",
+            "reference": "7031e213554436793e0927184f41be72dcd63eb6",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.0"
+        },
+        "require-dev": {
+            "phpdocumentor/phpdocumentor": "2.*",
+            "phpunit/phpunit": "3.7.*"
+        },
+        "time": "2014-06-11 19:10:51",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "lib/Mixpanel.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Mixpanel <dev@mixpanel.com>",
+                "homepage": "https://mixpanel.com/"
+            }
+        ],
+        "description": "The Official PHP library for Mixpanel",
+        "homepage": "https://mixpanel.com/help/reference/php",
+        "keywords": [
+            "mixpanel",
+            "mixpanel php"
+        ]
     }
 ]

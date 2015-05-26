@@ -1,7 +1,9 @@
 <?php
 
 require_once("../vendor/autoload.php");
+require_once("../vendor/mixpanel/mixpanel-php/lib/Mixpanel.php");
 use phpmailer\PHPMailerAutoload;
+
 
 function sendRecoveryEmail($email, $password, $username){
 	$mail = new PHPMailer;
@@ -43,7 +45,7 @@ function sendRecoveryEmail($email, $password, $username){
 	}
 }
 
-function sendShareEmail($recipients, $subject, $body){
+function sendShareEmail($recipients, $subject, $body, $username){
 	$mail = new PHPMailer;
 
 	$mail->SMTPDebug = false;                               // Enable verbose debug output
@@ -75,6 +77,8 @@ function sendShareEmail($recipients, $subject, $body){
 	    echo 'Mailer Error: ' . $mail->ErrorInfo;
 	} else {
 	    echo 'Message has been sent';
+	    $mp = Mixpanel::getInstance("acdc7100349e96b3c6337920bd091e42");
+		$mp->people->increment($username, "shares", count($recipients));
 	}
 }
 
@@ -101,9 +105,8 @@ function sendInviteEmail($userInvited,$inviterName, $groupName){
 	$mail->Subject = 'Clique Invitation from '.$inviterName;
 	
 
-	$body = "You've been invited to join a group on Clique by ".$inviterName." as part of our private beta! <br><br>";
-	$body .= " Clique is the best way to share and find recommendations about what to read, watch, or enjoy from around the web directly with your friends. <br><br>";
-	$body .=" Go to https://www.discoverclique.com/doublesecretbeta/ and sign up using this email (".$userInvited."). Once you've joined, you should see a pending invite for the &#34;".$groupName."&#34; group. Join up and start sharing the most interesting things you see from around the web! <br><br>";
+	$body = "You've been invited to join a group on Clique by ".$inviterName." as part of our beta! <br><br>";
+	$body .=" Go to https://www.discoverclique.com/beta/ and sign up using this email (".$userInvited."). Once you've joined, you should see a pending invite for the &#34;".$groupName."&#34; group. Join up and start sharing the most interesting things you see from around the web! <br><br>";
 	$body .=" Let us know if you have any questions, <br>";
 	$body .=" The Clique Team";
 
@@ -114,7 +117,8 @@ function sendInviteEmail($userInvited,$inviterName, $groupName){
 	    echo 'Message could not be sent.';
 	    echo 'Mailer Error: ' . $mail->ErrorInfo;
 	} else {
-	    echo 'Message has been sent';
+	    $mp = Mixpanel::getInstance("acdc7100349e96b3c6337920bd091e42");
+		$mp->people->increment($username, "invites", 1);
 	}
 
 
