@@ -87,6 +87,7 @@ include('inc/loggedInHeader.php'); ?>
             getGroups();
             location.reload();
 
+
           } else{
             alert("Something went wrong in accepting the invite!");
           }
@@ -102,7 +103,8 @@ include('inc/loggedInHeader.php'); ?>
             getInvites();
             getGroups();
             location.reload();
-
+            mixpanel.identify(<?php echo $_SESSION['username'];?>);
+            mixpanel.people.increment("groups");
           } else{
             alert("Something went wrong!");
           }

@@ -34,9 +34,12 @@ function goToNextScreen(){
 			showNotificationScreen();
 			break;
 		case 4:
-			finishWelcomeSequence();
+			showExtensionScreen();
 			break;
 		case 5:
+			finishWelcomeSequence();
+			break;
+		case 6:
 			mixpanel.track('Finish Welcome');
 			location.href='recent.php';
 			break;
@@ -59,7 +62,7 @@ function checkForPendingInvites(){
 function showPendingScreen(){
 	currentPage=1;
 	console.log("pending");
-	$("#welcomeProgressBar").css("width","32%");
+	$("#welcomeProgressBar").css("width","28%");
 	$("#welcomeHeadline").html('Pending Invitations');
 	$("#welcomeBody").html('Well aren&#39;t you popular! It looks like you&#39;ve already been invited to some Clique groups. Go ahead and respond if you like. You can also respond later through the Groups tab.');
 	
@@ -125,7 +128,7 @@ function rejectInvite(groupId){
 //New Group Functions
 function showNewGroupScreen(pending){
 	currentPage=2;
-	$("#welcomeProgressBar").css("width","49%");
+	$("#welcomeProgressBar").css("width","42%");
 	if (pending) {
 		$("#welcomeHeadline").html('Create Additional Groups to Share With');
 		$("#welcomeBody").html('You&#39;ve already got some groups, but the more the merrier. Fill out the information below to create a group<br><br> And don&#39;t be shy in inviting folks either - groups do best with at least 5 members');
@@ -218,12 +221,12 @@ function addFriendToTable(){
 
 function showNewPostScreen(){
 	currentPage=3;
-	$("#welcomeProgressBar").css("width","66%");
+	$("#welcomeProgressBar").css("width","56%");
 	$("#welcomeHeadline").html('Make Your First Post!');
 	$("#welcomeBody").html('To get started, think about the most interesting thing you&#39;ve seen online this week...'); 
 	$("#screenDetail").html('');
 	$("#nextScreenButton").html('<a class="button" onclick="showNewPostInput();">Okay - Got It</a>');
-	$("#skipButton").html('');
+	
 	//add eventlistener
 
 
@@ -359,7 +362,7 @@ function resetPostModalHTML(){
 function showNotificationScreen(){
 	
 	currentPage=4;
-	$("#welcomeProgressBar").css("width","83%");
+	$("#welcomeProgressBar").css("width","70%");
 	$("#welcomeHeadline").html('Set Notification Settings');
 	$("#welcomeBody").html('Because every recommendation on Clique comes to you directly from your friends, new posts can be a little irregular. <br><br>We <i>highly</i> recommend signing up for browser notifications so you don&#39;t miss a thing! You can always adjust the frequency of the notifications and even disable them via the settings menu');
 	
@@ -368,26 +371,38 @@ function showNotificationScreen(){
 	
 	$("#screenDetail").html(notificationHTML);
 	$("#nextScreenButton").html('');
-	$("#skipButton").html('<a onclick="goToNextScreen();">Skip this step</a>');
+	
 
 
 }
 
 function warnOnLeaving(canLeave){
+
 	if (!canLeave) {
     	return "Are you sure? This will abort the welcome sequence"
     } 
 }
 
+function showExtensionScreen(){
+	currentPage=5;
+	$("#welcomeProgressBar").css("width","85%");
+	$("#welcomeHeadline").html('Get the Chrome Extension');
+	$("#welcomeBody").html('Using Chrome? Clique offers a simple browser extension to make it even easier to post what you&#39;re reading to your groups. <br><br> Use the "Get It" button below to open a new tab that will take you straight to the extension. It only takes a second to get connected.');
+	$("#screenDetail").html('<br><a class="button" href="https://chrome.google.com/webstore/detail/post-to-clique/imfnkbdiijihedpldgjnlbdlikapfdjc" target="_blank"> Get It </a><br><br><a onclick="goToNextScreen();"> No thanks </a>');
+	$("#skipButton").html('');
+	$("#nextScreenButton").html('');
+
+}
+
 function finishWelcomeSequence(){
 	window.onbeforeunload = warnOnLeaving(true);
-	currentPage=5;
+	currentPage=6;
 	$("#welcomeProgressBar").css("width","100%");
 	$("#welcomeHeadline").html('Ready To Go!');
 	$("#welcomeBody").html('That&#39;s it! You&#39;ve got some groups set up and have personalized your settings. Enjoy!');
 	$("#nextScreenButton").html('<a class="button" onclick="goToNextScreen();">Onward!</a>');
 	$("#screenDetail").html('');
-	$("#skipButton").html('<a onclick="showNotificationScreen();">Go Back</a>');
+	$("#skipButton").html('<a onclick="showExtensionScreen();">Go Back</a>');
 
 }
 

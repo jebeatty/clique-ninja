@@ -52,12 +52,17 @@ function postNewPost(){
 
             var evt = new CustomEvent('itemUpdated');
             window.dispatchEvent(evt);
+
+            var postEvt = new CustomEvent('postMade');
+            window.dispatchEvent(postEvt);
+
             $('#newPostModal').foundation('reveal', 'close');
             resetPostModalHTML();
 
             //and use the saved modal data to avoid calling ajax
             ga("send", "event", "New Post", "Finish");
-            mixpanel.track('Finish New Group');
+            mixpanel.track('Finish New Post');
+            
 
           } else if(response=='failure'){
             $("#newPostErrorLabel").html("Something seems to be wrong with the URL. Please double check that it is a valid URL");
@@ -178,6 +183,10 @@ function createNewGroup(){
           $('#newGroupModal').foundation('reveal', 'close');
           var evt = new CustomEvent('groupAdded');
           window.dispatchEvent(evt);
+
+          var postEvt = new CustomEvent('groupCreated');
+          window.dispatchEvent(postEvt);
+
           resetGroupModalHTML();
           getGroupList();
           mixpanel.track('Finish New Group');
@@ -273,7 +282,10 @@ function sendShareMail(){
         console.log('response:'+response);
         if (response=='Message has been sent') {       
           $('#emailModal').foundation('reveal', 'close');
-          mixpanel.track('Finish Share Email');
+          mixpanel.track('Finish Email Share');
+          var shareEvt = new CustomEvent('shareEmailSent');
+          window.dispatchEvent(shareEvt);
+
           resetEmailModal();
         }
         else{

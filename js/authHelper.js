@@ -50,6 +50,11 @@ function login(){
   	
     if (response=="true") {
     	mixpanel.track('Log In');
+    	var username = $('#nameLabelLI').val();
+    	mixpanel.identify(username);
+	      mixpanel.people.set({
+			"$last_login": new Date(),
+	      });
       location.href="recent.php";
       
     } else if(response=='"No such user"'){
@@ -71,12 +76,26 @@ function signup(){
 	if($('#nameLabelSU').val()=='' || $('#passLabelSU').val()=='' || $('#emailLabelSU').val()==''){
 		$('#signupModalTitle').html("<p> Missing signup fields</p>");
 	} else{
-		console.log(formData);
+
 		$.post(url, formData, function(response){
-		console.log(response);
+
 	    if (response=="true") {
 	      mixpanel.track('Sign Up');
-	      location.href="welcome.php";
+	      var username = $('#nameLabelSU').val();
+	      var email = $('#emailLabelSU').val();
+	      mixpanel.identify(username);
+	      mixpanel.people.set({
+	      	"$email": email,      
+			"$created": new Date,
+			"$last_login": new Date(),
+			"posts":0,
+			"groups":0,
+			"groupsStarted":0,
+			"invites":0,
+			"shares":0
+	      });
+
+	     location.href="welcome.php";
 	    } else if(response=='"Username taken"'){
 	    	$('#signupModalTitle').html("<p> An account already exists with that username. Please try another</p>");
 	    } else if(response=='"Email taken"'){

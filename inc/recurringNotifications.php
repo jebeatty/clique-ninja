@@ -28,9 +28,9 @@ function sendPostNotifications(){
 	if(getdate()[wday]==0){
 		try{
 		$results = $db->prepare("SELECT userId, pendingPosts FROM notifications WHERE postCode=2 AND enabled=1 AND pendingPosts>0");
-		$results->execute(array());
+		$results->execute();
 		} catch (Exception $e){
-			echo "weekly post notification search error";
+			echo "weekly post notification search error".$e;
 			exit();
 		}
 		$weeklies = $results->fetchAll(PDO::FETCH_ASSOC);

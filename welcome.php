@@ -14,11 +14,11 @@ require_once("inc/welcomeHeader.php");
           <div class="panel" id="welcomePanel" style="text-align:center" style="background:white;">
           	<script> initializeWelcomeSequence();</script>
           	<div class="progress success radius" style="opacity:0.7;">
-  				<span id="welcomeProgressBar" class="meter" style="width: 16%"></span>
+  				<span id="welcomeProgressBar" class="meter" style="width: 14%"></span>
 			</div>
 			<br>
             <h4 id="welcomeHeadline"> Welcome to Clique! </h4>
-            <p id="welcomeBody"> We're here to set you up so you can get down to sharing and discovering content through social recommendations <br><br> Clique is based on groups - friends, family, whomever you like. What people post to groups is what you see. It's all about friends, not algorithms, deciding what to share with you. <br><br> All we need to do is get your groups set up and you'll be off to the races.<br><br>Ready? Great!</p>
+            <p id="welcomeBody"> We're here to set you up so you can get down to sharing and discovering content through social recommendations <br><br> Clique is based on your social circles - friends, family, whomever you like. What people post to groups is what you see. It's all about friends, not algorithms, deciding what to share with you. <br><br> All we need to do is get your groups set up and you'll be off to the races.<br><br>Ready? Great!</p>
             <div id="screenDetail"></div>
             <div id="nextScreenButton"><a class="button" onclick="goToNextScreen();"> Let's Go >> </a></div>
             <div id="skipButton"></div>
@@ -75,7 +75,12 @@ require_once("inc/welcomeHeader.php");
       registeredForNotifications();
     }]); 
 
-  
+  $(document).ready(function(){
+    window.onbeforeunload = function () {
+    return "Are you sure? This will abort the welcome sequence"
+    }
+
+  });
   </script>
   </body>
   

@@ -2,6 +2,15 @@ body{
         background: #774d8f;
 }
 
+
+#mainDescription{
+        color:white;
+        font-size: 1.25em;
+        font-family: 'walkway_ultraboldregular', sans-serif;
+        margin: 30px 80px 5px 80px;
+
+}
+
 /* Navbar
 ==========================*/
 nav.top-bar {
