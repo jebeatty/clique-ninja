@@ -118,6 +118,10 @@ section.top-bar-section{
                 text-align: right;
                 
         }
+         #mainDescription{
+                margin: 20px 50px 5px 50px;
+
+        }
 }
 
 @media screen and (max-width: 640px) {
@@ -128,7 +132,7 @@ section.top-bar-section{
 
         .top-bar .name h1 a{
                 text-align: left;
-                opacity: 0.8;
+                opacity: 1.0;
         }
 
         .top-bar-section li:not(.has-form) a:not(.button){
@@ -156,4 +160,12 @@ section.top-bar-section{
                 margin-left: 0;
         }
 
+        #mainDescription{
+                margin: 20px 20px 5px 20px;
+
+        }
+        .jumbotron{
+                margin-top: 0px;
+
+        }
 }

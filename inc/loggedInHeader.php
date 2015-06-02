@@ -134,9 +134,9 @@ mixpanel.init("acdc7100349e96b3c6337920bd091e42");</script><!-- end Mixpanel -->
 
               <ul class = "left">
                  <li><a href="recent.php">Home </a></li>
-                 <li><a href="library.php">Library</a></li>
+                 <li><a href="library.php">My Library</a></li>
                  <li class="has-dropdown">
-                    <a href="groups.php">Groups <span id="groupInviteAlert"> </span></a>
+                    <a href="groups.php">My Groups <span id="groupInviteAlert"> </span></a>
                     
                     <ul class="dropdown" id='groupMenu'>
                     </ul>
@@ -242,22 +242,21 @@ mixpanel.init("acdc7100349e96b3c6337920bd091e42");</script><!-- end Mixpanel -->
       <script>
               
         _roost.push(['onresult', function(data){
-          console.log('onresult data:');
-          console.log(data);
+ 
           //if the user isn't registered, then we can prompt, or we have to advise.
           if (data['registered']) {
-            console.log('writing notification section');
+
             setNotificationStatus(data['enabled']);
             
             if (data['firstTime']) {
               //if it is the first time, we should insert the user into the notification database
-              console.log('adding user to db');
+          
               changeNotificationStatus();
             }
 
             
           } else{
-            console.log("not registered");
+           
           }
           
         }]);
@@ -414,10 +413,10 @@ mixpanel.init("acdc7100349e96b3c6337920bd091e42");</script><!-- end Mixpanel -->
 
 
     <!-- New Group -->
-    <div id="newGroupModal" class="reveal-modal small" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
+    <div id="newGroupModal" class="reveal-modal medium" data-reveal aria-labelledby="modalTitle" aria-hidden="true" role="dialog">
       <h2 id="newGroupTitle">New Group</h2>
       <form method="post" action='inc/invites.php' id="addGroup">
-      Group Name: <input name="groupName"> <br>
+      Group Name: <input name="groupName" style="width:70%"> <br>
       <br>
       <br>
       Group Description:

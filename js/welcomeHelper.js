@@ -14,7 +14,7 @@ mixpanel.track('Start Welcome');
 
 
 function goToNextScreen(){
-	console.log("leaving page "+currentPage);
+
 	switch(currentPage){
 		case 0:
 			console.log(pendingInvitesExist);
@@ -61,7 +61,6 @@ function checkForPendingInvites(){
 
 function showPendingScreen(){
 	currentPage=1;
-	console.log("pending");
 	$("#welcomeProgressBar").css("width","28%");
 	$("#welcomeHeadline").html('Pending Invitations');
 	$("#welcomeBody").html('Well aren&#39;t you popular! It looks like you&#39;ve already been invited to some Clique groups. Go ahead and respond if you like. You can also respond later through the Groups tab.');
@@ -114,7 +113,7 @@ function acceptInvite(groupId){
 
 function rejectInvite(groupId){
 	$.getJSON('inc/invites.php',{action:"rejectInvite", rejectedGroupId:groupId},function(response){
-	  console.log(response);
+
 	  if (response=="success") {
 	    getInvites();
 
@@ -156,11 +155,10 @@ function createNewGroup(){
     var url = $('#addGroup').attr("action");
     var formData = $('#addGroup').serialize();
     formData+='&action=createGroup';
-    console.log(formData)
+
     $('#groupButton').html("Creating Group..."); 
           
     $.post(url, formData, function(response){
-        console.log(response);
         if (response=="success") {
           ga("send", "event", "New Group", "Welcome");
           mixpanel.track('New Group Welcome');
@@ -307,7 +305,6 @@ function makeNewPost(){
           response=response.substr(1,7);
           if (response=='success') {
             $("#newPostErrorLabel").html("");
-            console.log("Response Successful");
 
             //reset everything    
 
@@ -321,7 +318,7 @@ function makeNewPost(){
             $('#postButton').attr('value',"Post");
           }
           else{
-            console.log("Response unsuccessful");
+          
             $("#newPostErrorLabel").html("Uh-oh, something seems to have gone wrong. Please try again later!");
             $('#postButton').attr('value',"Post");
           }
@@ -371,7 +368,7 @@ function showNotificationScreen(){
 	
 	$("#screenDetail").html(notificationHTML);
 	$("#nextScreenButton").html('');
-	
+	$("#skipButton").html('<a onclick="goToNextScreen();">Skip this step</a>');
 
 
 }

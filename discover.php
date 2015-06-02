@@ -54,7 +54,7 @@ include('inc/loggedInHeader.php'); ?>
     </script>
   <!--End Feature Content-->
   <!-- Modal Content -->
-  <div id="discoveryModal" class="reveal-modal small" data-reveal>
+  <div id="discoveryModal" class="reveal-modal medium" data-reveal>
 
       <h2 id="discoveryModalTitle">Loading...</h2>
   
