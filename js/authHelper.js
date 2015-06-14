@@ -86,7 +86,7 @@ function signup(){
 	      mixpanel.identify(username);
 	      mixpanel.people.set({
 	      	"$email": email,      
-			"$created": new Date,
+			"$created": new Date(),
 			"$last_login": new Date(),
 			"posts":0,
 			"groups":0,

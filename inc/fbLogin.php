@@ -2,6 +2,7 @@
 session_start();
 
 require_once("../vendor/autoload.php");
+require_once("../vendor/mixpanel/mixpanel-php/lib/Mixpanel.php");
 use Facebook\FacebookSession;
 use Facebook\FacebookRedirectLoginHelper;
 use Facebook\FacebookRequest;
@@ -76,8 +77,25 @@ function loginFBUser($user_profile, $loop){
     //$loop only gets set when we came back from sign-up, which means its time for the welcome sequence!
     if ($loop) {
       header("Location: ../welcome.php");
+      $mp = Mixpanel::getInstance("acdc7100349e96b3c6337920bd091e42");
+      $mp->identify($_SESSION['username']);
+      $mp->people->set($_SESSION['username'], array(
+        "$email"=> $user[0]['email'],      
+        "$created"=> date("F j, Y, g:i a"),
+        "$last_login"=> date("F j, Y, g:i a"),
+        "posts"=>0,
+        "groups"=>0,
+        "groupsStarted"=>0,
+        "invites"=>0,
+        "shares"=>0
+      ));
+
+
     } else{
       header("Location: ../recent.php");
+      $mp = Mixpanel::getInstance("acdc7100349e96b3c6337920bd091e42");
+      $mp->identify($_SESSION['username']);
+      $mp->people->set($_SESSION['username'], array('$last_login'=> date("F j, Y, g:i a")));
     }
 		
   }
